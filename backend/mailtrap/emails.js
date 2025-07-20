@@ -27,5 +27,22 @@ export const sendVerificationEmail = async (email, verificationToken) => {
 };
 
 export const sendWelcomeEmail = async (email, name) => {
-  
+  const recipient = [{email}];
+
+  try {
+    const response = await client.send({
+      from: sender,
+      to: recipient,
+      template_uuid: "504f3f54-5686-410c-872f-a91e6a07221f",
+      template_variables: {
+        company_info_name: "PrimeWrap",
+        name: name,
+      }
+    });
+    console.log("Welcome email sent successfully", response);
+  }
+  catch(error){
+    console.error(`Error sending welcome email`, error);
+    throw new Error(`Error sending welcome email: ${error}`);
+  }
 }
