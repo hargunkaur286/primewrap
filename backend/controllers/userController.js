@@ -3,6 +3,7 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { User } from "../models/userModel.js";
 import twilio from "twilio"
 import { sendEmail } from "../utils/sendEmail.js";
+import { sendToken } from "../utils/sendToken.js";
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -47,7 +48,7 @@ export const register = catchAsyncError(async(req, res, next) => {
         if(registerationAttemptsByUser.length > 3) {
             return next(
                 new ErrorHandler(
-                    "You have exceede the maximum number of attempts (3). Please try again after an hour.", 400
+                    "You have exceeded the maximum number of attempts (3). Please try again after an hour.", 400
                 )
             );
         }
@@ -77,7 +78,7 @@ async function sendVerificationCode(verificationMethod, verificationCode, name, 
     try{
         if(verificationMethod === "email"){
             const message = generateEmailTemplate(verificationCode);
-            sendEmail({email, subject: "Your verification code", message});
+            await sendEmail({ email, subject: "Your verification code", message });
             res.status(200).json({
                 success: true,
                 message: `Verification email successfuly sent to ${name}`,
@@ -95,7 +96,7 @@ async function sendVerificationCode(verificationMethod, verificationCode, name, 
                 });
             res.status(200).json({
                 success: true,
-                message: `Verification email successfuly sent to ${name}`,
+                message: `OTP sent to ${name}`,
             });
         }
         else{
@@ -105,13 +106,10 @@ async function sendVerificationCode(verificationMethod, verificationCode, name, 
             })
         }
     }
-    catch(error){
-        console.error("Twilio Error:", error);
-        return res.status(500).json({
-            success: false,
-            message: "Verification code failed to send"
-        })
+    catch (error){
+        return next(new ErrorHandler("Verification code failed to send", 500));
     }
+
 }
 
 function generateEmailTemplate(verificationCode) {
@@ -135,3 +133,80 @@ function generateEmailTemplate(verificationCode) {
   `;
 }
 
+export const verifyOTP = catchAsyncError(async (req, res, next) => {
+    const {email, otp, phone} = req.body;
+
+    function validatePhoneNumber(phone) {
+        const phoneRegex = /^\+91\d{10}$/;
+        return phoneRegex.test(phone);
+    }
+
+    if(!validatePhoneNumber(phone)) {
+        return next(new ErrorHandler("Invalid phone number.", 400));
+    }
+    try{
+        const userAllEntries = await User.find({
+            $or: [
+                {
+                    email,
+                    accountVerified: false,
+                },
+                {
+                    phone,
+                    accountVerified: false,
+                }
+            ]
+        }).sort({ createdAt: -1 });
+
+        if (userAllEntries.length === 0) {
+            return next(new ErrorHandler("User not found!", 404));
+        }
+
+        let user;
+        if(userAllEntries.length>1){
+            user = userAllEntries[0];
+
+            await User.deleteMany({
+                _id: {$ne: user._id},
+                $or: [
+                    {phone, accountVerified: false},
+                    {email, accountVerified: false},
+                ],
+            });
+        }
+        else{
+            user = userAllEntries[0];
+        }
+        console.log("Stored OTP:", user.verificationCode);
+        console.log("Entered OTP:", otp);
+        if(user.verificationCode !== Number(otp)){
+            return next(new ErrorHandler("Invalid Otp", 400));
+        }
+
+        const currentTime = Date.now();
+
+        const verificationCodeExpire = new Date(
+            user.verificationCodeExpire
+        ).getTime();
+        console.log(currentTime);
+        console.log(verificationCodeExpire);
+        if(currentTime > verificationCodeExpire){
+            return next(new ErrorHandler("OTP Expired", 400));
+        }
+
+        user.accountVerified = true,
+        user.verificationCode = null,
+        user.verificationCodeExpire = null;
+        await user.save({validateModifiedOnly: true});
+
+        try {
+            sendToken(user, 200, "Account Verified", res);
+        } catch (error) {
+            console.error("sendToken error:", error);
+            return next(new ErrorHandler("Token generation failed", 500));
+        }
+    }
+    catch(error){
+        return next(new ErrorHandler("Internal Server Error", 500));
+    }
+})
