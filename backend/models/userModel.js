@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         minLength: [8, "Passowrd must have atleast 8 characters!"],
         maxLength: [32, "Password cannot have more than 32 characters!"],
+        select: false,
     },
     phone: String,
     accountVerified: { type: Boolean, default: false },
