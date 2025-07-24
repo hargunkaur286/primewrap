@@ -4,6 +4,7 @@ import { User } from "../models/userModel.js";
 import twilio from "twilio"
 import { sendEmail } from "../utils/sendEmail.js";
 import { sendToken } from "../utils/sendToken.js";
+import crypto from "crypto"
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -266,7 +267,7 @@ export const forgotPassword = catchAsyncError(async(req, res, next) => {
     const message = `Your reset password token is: \n\n ${resetPasswordUrl} \n\n If you have not requested this email, please ignore it.`;
 
     try{
-        sendEmail({
+        await sendEmail({
             email: user.email,
             subject: "PRIMEWRAP PASSWORD RESET MAIL",
             message
@@ -286,4 +287,37 @@ export const forgotPassword = catchAsyncError(async(req, res, next) => {
             )
         )
     }
-})
+});
+
+export const resetPassword = catchAsyncError(async (req, res, next) => {
+  const { token } = req.params;
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+  if (!user) {
+    return next(
+      new ErrorHandler(
+        "Reset password token is invalid or has been expired.",
+        400
+      )
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(
+      new ErrorHandler("Password & confirm password do not match.", 400)
+    );
+  }
+
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  await user.save();
+
+  sendToken(user, 200, "Reset Password Successfully.", res);
+});
