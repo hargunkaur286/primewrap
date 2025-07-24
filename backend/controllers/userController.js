@@ -242,3 +242,48 @@ export const logout = catchAsyncError(async(req, res, next) => {
             message: "Logged out successfully",
         });
 });
+
+export const getUser = catchAsyncError(async(req, res, next) => {
+    const user = req.user;
+    res.status(200).json({
+        success: true,
+        user,
+    });
+});
+
+export const forgotPassword = catchAsyncError(async(req, res, next) => {
+    const user = await User.findOne({
+        email: req.body.email,
+        accountVerified: true,
+    });
+    if(!user){
+        return next(new ErrorHandler("User not found!", 404));
+    }
+    const resetToken = user.generateResetPasswordToken();
+    await user.save({validateBeforeSave: false});
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+
+    const message = `Your reset password token is: \n\n ${resetPasswordUrl} \n\n If you have not requested this email, please ignore it.`;
+
+    try{
+        sendEmail({
+            email: user.email,
+            subject: "PRIMEWRAP PASSWORD RESET MAIL",
+            message
+        });
+        res.status(200).json({
+            success: true,
+            message:  `Email sent to ${user.email} successfully.`
+        });
+    }
+    catch(error){
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+        await user.save({ validateBeforeSave: false });
+        return next(
+            new ErrorHandler(
+                error.message ? error.message: "Cannot send rest password token.", 500
+            )
+        )
+    }
+})
