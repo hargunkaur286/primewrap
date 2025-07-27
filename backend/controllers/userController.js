@@ -5,6 +5,8 @@ import twilio from "twilio"
 import { sendEmail } from "../utils/sendEmail.js";
 import { sendToken } from "../utils/sendToken.js";
 import crypto from "crypto"
+import {paymentHelper} from "../payment.js"
+import Joi from "joi";
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -321,3 +323,34 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
 
   sendToken(user, 200, "Reset Password Successfully.", res);
 });
+
+export const payment = catchAsyncError(async (req, res, next) => {
+ const { paymentMethodId, amount } = req.body;
+  const { error: validationError } = validatePaymentInput(req.body);
+
+  if (validationError) {
+    return next(new ErrorHandler(validationError.details[0].message, 400));
+  }
+
+
+  try {
+
+    const paymentResult = await paymentHelper(paymentMethodId, amount);
+    res.status(200).json({
+      success: true,
+      message: "Payment successful",
+      payment: paymentResult,
+    });
+  } catch (error) {
+    return next(new ErrorHandler("Payment failed", 500));
+  }
+});
+
+function validatePaymentInput(data) {
+  const schema = Joi.object({
+    paymentMethodId: Joi.string().required(),
+    amount: Joi.number().integer().min(1).required(),
+  });
+
+  return schema.validate(data);
+}
