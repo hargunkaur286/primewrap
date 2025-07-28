@@ -7,6 +7,8 @@ import { sendToken } from "../utils/sendToken.js";
 import crypto from "crypto"
 import {paymentHelper} from "../payment.js"
 import Joi from "joi";
+import { Message } from "../models/messageModel.js";
+
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -354,3 +356,22 @@ function validatePaymentInput(data) {
 
   return schema.validate(data);
 }
+
+export const createMessage = async (req, res, next) => {
+  try {
+    const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const newMessage = await Message.create({ name, email, message });
+
+    return res.status(201).json({
+      success: true,
+      message: "Message received successfully.",
+      data: newMessage,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
