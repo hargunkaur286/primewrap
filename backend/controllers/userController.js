@@ -80,44 +80,83 @@ export const register = catchAsyncError(async(req, res, next) => {
     }
 });
 
-async function sendVerificationCode(verificationMethod, verificationCode, name, email, phone, res){
+// async function sendVerificationCode(verificationMethod, verificationCode, name, email, phone, res){
 
-    try{
-        if(verificationMethod === "email"){
-            const message = generateEmailTemplate(verificationCode);
-            await sendEmail({ email, subject: "Your verification code", message });
-            res.status(200).json({
-                success: true,
-                message: `Verification email successfuly sent to ${name}`,
-            });
-        }
-        else if(verificationMethod === "phone") {
-            const verificationCodeWithSpace = verificationCode  
-                .toString()
-                .split("")
-                .join("");
-                await client.calls.create({
-                    twiml: `<Response><Say>Your verification code is ${verificationCodeWithSpace}</Say></Response>`,
-                    from: process.env.TWILIO_PHONE,
-                    to: phone,
-                });
-            res.status(200).json({
-                success: true,
-                message: `OTP sent to ${name}`,
-            });
-        }
-        else{
-            return res.status(500).json({
-                success: false,
-                message: "Invalid verification method"
-            })
-        }
-    }
-    catch (error){
-        return next(new ErrorHandler("Verification code failed to send", 500));
-    }
+//     try{
+//         if(verificationMethod === "email"){
+//             const message = generateEmailTemplate(verificationCode);
+//             await sendEmail({ email, subject: "Your verification code", message });
+//             res.status(200).json({
+//                 success: true,
+//                 message: `Verification email successfuly sent to ${name}`,
+//             });
+//         }
+//         else if(verificationMethod === "phone") {
+//             const verificationCodeWithSpace = verificationCode  
+//                 .toString()
+//                 .split("")
+//                 .join("");
+//                 await client.calls.create({
+//                     twiml: `<Response><Say>Your verification code is ${verificationCodeWithSpace}</Say></Response>`,
+//                     from: process.env.TWILIO_PHONE,
+//                     to: phone,
+//                 });
+//             res.status(200).json({
+//                 success: true,
+//                 message: `OTP sent to ${name}`,
+//             });
+//         }
+//         else{
+//             return res.status(500).json({
+//                 success: false,
+//                 message: "Invalid verification method"
+//             })
+//         }
+//     }
+//     catch (error){
+//         return next(new ErrorHandler("Verification code failed to send", 500));
+//     }
 
+// }
+
+async function sendVerificationCode(
+  verificationMethod,
+  verificationCode,
+  name,
+  email,
+  phone,
+  res
+) {
+  try {
+    if (verificationMethod === "email") {
+      const message = generateEmailTemplate(verificationCode);
+      await sendEmail({ email, subject: "Your verification code", message });
+      res.status(200).json({
+        success: true,
+        message: `Verification email successfully sent to ${name}`,
+      });
+    } else if (verificationMethod === "phone") {
+      // ✅ send OTP as SMS instead of voice call
+      await client.messages.create({
+        body: `Your verification code is ${verificationCode}`,
+        from: process.env.TWILIO_PHONE,
+        to: phone,
+      });
+      res.status(200).json({
+        success: true,
+        message: `OTP SMS sent to ${name}`,
+      });
+    } else {
+      return res.status(500).json({
+        success: false,
+        message: "Invalid verification method",
+      });
+    }
+  } catch (error) {
+    return next(new ErrorHandler("Verification code failed to send", 500));
+  }
 }
+
 
 function generateEmailTemplate(verificationCode) {
   return `
