@@ -8,7 +8,9 @@ import crypto from "crypto"
 import {paymentHelper} from "../payment.js"
 import Joi from "joi";
 import { Message } from "../models/messageModel.js";
-
+import { Subscribers } from "../models/subscribers.js";
+import { sendNewsletter } from '../newsletter.js';
+import { Order } from "../models/orderModel.js";
 
 const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -375,3 +377,298 @@ export const createMessage = async (req, res, next) => {
     next(error);
   }
 };
+
+// export const createSubscribers = async (req, res, next) => {
+//     // console.log(req.body);
+//     const email = req.body.email;
+
+//     try {
+//         // Check if the email already exists in the database
+//         const existingSubscriber = await Subscribers.findOne({ email });
+
+//         if (existingSubscriber) {
+//             // Email already exists, send a message
+//             return res.send('Email already subscribed. Check your email for the welcome newsletter.');
+//         }
+
+//         // Email doesn't exist, save to the database
+//         const newSubscriber = new Subscribers({ email });
+//         const savedSubscriber = await newSubscriber.save();
+//         // console.log('Subscription saved to the database:', savedSubscriber);
+
+//         // For simplicity, let's just print it to the console
+//         console.log(`New subscription: ${email}`);
+
+//         // Send a welcome newsletter
+//         const welcomeSubject = 'Welcome to Our Newsletter!';
+//         const welcomeContent = '<p>Thank you for subscribing to our newsletter!</p>';
+//         sendNewsletter(email, welcomeSubject, welcomeContent);
+
+//         res.send('Subscription successful! Check your email for a welcome newsletter.');
+//     } catch (error) {
+//         // Handle database or other errors
+//         console.error('Error creating subscription:', error);
+//         next(error);
+//     }
+// };
+
+function generateWelcomeEmailHTML(email) {
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to PrimeWrap Newsletter</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f8f9fa;">
+  <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background-color:#f8f9fa;padding:20px;">
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#10b981,#059669);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
+      <h1 style="color:#fff;font-size:28px;font-weight:bold;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.1);">
+        Welcome to PrimeWrap!
+      </h1>
+      <div style="width:80px;height:3px;background-color:#fff;margin:15px auto;border-radius:2px;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="background-color:#fff;padding:40px 30px;border-radius:0 0 12px 12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+      <h2 style="color:#1f2937;font-size:24px;font-weight:600;margin:0 0 20px 0;text-align:center;">
+        Thank you for joining our newsletter! 🌿
+      </h2>
+      <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
+        Hi there!
+      </p>
+      <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
+        We're thrilled to welcome you to the PrimeWrap family! You've taken the first step towards 
+        staying updated with our latest eco-friendly packaging solutions, exclusive offers, and 
+        sustainability tips.
+      </p>
+      <div style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:20px;margin:25px 0;">
+        <h3 style="color:#15803d;font-size:18px;font-weight:600;margin:0 0 15px 0;">
+          What to expect:
+        </h3>
+        <ul style="color:#166534;font-size:14px;line-height:1.6;margin:0;padding-left:20px;">
+          <li style="margin-bottom:8px;">Monthly updates on new sustainable packaging products</li>
+          <li style="margin-bottom:8px;">Exclusive discounts and early access to sales</li>
+          <li style="margin-bottom:8px;">Eco-friendly tips and industry insights</li>
+          <li style="margin-bottom:0;">Behind-the-scenes content from our sustainability journey</li>
+        </ul>
+      </div>
+      <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
+        As a welcome gift, here's a <strong style="color:#10b981;">10% discount code</strong> for your first order:
+      </p>
+      <div style="background-color:#10b981;color:#fff;padding:15px 20px;border-radius:8px;text-align:center;margin:25px 0;border:2px dashed #fff;">
+        <span style="font-size:24px;font-weight:bold;letter-spacing:2px;">WELCOME10</span>
+      </div>
+      <div style="text-align:center;margin:30px 0;">
+        <a href="https://primewrap.ca/shop" style="background-color:#10b981;color:#fff;padding:15px 30px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:600;display:inline-block;box-shadow:0 4px 6px rgba(16,185,129,0.3);">
+          Start Shopping Now →
+        </a>
+      </div>
+      <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:30px 0 0 0;text-align:center;">
+        Questions? Simply reply to this email – we'd love to hear from you!
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div style="background-color:#f9fafb;padding:30px;text-align:center;border-top:1px solid #e5e7eb;margin-top:20px;border-radius:8px;">
+      <div style="color:#10b981;font-size:20px;font-weight:bold;margin:0 0 15px 0;">PrimeWrap</div>
+      <p style="color:#6b7280;font-size:14px;margin:0 0 15px 0;">
+        Sustainable Packaging Solutions for a Better Tomorrow
+      </p>
+      <div style="color:#9ca3af;font-size:12px;line-height:1.4;">
+        <p style="margin:0 0 5px 0;">📧 ${email} | 📞 1-800-PRIMEWRAP</p>
+        <p style="margin:0 0 15px 0;">🏢 123 Eco Street, Green City, GC 12345</p>
+        <a href="https://primewrap.ca/unsubscribe" style="color:#6b7280;font-size:12px;text-decoration:underline;">
+          Unsubscribe from this newsletter
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`;
+}
+
+/**
+ * POST /api/v1/user/subscribe
+ * Saves a new subscriber and sends the styled welcome email.
+ */
+export const createSubscribers = catchAsyncError(async (req, res, next) => {
+  const email = req.body.email;
+
+  // 1) Check for existing
+  const existing = await Subscribers.findOne({ email });
+  if (existing) {
+    return res
+      .status(200)
+      .send("Email already subscribed. Check your email for the welcome newsletter.");
+  }
+
+  // 2) Save new subscriber
+  const newSub = new Subscribers({ email });
+  await newSub.save();
+  console.log(`New subscription: ${email}`);
+
+  // 3) Send styled welcome email
+  const subject = "Welcome to Our Newsletter!";
+  const htmlContent = generateWelcomeEmailHTML(email);
+  await sendNewsletter(email, subject, htmlContent);
+
+  // 4) Respond
+  res
+    .status(201)
+    .send("Subscription successful! Check your email for your welcome newsletter.");
+});
+
+
+export const getCart = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  if (!user) return next(new ErrorHandler("User not found", 404));
+  res.status(200).json({ success: true, cart: user.cart });
+});
+
+// backend/controllers/cartController.js
+export const saveCart = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  if (!user) return next(new ErrorHandler("User not found", 404));
+
+  // Map the full client‐side array into your schema fields:
+  const items = (req.body.cartItems || []).map(c => ({
+    product: c.id ?? c.product,     // or c.product if your client uses that
+    name:    c.name,
+    price:   c.price,
+    quantity:c.quantity,
+    image:   c.image,
+  }));
+
+  // ⚠️ Overwrite instead of merge:
+  user.cart = items;
+  await user.save();
+
+  res.status(200).json({ success: true, cart: user.cart });
+});
+
+
+
+export const getAllMessages = catchAsyncError(async (req, res, next) => {
+  const messages = await Message.find().sort({ createdAt: -1 });
+  if (!messages) {
+    return next(new ErrorHandler("No messages found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: messages,
+  });
+});
+
+
+export const getAllUsers = catchAsyncError(async (req, res, next) => {
+  // Fetch every user, omit the password field
+  const users = await User.find()
+    .select("-password")
+    .sort({ createdAt: -1 });
+
+  if (!users) {
+    return next(new ErrorHandler("No users found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    data: users,
+  });
+});
+
+export const getAllSubscribers = catchAsyncError(async (req, res, next) => {
+  const subs = await Subscribers.find().sort({ _id: -1 });
+  if (!subs) {
+    return next(new ErrorHandler("No subscribers found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    data: subs,
+  });
+});
+
+export const getAllOrders = catchAsyncError(async (req, res, next) => {
+  let orders;
+  if (req.user.role === 'admin') {
+    orders = await Order.find()
+      .populate('user', 'name email')
+      .sort({ orderDate: -1 });
+  } else {
+    orders = await Order.find({ user: req.user._id })
+      .sort({ orderDate: -1 });
+  }
+
+  res.status(200).json({
+    success: true,
+    orders
+  });
+});
+
+// export const createOrder = catchAsyncError(async (req, res, next) => {
+//   const { items, total, deliveryAddress, paymentMethod, trackingNumber } = req.body;
+//   if (!items || !items.length) {
+//     return next(new ErrorHandler('No order items provided.', 400));
+//   }
+
+//   const order = await Order.create({
+//     user: req.user._id,
+//     items: items.map(i => ({
+//       product: i.id,
+//       name:    i.name,
+//       price:   i.price,
+//       quantity:i.quantity
+//     })),
+//     total,
+//     deliveryAddress,
+//     paymentMethod,
+//     trackingNumber
+//   });
+
+//   res.status(201).json({
+//     success: true,
+//     order
+//   });
+// });
+
+export const createOrder = catchAsyncError(async (req, res, next) => {
+  const { items, total, deliveryAddress, paymentMethod, trackingNumber } = req.body;
+  if (!items || !items.length) {
+    return next(new ErrorHandler('No order items provided.', 400));
+  }
+
+  // Normalize each line‐item so `product` is always set
+  const normalizedItems = items.map(i => ({
+    product:       // pick whichever one your UI sent:
+       // front-end sent { id }?               i.id :
+       // front-end sent { product }?          i.product :
+       // fallback to either/or:
+       i.product ?? i.id,
+    name:          i.name,
+    price:         i.price,
+    quantity:      i.quantity,
+    image:         i.image,   // optional: include if you added it to your schema
+  }));
+
+  // verify everything has a product
+  if (normalizedItems.some(li => !li.product)) {
+    return next(new ErrorHandler('Each order item must have a product ID.', 400));
+  }
+
+  const order = await Order.create({
+    user:            req.user._id,
+    items:           normalizedItems,
+    total,
+    deliveryAddress,
+    paymentMethod,
+    trackingNumber,
+  });
+
+  res.status(201).json({
+    success: true,
+    order,
+  });
+});

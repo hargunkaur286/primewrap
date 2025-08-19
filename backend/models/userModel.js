@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import crypto from "crypto"
+import cartItemSchema from "./cartModel.js";
 
 const userSchema = new mongoose.Schema({
     name: String,
@@ -18,6 +19,10 @@ const userSchema = new mongoose.Schema({
     verificationCodeExpire: Date,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+      cart: {
+        type: [cartItemSchema],
+        default: [],
+    },
     createdAt: {
         type: Date,
         default: Date.now,
