@@ -330,7 +330,7 @@
 
 // export default OTPVerification;
 
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -366,7 +366,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Context } from '@/main'; // Change path if needed
+import { useAuth } from '@/contexts/AuthContext';
 
 // ------ Zod Schema and Types ------
 const otpSchema = z.object({
@@ -380,8 +380,7 @@ type OTPFormData = z.infer<typeof otpSchema>;
 
 // ------------ Component -----------
 const OTPVerification: React.FC = () => {
-  // Global auth context (adjust this if your context is elsewhere)
-  const { setIsAuthenticated, setUser } = useContext(Context);
+  const { refreshMe } = useAuth();
 
   // Route params ('email' and/or 'phone' must be provided via the route!)
   const { email, phone } = useParams<{
@@ -445,8 +444,8 @@ const OTPVerification: React.FC = () => {
         description: res.data.message,
       });
       setIsVerified(true);
-      setIsAuthenticated(true);
-      setUser(res.data.user);
+      // Backend sets the auth cookie; pull fresh /me so Header updates immediately.
+      await refreshMe();
       setTimeout(() => navigate('/'), 2000); // Navigate to home, not login
     } catch (err: any) {
       console.error('OTP Verification Error:', err.response?.data); // Add logging
@@ -457,8 +456,6 @@ const OTPVerification: React.FC = () => {
           'Invalid verification code. Please try again.',
         variant: 'destructive',
       });
-      setIsAuthenticated(false);
-      setUser(null);
       form.reset();
     } finally {
       setIsLoading(false);

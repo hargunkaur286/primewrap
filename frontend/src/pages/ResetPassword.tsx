@@ -320,7 +320,7 @@
 
 // export default ResetPassword;
 
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -352,7 +352,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { Context } from '../main';
+import { useAuth } from '@/contexts/AuthContext';
 
 const resetPasswordSchema = z
   .object({
@@ -383,7 +383,7 @@ const ResetPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const { setIsAuthenticated, setUser } = useContext(Context);
+  const { refreshMe } = useAuth();
 
   const form = useForm<ResetPasswordFormData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -440,8 +440,8 @@ const ResetPassword = () => {
         }
       );
       toast.success(res.data.message || 'Password reset successful!');
-      setIsAuthenticated(true);
-      setUser(res.data.user);
+      // Reset endpoint may also set auth cookie; ensure app-wide auth state updates.
+      await refreshMe();
       setIsSuccess(true);
     } catch (error: any) {
       toast.error(

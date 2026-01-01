@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -24,7 +24,6 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Context } from "../main";          // <-- import your global context
 import { useAuth } from "@/contexts/AuthContext";  // ← use the typed auth hook
 const ADMIN_EMAIL="hargunkaur2863@gmail.com"
 /* --------------------------- validation schema --------------------------- */
@@ -38,8 +37,6 @@ type LoginFormData = z.infer<typeof loginSchema>;
 /* ======================================================================== */
 const Login = () => {
   const navigate = useNavigate();
-  const { setIsAuthenticated, setUser } = useContext(Context);   // <-- same API you used before
-
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
