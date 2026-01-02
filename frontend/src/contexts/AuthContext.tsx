@@ -309,6 +309,7 @@ import React, {
   ReactNode,
 } from 'react';
 import axios from 'axios';
+import { API_BASE } from '@/lib/apiBase';
 
 /* ----------------------------- Types ----------------------------- */
 export interface User {
@@ -340,7 +341,6 @@ interface AuthContextType {
 }
 
 /* ----------------------------- Axios ---------------------------- */
-const API_BASE = import.meta.env?.VITE_API_URL ?? 'http://localhost:4000';
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,

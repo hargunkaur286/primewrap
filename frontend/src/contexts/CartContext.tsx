@@ -135,6 +135,7 @@ import React, {
 } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
+import { API_BASE } from '@/lib/apiBase';
 
 export interface CartItem {
   id: string;
@@ -172,7 +173,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       }
       try {
         console.log('🛒 [CartContext] fetching cart…');
-        const res = await axios.get('http://localhost:4000/api/v1/user/cart', {
+        const res = await axios.get(`${API_BASE}/api/v1/user/cart`, {
           withCredentials: true,
         });
         console.log('🛒 [CartContext] fetchCart response:', res.data.cart);
@@ -191,7 +192,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     setItems(newCart);
     try {
       const res = await axios.post(
-        'http://localhost:4000/api/v1/user/cart',
+          `${API_BASE}/api/v1/user/cart`,
         { cartItems: newCart },
         { withCredentials: true }
       );

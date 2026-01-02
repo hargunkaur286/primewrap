@@ -367,6 +367,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_BASE } from '@/lib/apiBase';
 
 // ------ Zod Schema and Types ------
 const otpSchema = z.object({
@@ -431,7 +432,7 @@ const OTPVerification: React.FC = () => {
       };
       
       const res = await axios.post(
-        'http://localhost:4000/api/v1/user/otp-verification',
+        `${API_BASE}/api/v1/user/otp-verification`,
         payload,
         {
           withCredentials: true,
@@ -469,7 +470,7 @@ const OTPVerification: React.FC = () => {
       const formattedPhone = phone?.startsWith('+91') ? phone : `+91${phone}`;
       
       await axios.post(
-        'http://localhost:4000/api/v1/user/resend-otp',
+        `${API_BASE}/api/v1/user/resend-otp`,
         { email, phone: formattedPhone },
         { withCredentials: true }
       );

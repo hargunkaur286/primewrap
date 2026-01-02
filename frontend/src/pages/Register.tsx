@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { API_BASE } from "@/lib/apiBase";
 
 /* ------------------------------------------------------------------ */
 /* validation schema — mirrors what the API expects                    */
@@ -106,7 +107,7 @@ const Register: React.FC = () => {
 
       /* 2️⃣ send request --------------------------------------------- */
       const res = await axios.post(
-        "http://localhost:4000/api/v1/user/register",
+        `${API_BASE}/api/v1/user/register`,
         payload,
         {
           withCredentials: true,

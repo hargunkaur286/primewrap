@@ -160,6 +160,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Mail, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { API_BASE } from '@/lib/apiBase';
 import { Link } from 'react-router-dom';
 
 const forgotPasswordSchema = z.object({
@@ -185,7 +186,7 @@ const ForgotPasswordForm = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        'http://localhost:4000/api/v1/user/password/forgot',
+        `${API_BASE}/api/v1/user/password/forgot`,
         { email: data.email },
         {
           withCredentials: true,

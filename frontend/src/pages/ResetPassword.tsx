@@ -353,6 +353,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_BASE } from '@/lib/apiBase';
 
 const resetPasswordSchema = z
   .object({
@@ -403,7 +404,7 @@ const ResetPassword = () => {
       try {
         // Call backend API to verify if token is valid
         const res = await axios.get(
-          `http://localhost:4000/api/v1/user/password/reset/${token}`,
+          `${API_BASE}/api/v1/user/password/reset/${token}`,
           {
             withCredentials: true,
           }
@@ -432,7 +433,7 @@ const ResetPassword = () => {
     setIsLoading(true);
     try {
       const res = await axios.put(
-        `http://localhost:4000/api/v1/user/password/reset/${token}`,
+        `${API_BASE}/api/v1/user/password/reset/${token}`,
         { password: data.password, confirmPassword: data.confirmPassword },
         {
           withCredentials: true,
