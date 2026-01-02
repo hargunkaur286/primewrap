@@ -1,9 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import {connection} from "./database/dbConnection.js"
+import { connection } from "./database/dbConnection.js";
 import { errorMiddleware } from "./middleware/error.js";
-import userRouter from "./routes/userRouter.js"
+import userRouter from "./routes/userRouter.js";
 import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.js";
 export const app = express();
 
@@ -25,7 +25,7 @@ const corsOptions = {
     if (!process.env.VERCEL) return callback(null, true);
 
     if (allowedOrigins.has(origin) || vercelPreviewOriginRegex.test(origin)) {
-      return callback(null, origin); // echo back the request origin
+      return callback(null, true);
     }
 
     return callback(new Error(`CORS blocked origin: ${origin}`));
@@ -35,7 +35,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+// Express 5 does not accept "*" as a path pattern here.
+app.options(/.*/, cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());
@@ -49,4 +50,4 @@ if (!process.env.VERCEL) {
 }
 connection();
 
-app.use(errorMiddleware)
+app.use(errorMiddleware);
