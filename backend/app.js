@@ -7,9 +7,13 @@ import userRouter from "./routes/userRouter.js"
 import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.js";
 export const app = express();
 
+const corsOrigin = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL]
+  : true; // safe default (reflect request origin) when env var isn't set
+
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: corsOrigin,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -21,7 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/user", userRouter);
 
-removeUnverifiedAccounts();
+// Vercel serverless functions should not start background cron jobs.
+if (!process.env.VERCEL) {
+  removeUnverifiedAccounts();
+}
 connection();
 
 app.use(errorMiddleware)

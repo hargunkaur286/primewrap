@@ -28,10 +28,21 @@
 
 
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+let stripeClient;
+const getStripeClient = () => {
+  if (stripeClient) return stripeClient;
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error('STRIPE_SECRET_KEY is not set');
+  }
+  stripeClient = new Stripe(secretKey);
+  return stripeClient;
+};
 
 export const paymentHelper = async (paymentMethodId, amount) => {
   try {
+    const stripe = getStripeClient();
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100, 
       currency: 'cad',

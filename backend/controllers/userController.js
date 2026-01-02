@@ -12,7 +12,17 @@ import { Subscribers } from "../models/subscribers.js";
 import { sendNewsletter } from '../newsletter.js';
 import { Order } from "../models/orderModel.js";
 
-const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+let twilioClient;
+const getTwilioClient = () => {
+  if (twilioClient) return twilioClient;
+  const sid = process.env.TWILIO_SID;
+  const token = process.env.TWILIO_AUTH_TOKEN;
+  if (!sid || !token) {
+    return null;
+  }
+  twilioClient = twilio(sid, token);
+  return twilioClient;
+};
 
 export const register = catchAsyncError(async(req, res, next) => {
     try {
@@ -136,6 +146,13 @@ async function sendVerificationCode(
         message: `Verification email successfully sent to ${name}`,
       });
     } else if (verificationMethod === "phone") {
+      const client = getTwilioClient();
+      if (!client || !process.env.TWILIO_PHONE) {
+        return res.status(500).json({
+          success: false,
+          message: "SMS verification is not configured on the server",
+        });
+      }
       // ✅ send OTP as SMS instead of voice call
       await client.messages.create({
         body: `Your verification code is ${verificationCode}`,

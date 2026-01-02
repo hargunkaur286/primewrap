@@ -2,9 +2,11 @@ import mongoose from "mongoose";
 import { config } from "dotenv";
 config({ path: "./.env" });
 
-console.log(process.env.MONGO_URI)
-
 export const connection = () => {
+    if (!process.env.MONGO_URI) {
+        console.warn("MONGO_URI is not set; skipping DB connection.");
+        return;
+    }
     mongoose
         .connect(process.env.MONGO_URI, {
             dbName: "auth_db",
