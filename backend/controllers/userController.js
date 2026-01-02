@@ -11,7 +11,7 @@ import { Message } from "../models/messageModel.js";
 import { Subscribers } from "../models/subscribers.js";
 import { sendNewsletter } from '../newsletter.js';
 import { Order } from "../models/orderModel.js";
-import mongoose from "mongoose";
+import { ensureDbConnection } from "../database/dbConnection.js";
 
 let twilioClient;
 const getTwilioClient = () => {
@@ -276,7 +276,9 @@ export const verifyOTP = catchAsyncError(async (req, res, next) => {
 });
 
 export const login = catchAsyncError(async(req, res, next) => {
-  if (mongoose.connection.readyState !== 1) {
+  try {
+    await ensureDbConnection();
+  } catch (err) {
     return next(new ErrorHandler("Database is not connected. Please try again later.", 503));
   }
     const {email, password} = req.body;
