@@ -294,11 +294,15 @@ export const login = catchAsyncError(async(req, res, next) => {
 });
 
 export const logout = catchAsyncError(async(req, res, next) => {
+  const isProd = process.env.NODE_ENV === "production";
     res
         .status(200)
         .cookie("token", "", {
-            expire: new Date(Date.now()),
+      expires: new Date(Date.now()),
             httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "None" : "Lax",
+      path: "/",
         })
         .json({
             success: true,

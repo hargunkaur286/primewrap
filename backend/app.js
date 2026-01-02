@@ -7,9 +7,12 @@ import userRouter from "./routes/userRouter.js"
 import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.js";
 export const app = express();
 
+const defaultFrontendUrl = "https://primewrap.vercel.app";
 const corsOrigin = process.env.FRONTEND_URL
   ? [process.env.FRONTEND_URL]
-  : true; // safe default (reflect request origin) when env var isn't set
+  : process.env.VERCEL
+    ? [defaultFrontendUrl]
+    : true; // local dev: reflect request origin
 
 app.use(
   cors({

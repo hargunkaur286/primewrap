@@ -21,13 +21,17 @@ export const sendToken = (user, statusCode, message, res) => {
 
     const cookieExpireDays = Number(process.env.COOKIE_EXPIRE) || 7; // fallback to 7 days
 
+    const isProd = process.env.NODE_ENV === "production";
+
     res
         .status(statusCode)
         .cookie("token", token, {
             expires: new Date(Date.now() + cookieExpireDays * 24 * 60 * 60 * 1000),
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // true for HTTPS in prod
-            sameSite: "Lax", // can adjust based on your frontend/backend config
+            // Cross-site cookies (frontend and backend on different domains) require SameSite=None + Secure.
+            secure: isProd,
+            sameSite: isProd ? "None" : "Lax",
+            path: "/",
         })
         .json({
             success: true,
