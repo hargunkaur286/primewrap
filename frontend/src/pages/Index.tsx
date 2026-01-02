@@ -293,6 +293,7 @@ import { useCart } from '@/contexts/CartContext';
 import { toast } from '@/hooks/use-toast';
 import ProductCard from '@/components/ProductCard';
 import FeatureCard from '@/components/FeatureCard';
+import { API_BASE } from '@/lib/apiBase';
 
 const Index = () => {
   const [email, setEmail] = useState('');
@@ -304,7 +305,7 @@ const Index = () => {
   if (!email) return;
 
   try {
-    const response = await fetch('http://localhost:4000/api/v1/user/subscribe', {
+    const response = await fetch(`${API_BASE}/api/v1/user/subscribe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

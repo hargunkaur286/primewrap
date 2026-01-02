@@ -357,6 +357,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Search, Eye } from 'lucide-react';
+import { API_BASE } from '@/lib/apiBase';
 
 interface MessageType {
   _id: string;
@@ -377,7 +378,7 @@ const ContactQueries = () => {
       try {
         setLoading(true);
         const res = await axios.get<{ success: boolean; data: MessageType[] }>(
-          'http://localhost:4000/api/v1/user/contact',
+          `${API_BASE}/api/v1/user/contact`,
           { withCredentials: true }
         );
         setQueries(res.data.data);

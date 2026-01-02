@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from '@/hooks/use-toast';
+import { API_BASE } from '@/lib/apiBase';
 import axios from "axios"
 const stripePromise = loadStripe('pk_test_51RrbJ256fhzVxt4O5OGBHT37TZEHt4RshdZ2M7NFvzSlfAvbHb2HozFBOLAKyEy3nGTcVHjCwtTOQViIZSPPBmjM00A50jWvn3');
 
@@ -85,8 +86,9 @@ const PaymentForm = () => {
       }
 
       // TODO: Replace with your actual backend API endpoint
-      const response = await fetch('http://localhost:4000/api/v1/user/payment', {
+      const response = await fetch(`${API_BASE}/api/v1/user/payment`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           // TODO: Add authentication headers if required

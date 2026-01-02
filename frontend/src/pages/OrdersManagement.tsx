@@ -8,6 +8,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select'
 import { ShoppingCart, Package, DollarSign, Truck, Eye, Edit2, Calendar, Search, Filter } from 'lucide-react'
+import { API_BASE } from '@/lib/apiBase'
 
 interface OrderItem {
   product: string
@@ -28,17 +29,19 @@ interface Order {
   createdAt: string
 }
 
+type FilterStatus = 'all'|'pending'|'processing'|'shipped'|'delivered'|'cancelled'
+
 export default function OrdersManagement() {
   const [orders, setOrders] = useState<Order[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterStatus, setFilterStatus] = useState<'all'|'pending'|'processing'|'shipped'|'delivered'|'cancelled'>('all')
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string|null>(null)
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get('http://localhost:4000/api/v1/user/orders', {
+        const res = await axios.get(`${API_BASE}/api/v1/user/orders`, {
           withCredentials: true
         })
         setOrders(res.data.orders)
@@ -152,7 +155,7 @@ export default function OrdersManagement() {
               onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
-          <Select value={filterStatus} onValueChange={setFilterStatus}>
+          <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as FilterStatus)}>
             <SelectTrigger className="w-full md:w-48">
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Filter by status" />

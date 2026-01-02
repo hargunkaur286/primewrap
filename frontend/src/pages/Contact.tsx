@@ -7,6 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { toast } from '@/hooks/use-toast';
 import { Mail, MessageSquare, Phone, Clock, Leaf, Sparkles } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE } from '@/lib/apiBase';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const Contact = () => {
   e.preventDefault();
   if (formData.name && formData.email && formData.message) {
     try {
-      const res = await axios.post('http://localhost:4000/api/v1/user/contact', formData, {
+      const res = await axios.post(`${API_BASE}/api/v1/user/contact`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },

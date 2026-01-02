@@ -298,6 +298,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { API_BASE } from '@/lib/apiBase';
 import { Users as UsersIcon, Search, Filter, UserPlus, Edit2, Trash2, Mail, Phone, Calendar } from 'lucide-react';
 
 interface CartItem {
@@ -348,7 +349,7 @@ export default function UsersManagement() {
       try {
         setLoading(true);
         const res = await axios.get<{ success: boolean; data: UserType[] }>(
-          'http://localhost:4000/api/v1/user/all',
+          `${API_BASE}/api/v1/user/all`,
           { withCredentials: true }
         );
         setUsers(res.data.data);

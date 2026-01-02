@@ -1,6 +1,7 @@
 // src/pages/NewsletterSubscribers.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE } from '@/lib/apiBase';
 import {
   Card,
   CardContent,
@@ -64,7 +65,7 @@ export default function NewsletterSubscribers() {
   useEffect(() => {
     axios
       .get<{ success: boolean; data: Subscriber[] }>(
-        'http://localhost:4000/api/v1/user/subscribers',
+        `${API_BASE}/api/v1/user/subscribers`,
         { withCredentials: true }
       )
       .then((res) => {
