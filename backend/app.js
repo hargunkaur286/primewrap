@@ -8,19 +8,34 @@ import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.
 export const app = express();
 
 const defaultFrontendUrl = "https://primewrap.vercel.app";
-const corsOrigin = process.env.FRONTEND_URL
-  ? [process.env.FRONTEND_URL]
-  : process.env.VERCEL
-    ? [defaultFrontendUrl]
-    : true; // local dev: reflect request origin
 
-app.use(
-  cors({
-    origin: corsOrigin,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
+// In Vercel, your frontend can be either the production URL or a preview URL like:
+// https://primewrap-git-main-hargunkaur286s-projects.vercel.app
+const vercelPreviewOriginRegex = /^https:\/\/primewrap(-.*)?\.vercel\.app$/;
+const allowedOrigins = new Set(
+  [process.env.FRONTEND_URL, defaultFrontendUrl].filter(Boolean)
 );
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Non-browser clients / same-origin requests may not send Origin.
+    if (!origin) return callback(null, true);
+
+    // Local dev: be permissive.
+    if (!process.env.VERCEL) return callback(null, true);
+
+    if (allowedOrigins.has(origin) || vercelPreviewOriginRegex.test(origin)) {
+      return callback(null, origin); // echo back the request origin
+    }
+
+    return callback(new Error(`CORS blocked origin: ${origin}`));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());
