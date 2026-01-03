@@ -58,12 +58,12 @@ const Contact = () => {
 
   const faqs = [
     {
-      question: "What makes PrimeWrap bags eco-friendly?",
+      question: "What makes Pinewrap bags eco-friendly?",
       answer: "Our bags are made from plant-based materials that biodegrade naturally without leaving harmful residues. They're certified compostable and meet all international environmental standards."
     },
     {
-      question: "How strong are PrimeWrap bags compared to regular plastic bags?",
-      answer: "PrimeWrap bags are designed to be just as strong as traditional plastic bags, with enhanced puncture resistance and stretch capacity. They won't tear or leak during normal use."
+      question: "How strong are Pinewrap bags compared to regular plastic bags?",
+      answer: "Pinewrap bags are designed to be just as strong as traditional plastic bags, with enhanced puncture resistance and stretch capacity. They won't tear or leak during normal use."
     },
     {
       question: "What's your shipping policy?",
@@ -75,7 +75,7 @@ const Contact = () => {
     },
     {
       question: "How should I store the bags?",
-      answer: "Store PrimeWrap bags in a cool, dry place away from direct sunlight. They have a shelf life of 18 months when stored properly."
+      answer: "Store Pinewrap bags in a cool, dry place away from direct sunlight. They have a shelf life of 18 months when stored properly."
     },
     {
       question: "Are the bags suitable for all types of waste?",

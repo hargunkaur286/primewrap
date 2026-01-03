@@ -229,7 +229,7 @@ const PaymentForm = () => {
               Payment Complete!
             </h1>
             <p className="text-gray-600 text-lg">
-              Thank you for choosing PrimeWrap! Your order is being processed.
+              Thank you for choosing Pinewrap! Your order is being processed.
             </p>
           </div>
           
@@ -348,7 +348,7 @@ const PaymentForm = () => {
                     />
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="city" className="text-gray-700 font-medium">City</Label>
                       <Input
@@ -686,7 +686,7 @@ export default Payment;
 //           <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
 //             Payment Complete!
 //           </h1>
-//           <p className="text-gray-600">Thank you for choosing PrimeWrap! Your order is being processed.</p>
+//           <p className="text-gray-600">Thank you for choosing Pinewrap! Your order is being processed.</p>
 //           <Button
 //             className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 text-white"
 //             onClick={() => navigate('/')}

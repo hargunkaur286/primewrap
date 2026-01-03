@@ -12,10 +12,10 @@ const ProductScented = () => {
 
   const product = {
     id: 'scented-bags',
-    name: 'PrimeWrap Scented',
+    name: 'Pinewrap Scented',
     tagline: 'Fresh scent, lasting strength',
     price: 24.99,
-    image: '/lovable-uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png',
+    image: '/uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png',
     description: 'Our premium scented garbage bags combine powerful odor control with eco-friendly materials. Each bag is infused with a light, fresh scent that neutralizes unpleasant odors while maintaining our commitment to sustainability.',
     features: [
       'Fresh lavender scent neutralizes odors',

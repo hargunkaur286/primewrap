@@ -13,17 +13,17 @@ const Shop = () => {
   const products = [
     {
       id: 'scented-bags',
-      name: 'PrimeWrap Scented',
+      name: 'Pinewrap Scented',
       tagline: 'Fresh scent, lasting strength',
       price: 24.99,
-      image: '/lovable-uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png'
+      image: '/uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png'
     },
     {
       id: 'recycling-bags',
-      name: 'PrimeWrap Recycling',
+      name: 'Pinewrap Recycling',
       tagline: 'Made from 100% recycled materials',
       price: 22.99,
-      image: '/lovable-uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png'
+      image: '/uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png'
     }
   ];
 
@@ -103,7 +103,7 @@ const Shop = () => {
             <div className="grid md:grid-cols-2 gap-6 md:gap-8">
               <div className="text-center space-y-4 md:space-y-6 p-4 md:p-8 bg-gradient-to-br from-emerald-50 to-cyan-50 rounded-2xl hover-lift">
                 <img 
-                  src="/lovable-uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png" 
+                  src="/uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png" 
                   alt="Scented Bags" 
                   className="w-32 md:w-48 h-32 md:h-48 mx-auto object-cover rounded-2xl shadow-lg"
                 />
@@ -118,7 +118,7 @@ const Shop = () => {
               
               <div className="text-center space-y-4 md:space-y-6 p-4 md:p-8 bg-gradient-to-br from-cyan-50 to-emerald-50 rounded-2xl hover-lift">
                 <img 
-                  src="/lovable-uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png" 
+                  src="/uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png" 
                   alt="Recycling Bags" 
                   className="w-32 md:w-48 h-32 md:h-48 mx-auto object-cover rounded-2xl shadow-lg"
                 />
@@ -137,7 +137,7 @@ const Shop = () => {
           <div className="mb-12 md:mb-20">
             <div className="text-center mb-8 md:mb-12">
               <h2 className="text-2xl md:text-3xl font-bold font-display mb-4 bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text text-transparent">
-                Why Choose PrimeWrap?
+                Why Choose Pinewrap?
               </h2>
               <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
                 Every product is designed with your needs and the environment in mind

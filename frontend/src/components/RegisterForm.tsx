@@ -49,7 +49,7 @@ const RegisterForm = ({ onToggleMode }: RegisterFormProps) => {
       await register(data.email, data.password, data.name);
       toast({
         title: "Account created!",
-        description: "Welcome to PrimeWrap! Your account has been created successfully.",
+        description: "Welcome to Pinewrap! Your account has been created successfully.",
       });
     } catch (error) {
       toast({
@@ -78,7 +78,7 @@ const RegisterForm = ({ onToggleMode }: RegisterFormProps) => {
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-        <CardDescription>Sign up to get started with PrimeWrap</CardDescription>
+        <CardDescription>Sign up to get started with Pinewrap</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <Button

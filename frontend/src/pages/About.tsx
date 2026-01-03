@@ -58,7 +58,7 @@ const About = () => {
           </h1>
           
           <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            At PrimeWrap, we believe that everyday choices can create extraordinary change. 
+            At Pinewrap, we believe that everyday choices can create extraordinary change. 
             Our mission is to make sustainable living simple, accessible, and effective.
           </p>
         </div>
@@ -81,7 +81,7 @@ const About = () => {
               
               <p className="text-lg text-slate-700 leading-relaxed mb-6">
                 Born from the simple realization that the products we use every day should work 
-                for us <em>and</em> our planet, PrimeWrap started as a quest to reimagine the 
+                for us <em>and</em> our planet, Pinewrap started as a quest to reimagine the 
                 humble garbage bag.
               </p>
               <p className="text-lg text-slate-700 leading-relaxed">

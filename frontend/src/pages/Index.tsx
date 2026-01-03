@@ -27,17 +27,17 @@
 //   const products = [
 //     {
 //       id: 'scented-bags',
-//       name: 'PrimeWrap Scented',
+//       name: 'Pinewrap Scented',
 //       tagline: 'Fresh scent, lasting strength',
 //       price: 24.99,
-//       image: '/lovable-uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png'
+//       image: '/uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png'
 //     },
 //     {
 //       id: 'recycling-bags',
-//       name: 'PrimeWrap Recycling',
+//       name: 'Pinewrap Recycling',
 //       tagline: 'Made from 100% recycled materials',
 //       price: 22.99,
-//       image: '/lovable-uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png'
+//       image: '/uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png'
 //     }
 //   ];
 
@@ -94,7 +94,7 @@
 //                 </span>
 //                 <br />
 //                 <span className="bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
-//                   PrimeWrap
+//                   Pinewrap
 //                 </span>
 //               </h1>
               
@@ -123,8 +123,8 @@
 //               <div className="relative perspective-1000">
 //                 <div className="transform-gpu hover:rotate-y-12 transition-transform duration-700 group">
 //                   <img
-//                     src="/lovable-uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png"
-//                     alt="PrimeWrap Hero Product"
+//                     src="/uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png"
+//                     alt="Pinewrap Hero Product"
 //                     className="w-full h-auto max-w-lg mx-auto drop-shadow-2xl group-hover:drop-shadow-3xl transition-all duration-500"
 //                   />
                   
@@ -210,7 +210,7 @@
 //               </span>
 //               <br />
 //               <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-//                 PrimeWrap?
+//                 Pinewrap?
 //               </span>
 //             </h2>
             
@@ -343,17 +343,17 @@ const Index = () => {
   const products = [
     {
       id: 'scented-bags',
-      name: 'PrimeWrap Scented',
+      name: 'Pinewrap Scented',
       tagline: 'Fresh scent, lasting strength',
       price: 24.99,
-      image: '/lovable-uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png'
+      image: '/uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png'
     },
     {
       id: 'recycling-bags',
-      name: 'PrimeWrap Recycling',
+      name: 'Pinewrap Recycling',
       tagline: 'Made from 100% recycled materials',
       price: 22.99,
-      image: '/lovable-uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png'
+      image: '/uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png'
     }
   ];
 
@@ -410,7 +410,7 @@ const Index = () => {
               </span>
               <br />
               <span className="bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent">
-                PrimeWrap
+                Pinewrap
               </span>
             </h1>
 
@@ -439,8 +439,8 @@ const Index = () => {
             <div className="perspective-1000">
               <div className="transform-gpu hover:rotate-y-12 transition-transform duration-700 group">
                 <img
-                  src="/lovable-uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png"
-                  alt="PrimeWrap Hero Product"
+                  src="/uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png"
+                  alt="Pinewrap Hero Product"
                   className="w-full h-auto drop-shadow-2xl group-hover:drop-shadow-3xl transition-all duration-500 rounded-lg"
                 />
 
@@ -520,7 +520,7 @@ const Index = () => {
               </span>
               <br />
               <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                PrimeWrap?
+                Pinewrap?
               </span>
             </h2>
 

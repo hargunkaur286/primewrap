@@ -63,7 +63,7 @@ const Login = () => {
 //     // Show success toast
 //     toast({
 //       title: "Login successful!",
-//       description: res.data.message || "Welcome back to PrimeWrap.",
+//       description: res.data.message || "Welcome back to Pinewrap.",
 //     });
 
 //     // Update global auth state
@@ -131,14 +131,14 @@ const Login = () => {
           <CardHeader className="text-center pb-8">
             <div className="mx-auto mb-6">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                PrimeWrap
+                Pinewrap
               </h1>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
               Welcome Back
             </CardTitle>
             <CardDescription className="text-gray-600">
-              Sign in to your PrimeWrap account to continue
+              Sign in to your Pinewrap account to continue
             </CardDescription>
           </CardHeader>
 
@@ -232,7 +232,7 @@ const Login = () => {
                   {isLoading && (
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   )}
-                  Sign In to PrimeWrap
+                  Sign In to Pinewrap
                 </Button>
               </form>
             </Form>

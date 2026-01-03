@@ -12,10 +12,10 @@ const ProductRecycling = () => {
 
   const product = {
     id: 'recycling-bags',
-    name: 'PrimeWrap Recycling',
+    name: 'Pinewrap Recycling',
     tagline: 'Made from 100% recycled materials',
     price: 22.99,
-    image: '/lovable-uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png',
+    image: '/uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png',
     description: 'Leading the circular economy, our recycling bags are crafted entirely from post-consumer recycled materials. Perfect for sorting and disposing of recyclables while maintaining the highest standards of strength and reliability.',
     features: [
       '100% post-consumer recycled content',

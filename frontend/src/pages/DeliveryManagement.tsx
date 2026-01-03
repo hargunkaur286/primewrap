@@ -169,14 +169,14 @@ const DeliveryManagement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Delivery Management</h1>
             <p className="text-gray-600">Manage routes, assign drivers, and track deliveries</p>
           </div>
           <Dialog open={isCreateRouteOpen} onOpenChange={setIsCreateRouteOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="w-full sm:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
                 Create Route
               </Button>

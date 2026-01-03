@@ -84,7 +84,7 @@
 //             </div>
 //             <div className="font-bold text-2xl tracking-tight">
 //               <span className="bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text text-transparent">
-//                 PRIME
+//                 PINE
 //               </span>
 //               <span className="bg-gradient-to-r from-cyan-600 to-emerald-600 bg-clip-text text-transparent">
 //                 WRAP
@@ -235,14 +235,14 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-gradient-to-r from-emerald-50/95 to-cyan-50/95 backdrop-blur-xl border-b border-emerald-200/30 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-20 items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 sm:h-20 items-center justify-between gap-2">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3 hover:scale-105 transition">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
-            <Leaf className="w-6 h-6 text-white" />
+          <div className="w-9 h-9 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
+            <Leaf className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 to-cyan-700">PRIME</span>
+          <h1 className="text-lg sm:text-2xl font-bold tracking-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-700 to-cyan-700">PINE</span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-emerald-600">WRAP</span>
           </h1>
         </Link>
@@ -268,15 +268,16 @@ export default function Header() {
         </nav>
 
         {/* Right side */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           {/* Cart */}
           <div className="relative">
             <Button
               variant="ghost"
-              className="relative p-3 bg-emerald-100 rounded-2xl hover:bg-emerald-200 transition"
+              className="relative p-2 sm:p-3 bg-emerald-100 rounded-2xl hover:bg-emerald-200 transition"
               onClick={() => setIsCartOpen(o => !o)}
             >
-              <ShoppingCart size={24} />
+              <ShoppingCart size={20} className="sm:hidden" />
+              <ShoppingCart size={24} className="hidden sm:block" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-xs flex items-center justify-center">
                   {totalItems}
@@ -319,7 +320,7 @@ export default function Header() {
           ) : (
             <Link to="/login">
               <Button variant="outline" className="flex items-center space-x-2">
-                <UserIcon size={16} /> <span>Sign In</span>
+                <UserIcon size={16} /> <span className="hidden sm:inline">Sign In</span>
               </Button>
             </Link>
           )}

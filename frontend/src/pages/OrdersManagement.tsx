@@ -84,12 +84,12 @@ export default function OrdersManagement() {
     <div className="min-h-screen p-6 bg-gradient-to-br from-purple-50 to-blue-50">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold">Orders Management</h1>
             <p className="text-gray-600">Track and manage customer orders</p>
           </div>
-          <Button className="bg-gradient-to-r from-purple-600 to-blue-600">
+          <Button className="bg-gradient-to-r from-purple-600 to-blue-600 w-full sm:w-auto">
             <Package className="w-4 h-4 mr-2" /> Export Orders
           </Button>
         </div>

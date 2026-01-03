@@ -341,7 +341,7 @@ export const forgotPassword = catchAsyncError(async(req, res, next) => {
     try{
         await sendEmail({
             email: user.email,
-            subject: "PRIMEWRAP PASSWORD RESET MAIL",
+          subject: "PINEWRAP PASSWORD RESET MAIL",
             message
         });
         res.status(200).json({
@@ -485,14 +485,14 @@ function generateWelcomeEmailHTML(email) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to PrimeWrap Newsletter</title>
+  <title>Welcome to Pinewrap Newsletter</title>
 </head>
 <body style="margin:0;padding:0;background-color:#f8f9fa;">
   <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background-color:#f8f9fa;padding:20px;">
     <!-- Header -->
     <div style="background:linear-gradient(135deg,#10b981,#059669);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
       <h1 style="color:#fff;font-size:28px;font-weight:bold;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.1);">
-        Welcome to PrimeWrap!
+        Welcome to Pinewrap!
       </h1>
       <div style="width:80px;height:3px;background-color:#fff;margin:15px auto;border-radius:2px;"></div>
     </div>
@@ -506,7 +506,7 @@ function generateWelcomeEmailHTML(email) {
         Hi there!
       </p>
       <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
-        We're thrilled to welcome you to the PrimeWrap family! You've taken the first step towards 
+        We're thrilled to welcome you to the Pinewrap family! You've taken the first step towards 
         staying updated with our latest eco-friendly packaging solutions, exclusive offers, and 
         sustainability tips.
       </p>
@@ -539,7 +539,7 @@ function generateWelcomeEmailHTML(email) {
 
     <!-- Footer -->
     <div style="background-color:#f9fafb;padding:30px;text-align:center;border-top:1px solid #e5e7eb;margin-top:20px;border-radius:8px;">
-      <div style="color:#10b981;font-size:20px;font-weight:bold;margin:0 0 15px 0;">PrimeWrap</div>
+      <div style="color:#10b981;font-size:20px;font-weight:bold;margin:0 0 15px 0;">Pinewrap</div>
       <p style="color:#6b7280;font-size:14px;margin:0 0 15px 0;">
         Sustainable Packaging Solutions for a Better Tomorrow
       </p>

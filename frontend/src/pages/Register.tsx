@@ -149,14 +149,14 @@ const Register: React.FC = () => {
           <CardHeader className="text-center pb-6">
             <div className="mx-auto mb-4">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                PrimeWrap
+                Pinewrap
               </h1>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
               Create Your Account
             </CardTitle>
             <CardDescription className="text-gray-600">
-              Join PrimeWrap and start your sustainable packaging journey
+              Join Pinewrap and start your sustainable packaging journey
             </CardDescription>
           </CardHeader>
 
@@ -186,7 +186,7 @@ const Register: React.FC = () => {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 {/* name row */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -439,7 +439,7 @@ const Register: React.FC = () => {
                   {isLoading && (
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   )}
-                  Create PrimeWrap Account
+                  Create Pinewrap Account
                 </Button>
               </form>
             </Form>

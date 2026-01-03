@@ -61,11 +61,14 @@ const Cart = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex items-center space-x-4 p-4 bg-white rounded-lg border border-sage-100">
+                  <div
+                    key={item.id}
+                    className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 bg-white rounded-lg border border-sage-100"
+                  >
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="w-20 h-20 object-cover rounded-md bg-kraft-100"
+                      className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md bg-kraft-100"
                     />
                     
                     <div className="flex-1 min-w-0">
@@ -77,7 +80,7 @@ const Cart = () => {
                       </p>
                     </div>
 
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center flex-wrap gap-3">
                       <Button
                         variant="outline"
                         size="icon"
@@ -105,7 +108,7 @@ const Cart = () => {
                       </Button>
                     </div>
 
-                    <div className="text-right">
+                    <div className="text-right sm:ml-auto">
                       <p className="font-semibold text-charcoal-900">
                         ${(item.price * item.quantity).toFixed(2)}
                       </p>
@@ -127,7 +130,7 @@ const Cart = () => {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <Card className="border-sage-200 shadow-lg sticky top-8">
+            <Card className="border-sage-200 shadow-lg lg:sticky lg:top-8">
               <CardHeader>
                 <CardTitle className="text-charcoal-900">Order Summary</CardTitle>
               </CardHeader>

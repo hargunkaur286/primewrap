@@ -27,7 +27,7 @@ const Footer = () => {
               </div>
               <div className="font-bold text-3xl tracking-tight">
                 <span className="bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
-                  PRIME
+                  PINE
                 </span>
                 <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">
                   WRAP
@@ -110,7 +110,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2">
               <Heart className="w-5 h-5 text-emerald-400 animate-pulse" />
               <p className="text-emerald-100/60 text-sm">
-                © 2024 PrimeWrap. Made with love for our planet.
+                © 2024 Pinewrap. Made with love for our planet.
               </p>
             </div>
             

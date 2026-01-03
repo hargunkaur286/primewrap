@@ -1,4 +1,4 @@
-# PrimeWrap Frontend
+# Pinewrap Frontend
 
 Vite + React + TypeScript + Tailwind + shadcn/ui.
 

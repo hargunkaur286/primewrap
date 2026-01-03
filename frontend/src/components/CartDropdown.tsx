@@ -127,7 +127,7 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
       />
 
       {/* Cart Dropdown */}
-      <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-xl border border-sage/20 z-50">
+      <div className="absolute right-2 sm:right-0 top-full mt-2 w-[calc(100vw-2rem)] max-w-sm bg-white rounded-lg shadow-xl border border-sage/20 z-50">
         <div className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-lg text-charcoal">Shopping Cart</h3>

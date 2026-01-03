@@ -13,10 +13,10 @@ const ProductDetail = () => {
   const products = {
     'scented-bags': {
       id: 'scented-bags',
-      name: 'PrimeWrap Scented',
+      name: 'Pinewrap Scented',
       tagline: 'Fresh scent, lasting strength',
       price: 24.99,
-      image: '/lovable-uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png',
+      image: '/uploads/9a4802e7-c0b1-4503-ada5-a1ee29b8504b.png',
       description: 'Our premium scented garbage bags combine powerful odor control with eco-friendly materials. Each bag is infused with a light, fresh scent that neutralizes unpleasant odors while maintaining our commitment to sustainability.',
       benefits: [
         'Fresh lavender scent neutralizes odors',
@@ -29,10 +29,10 @@ const ProductDetail = () => {
     },
     'recycling-bags': {
       id: 'recycling-bags',
-      name: 'PrimeWrap Recycling',
+      name: 'Pinewrap Recycling',
       tagline: 'Made from 100% recycled materials',
       price: 22.99,
-      image: '/lovable-uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png',
+      image: '/uploads/e2e7eb2e-d8a9-4c28-9248-a226799224b2.png',
       description: 'Leading the circular economy, our recycling bags are crafted entirely from post-consumer recycled materials. Perfect for sorting and disposing of recyclables while maintaining the highest standards of strength and reliability.',
       benefits: [
         '100% post-consumer recycled content',

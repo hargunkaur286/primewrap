@@ -134,7 +134,7 @@ export default function NewsletterSubscribers() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header + Actions */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Newsletter Subscribers
@@ -143,10 +143,10 @@ export default function NewsletterSubscribers() {
               Manage your email subscribers and send newsletters
             </p>
           </div>
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 w-full sm:w-auto">
                   <Send className="h-4 w-4 mr-2" />
                   Send Newsletter
                 </Button>

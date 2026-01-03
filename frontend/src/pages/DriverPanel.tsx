@@ -153,17 +153,17 @@ const DriverPanel = () => {
         {/* Driver Header */}
         <Card className="mb-6">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-4 min-w-0">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                   <User className="h-6 w-6 text-blue-600" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <CardTitle>Welcome, {currentDriver.name}</CardTitle>
                   <CardDescription>Vehicle: {currentDriver.vehicle}</CardDescription>
                 </div>
               </div>
-              <Badge className="bg-green-500 text-white">
+              <Badge className="bg-green-500 text-white w-fit">
                 Route: {assignedRoute.name}
               </Badge>
             </div>
@@ -176,7 +176,7 @@ const DriverPanel = () => {
             <CardTitle>Today's Progress</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">{completedOrders.length}</div>
                 <div className="text-sm text-gray-600">Completed</div>

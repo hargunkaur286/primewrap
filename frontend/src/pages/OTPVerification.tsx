@@ -172,7 +172,7 @@
 //             <CardHeader className="text-center pb-6">
 //               <div className="mx-auto mb-4">
 //                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-//                   PrimeWrap
+//                   Pinewrap
 //                 </h1>
 //               </div>
 //               <div className="mx-auto mb-4 w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
@@ -210,7 +210,7 @@
 //           <CardHeader className="text-center pb-6">
 //             <div className="mx-auto mb-4">
 //               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-//                 PrimeWrap
+//                 Pinewrap
 //               </h1>
 //             </div>
 //             <CardTitle className="text-2xl font-bold text-gray-900">
@@ -502,7 +502,7 @@ const OTPVerification: React.FC = () => {
             <CardHeader className="text-center pb-6">
               <div className="mx-auto mb-4">
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                  PrimeWrap
+                  Pinewrap
                 </h1>
               </div>
               <div className="mx-auto mb-4 w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center">
@@ -546,7 +546,7 @@ const OTPVerification: React.FC = () => {
           <CardHeader className="text-center pb-6">
             <div className="mx-auto mb-4">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                PrimeWrap
+                Pinewrap
               </h1>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">

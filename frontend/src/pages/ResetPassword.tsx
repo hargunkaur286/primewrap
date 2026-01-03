@@ -130,7 +130,7 @@
 //             <CardHeader className="text-center pb-6">
 //               <div className="mx-auto mb-4">
 //                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-//                   PrimeWrap
+//                   Pinewrap
 //                 </h1>
 //               </div>
 //               <div className="mx-auto mb-4 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
@@ -179,7 +179,7 @@
 //             <CardHeader className="text-center pb-6">
 //               <div className="mx-auto mb-4">
 //                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-//                   PrimeWrap
+//                   Pinewrap
 //                 </h1>
 //               </div>
 //               <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -213,12 +213,12 @@
 //           <CardHeader className="text-center pb-6">
 //             <div className="mx-auto mb-4">
 //               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-//                 PrimeWrap
+//                 Pinewrap
 //               </h1>
 //             </div>
 //             <CardTitle className="text-2xl font-bold text-gray-900">Create New Password</CardTitle>
 //             <CardDescription className="text-gray-600">
-//               Choose a strong password to secure your PrimeWrap account.
+//               Choose a strong password to secure your Pinewrap account.
 //             </CardDescription>
 //           </CardHeader>
           
@@ -481,7 +481,7 @@ const ResetPassword = () => {
             <CardHeader className="text-center pb-6">
               <div className="mx-auto mb-4">
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                  PrimeWrap
+                  Pinewrap
                 </h1>
               </div>
               <div className="mx-auto mb-4 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
@@ -533,7 +533,7 @@ const ResetPassword = () => {
             <CardHeader className="text-center pb-6">
               <div className="mx-auto mb-4">
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                  PrimeWrap
+                  Pinewrap
                 </h1>
               </div>
               <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -570,14 +570,14 @@ const ResetPassword = () => {
           <CardHeader className="text-center pb-6">
             <div className="mx-auto mb-4">
               <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
-                PrimeWrap
+                Pinewrap
               </h1>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
               Create New Password
             </CardTitle>
             <CardDescription className="text-gray-600">
-              Choose a strong password to secure your PrimeWrap account.
+              Choose a strong password to secure your Pinewrap account.
             </CardDescription>
           </CardHeader>
 

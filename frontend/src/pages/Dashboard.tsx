@@ -223,7 +223,7 @@ const Dashboard = () => {
               <CardDescription>Frequently used features</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Link to="/dashboard/users">
                   <Button variant="outline" className="w-full h-16 flex flex-col">
                     <TrendingUp className="h-5 w-5 mb-1" />

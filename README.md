@@ -1,6 +1,6 @@
-# PrimeWrap
+# Pinewrap
 
-PrimeWrap is a full‑stack web app for an eco‑friendly product storefront (PrimeWrap bags) with account registration + OTP verification, login/logout, a server-synced cart, Stripe-based payments, basic order persistence, newsletter subscriptions, and an admin dashboard for operational views.
+Pinewrap is a full‑stack web app for an eco‑friendly product storefront (Pinewrap bags) with account registration + OTP verification, login/logout, a server-synced cart, Stripe-based payments, basic order persistence, newsletter subscriptions, and an admin dashboard for operational views.
 
 This README focuses on **what the app can do** (functionalities), based on the current code in this repo.
 
