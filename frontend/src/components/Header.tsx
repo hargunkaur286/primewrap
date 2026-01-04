@@ -203,11 +203,12 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Leaf, User as UserIcon, LogOut } from 'lucide-react';
+import { ShoppingCart, Leaf, User as UserIcon, LogOut, Menu } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import CartDropdown from './CartDropdown';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -324,24 +325,48 @@ export default function Header() {
               </Button>
             </Link>
           )}
-        </div>
-      </div>
 
-      {/* Mobile Nav */}
-      <div className="md:hidden border-t border-emerald-200/30 bg-emerald-50/90 backdrop-blur-sm">
-        <nav className="flex justify-around py-3">
-          {['/', '/shop', '/about', '/contact'].map(href => (
-            <Link
-              key={href}
-              to={href}
-              className={`text-sm font-semibold ${
-                location.pathname === href ? 'text-emerald-700' : 'text-slate-700'
-              }`}
-            >
-              {href === '/' ? 'Home' : href.replace('/', '').replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-            </Link>
-          ))}
-        </nav>
+          {/* Mobile hamburger (right-most on mobile) */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                className="md:hidden p-2 rounded-2xl bg-emerald-100 hover:bg-emerald-200 transition"
+                aria-label="Open menu"
+              >
+                <Menu size={22} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-80">
+              <div className="space-y-6">
+                <div className="space-y-1">
+                  <div className="text-sm font-semibold text-foreground">Menu</div>
+                  <div className="text-sm text-muted-foreground">Navigate the site</div>
+                </div>
+
+                <nav className="flex flex-col gap-3">
+                  {[
+                    { href: '/', label: 'Home' },
+                    { href: '/shop', label: 'Shop' },
+                    { href: '/about', label: 'About' },
+                    { href: '/contact', label: 'Contact' },
+                  ].map(({ href, label }) => (
+                    <SheetClose asChild key={href}>
+                      <Link
+                        to={href}
+                        className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:bg-muted ${
+                          location.pathname === href ? 'text-emerald-700' : 'text-foreground'
+                        }`}
+                      >
+                        {label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </nav>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

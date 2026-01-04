@@ -156,6 +156,7 @@ import ContactQueries from "./pages/ContactQueries";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 const ADMIN_EMAIL = "hargunkaur2863@gmail.com";
@@ -174,6 +175,7 @@ const AppShell: React.FC = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <div className="min-h-screen bg-white font-satoshi">
               <Header />
               <Routes>

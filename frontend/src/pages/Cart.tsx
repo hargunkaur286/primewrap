@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+const MAX_ITEM_QTY = 10;
+
 const Cart = () => {
   const { items, updateQuantity, removeItem, getTotalPrice, getTotalItems } = useCart();
   const navigate = useNavigate();
@@ -102,7 +104,8 @@ const Cart = () => {
                         variant="outline"
                         size="icon"
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="h-8 w-8 border-sage-300 hover:bg-sage-50"
+                        disabled={item.quantity >= MAX_ITEM_QTY}
+                        className="h-8 w-8 border-sage-300 hover:bg-sage-50 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Plus className="h-3 w-3" />
                       </Button>

@@ -145,6 +145,8 @@ export interface CartItem {
   image?: string;
 }
 
+const MAX_ITEM_QTY = 10;
+
 interface CartContextType {
   items: CartItem[];
   addItem: (item: CartItem) => Promise<void>;
@@ -207,7 +209,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     const existing = items.find(i => i.id === item.id);
     const updated = existing
       ? items.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.id === item.id
+            ? { ...i, quantity: Math.min(MAX_ITEM_QTY, i.quantity + 1) }
+            : i
         )
       : [...items, { ...item, quantity: 1 }];
     await syncCart(updated);
@@ -225,8 +229,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       // If you want removing when quantity goes to zero:
       return removeItem(itemId);
     }
+    const clamped = Math.min(MAX_ITEM_QTY, quantity);
     const updated = items.map(i =>
-      i.id === itemId ? { ...i, quantity } : i
+      i.id === itemId ? { ...i, quantity: clamped } : i
     );
     await syncCart(updated);
   };

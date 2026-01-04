@@ -107,6 +107,8 @@ import { useCart } from '@/contexts/CartContext';
 import { X, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+const MAX_ITEM_QTY = 10;
+
 interface CartDropdownProps {
   isOpen: boolean;
   onClose: () => void;
@@ -169,9 +171,15 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
                       <span className="text-sm font-medium w-6 text-center">
                         {item.quantity}
                       </span>
+
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="p-1 hover:bg-sage/20 rounded transition-colors"
+                        disabled={item.quantity >= MAX_ITEM_QTY}
+                        className={`p-1 rounded transition-colors ${
+                          item.quantity >= MAX_ITEM_QTY
+                            ? 'opacity-50 cursor-not-allowed'
+                            : 'hover:bg-sage/20'
+                        }`}
                       >
                         <Plus size={12} />
                       </button>
