@@ -164,6 +164,10 @@ const ADMIN_EMAIL = "hargunkaur2863@gmail.com";
 const AppShell: React.FC = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
 
+  const isAdmin =
+    isAuthenticated &&
+    (user?.email ?? '').trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
   if (isLoading) {
     return <p className="p-8 text-center">Loading…</p>;
   }
@@ -207,7 +211,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <Dashboard />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -217,7 +221,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/orders"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <OrderManagement />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -227,7 +231,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/products"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <ProductManagement />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -237,7 +241,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/delivery"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <DeliveryManagement />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -247,7 +251,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/drivers"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <DriverPanel />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -257,7 +261,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/analytics"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <Analytics />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -267,7 +271,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/accounting"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <Accounting />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -277,7 +281,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/users"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <UsersManagement />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -287,7 +291,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/orders-admin"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <OrdersManagement />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -297,7 +301,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/newsletter"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <NewsletterSubscribers />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
@@ -307,7 +311,7 @@ const AppShell: React.FC = () => {
                 <Route
                   path="/dashboard/contact-queries"
                   element={
-                    isAuthenticated && user?.email === ADMIN_EMAIL
+                    isAdmin
                       ? <ContactQueries />
                       : isAuthenticated
                         ? <Navigate to="/" replace />
