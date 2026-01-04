@@ -299,11 +299,18 @@ export default function Header() {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent
+                align="end"
+                sideOffset={8}
+                collisionPadding={12}
+                className="w-56 max-w-[calc(100vw-1.5rem)]"
+              >
                 <DropdownMenuLabel>
                   <div className="flex flex-col">
-                    <span className="font-medium">{user.name || 'User'}</span>
-                    <span className="text-sm text-muted-foreground">{user.email}</span>
+                    <span className="font-medium truncate">{user.name || 'User'}</span>
+                    <span className="text-sm text-muted-foreground truncate" title={user.email}>
+                      {user.email}
+                    </span>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
