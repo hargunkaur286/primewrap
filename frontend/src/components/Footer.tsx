@@ -4,7 +4,7 @@ import { Leaf, Mail, Phone, MapPin, Heart } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gradient-to-br from-emerald-900 via-slate-800 to-cyan-900 text-white overflow-hidden">
+    <footer className="relative bg-gradient-to-br from-charcoal-900 via-forest-green-900 to-kraft-700 text-sage-50 overflow-hidden">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl animate-float"></div>
@@ -19,15 +19,15 @@ const Footer = () => {
             {/* 3D Logo */}
             <div className="group flex items-center space-x-4 mb-6">
               <div className="relative perspective-1000">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-3xl flex items-center justify-center shadow-2xl transform-gpu group-hover:rotate-y-12 group-hover:scale-110 transition-all duration-500 transform-style-preserve-3d">
+                <div className="w-16 h-16 bg-gradient-to-br from-kraft-400 to-charcoal-900 rounded-3xl flex items-center justify-center shadow-2xl transform-gpu group-hover:rotate-y-12 group-hover:scale-110 transition-all duration-500 transform-style-preserve-3d">
                   <Leaf className="w-8 h-8 text-white transform-gpu group-hover:scale-110 transition-transform duration-300" />
                   {/* 3D depth effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-3xl -z-10 translate-x-2 translate-y-2 opacity-60"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-kraft-500 to-charcoal-900 rounded-3xl -z-10 translate-x-2 translate-y-2 opacity-60"></div>
                 </div>
               </div>
               <div className="font-bold text-3xl tracking-tight">
                 <span className="bg-gradient-to-r from-emerald-300 to-cyan-300 bg-clip-text text-transparent">
-                  PINE
+                  PRIME
                 </span>
                 <span className="bg-gradient-to-r from-cyan-300 to-emerald-300 bg-clip-text text-transparent">
                   WRAP
@@ -110,7 +110,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2">
               <Heart className="w-5 h-5 text-emerald-400 animate-pulse" />
               <p className="text-emerald-100/60 text-sm">
-                © 2024 Pinewrap. Made with love for our planet.
+                © 2024 PrimeWrap. Made with love for our planet.
               </p>
             </div>
             

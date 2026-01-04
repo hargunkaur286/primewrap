@@ -1,6 +1,39 @@
 
 import type { Config } from "tailwindcss";
 
+const PRIME = {
+  yellow: "#FFE569",
+  amber: "#FFB22C",
+  orange: "#FB9224",
+  black: "#000000",
+} as const;
+
+const PRIME_SCALE = {
+  50: PRIME.yellow,
+  100: PRIME.yellow,
+  200: PRIME.amber,
+  300: PRIME.amber,
+  400: PRIME.amber,
+  500: PRIME.orange,
+  600: PRIME.orange,
+  700: PRIME.orange,
+  800: PRIME.black,
+  900: PRIME.black,
+} as const;
+
+const PRIME_TEXT_SCALE = {
+  50: PRIME.yellow,
+  100: PRIME.yellow,
+  200: PRIME.amber,
+  300: PRIME.orange,
+  400: PRIME.orange,
+  500: PRIME.black,
+  600: PRIME.black,
+  700: PRIME.black,
+  800: PRIME.black,
+  900: PRIME.black,
+} as const;
+
 export default {
   darkMode: ["class"],
   content: [
@@ -67,67 +100,30 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Modern color palette
+        // Updated brand palette (only uses: #FFE569, #FFB22C, #FB9224, #000000)
         sage: {
-          50: '#f6f7f6',
-          100: '#e1e6e1',
-          200: '#c3cdc3',
-          300: '#9db09d',
-          400: '#7a917a',
-          500: '#5f7a5f',
-          600: '#4a5f4a',
-          700: '#3d4e3d',
-          800: '#334133',
-          900: '#2b372b',
+          50: PRIME.yellow,
+          100: PRIME.yellow,
+          200: PRIME.yellow,
+          300: PRIME.yellow,
+          400: PRIME.amber,
+          500: PRIME.amber,
+          600: PRIME.orange,
+          700: PRIME.orange,
+          800: PRIME.black,
+          900: PRIME.black,
         },
-        kraft: {
-          50: '#faf8f3',
-          100: '#f3ede0',
-          200: '#e6d7c0',
-          300: '#d5bc96',
-          400: '#c49e6c',
-          500: '#b5864e',
-          600: '#a77142',
-          700: '#8b5a37',
-          800: '#704a31',
-          900: '#5c3e2a',
-        },
-        charcoal: {
-          50: '#f6f6f6',
-          100: '#e7e7e7',
-          200: '#d1d1d1',
-          300: '#b0b0b0',
-          400: '#888888',
-          500: '#6d6d6d',
-          600: '#5d5d5d',
-          700: '#4f4f4f',
-          800: '#454545',
-          900: '#3d3d3d',
-        },
-        'prime-blue': {
-          50: '#eff8ff',
-          100: '#dbeeff',
-          200: '#bfe2ff',
-          300: '#93d1ff',
-          400: '#60b7ff',
-          500: '#3b9eff',
-          600: '#2485f5',
-          700: '#1c6ee1',
-          800: '#1d5ab6',
-          900: '#1e4d8f',
-        },
-        'forest-green': {
-          50: '#f0f9f0',
-          100: '#daf1da',
-          200: '#b8e3b8',
-          300: '#8cce8c',
-          400: '#5fb35f',
-          500: '#3d9b3d',
-          600: '#2d7d2d',
-          700: '#266426',
-          800: '#225122',
-          900: '#1e431e',
-        },
+        kraft: PRIME_SCALE,
+        charcoal: PRIME_TEXT_SCALE,
+        'prime-blue': PRIME_SCALE,
+        'forest-green': PRIME_SCALE,
+
+        // Override common Tailwind color names used across the app
+        emerald: PRIME_SCALE,
+        cyan: PRIME_SCALE,
+        teal: PRIME_SCALE,
+        green: PRIME_SCALE,
+        blue: PRIME_SCALE,
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -156,8 +152,8 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         "glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(59, 158, 255, 0.3)" },
-          "50%": { boxShadow: "0 0 40px rgba(59, 158, 255, 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(251, 146, 36, 0.25)" },
+          "50%": { boxShadow: "0 0 40px rgba(255, 178, 44, 0.45)" },
         },
       },
       animation: {

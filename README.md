@@ -13,6 +13,28 @@ This README focuses on **what the app can do** (functionalities), based on the c
 - React Router
 - Stripe Elements (`@stripe/react-stripe-js`)
 
+## UI Theme / Brand Colors
+
+The frontend theme is driven by Tailwind + shadcn/ui tokens (CSS variables) and a small set of brand colors.
+
+**Current brand palette (Jan 2026)**
+
+- `#FFE569` (yellow)
+- `#FFB22C` (amber)
+- `#FB9224` (orange)
+- `#000000` (black)
+
+**Where to change theme colors**
+
+- Theme tokens (background/foreground/primary/etc): [frontend/src/index.css](frontend/src/index.css)
+- Tailwind palette mapping / compatibility overrides (so existing `emerald-*`, `cyan-*`, etc. classes map into the brand palette): [frontend/tailwind.config.ts](frontend/tailwind.config.ts)
+
+**Notable component/page styling touched**
+
+- Footer palette + contrast tweaks: [frontend/src/components/Footer.tsx](frontend/src/components/Footer.tsx)
+- Home hero background gradient: [frontend/src/pages/Index.tsx](frontend/src/pages/Index.tsx)
+- Contact page background gradient: [frontend/src/pages/Contact.tsx](frontend/src/pages/Contact.tsx)
+
 **Backend**
 
 - Node.js + Express

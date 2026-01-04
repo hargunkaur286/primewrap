@@ -381,15 +381,15 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-cyan-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFE569]/40 via-white to-[#FFB22C]/25">
       {/* Hero Section with 3D Elements */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Hide blurred circles on small screens for clarity */}
-          <div className="hidden sm:block absolute top-1/4 left-1/4 w-56 h-56 sm:w-72 sm:h-72 bg-emerald-200/30 rounded-full blur-3xl animate-float"></div>
-          <div className="hidden sm:block absolute bottom-1/4 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-cyan-200/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-          <div className="hidden sm:block absolute top-1/2 left-1/2 w-48 h-48 sm:w-64 sm:h-64 bg-teal-200/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="hidden sm:block absolute top-1/4 left-1/4 w-56 h-56 sm:w-72 sm:h-72 bg-[#FFE569]/25 rounded-full blur-3xl animate-float"></div>
+          <div className="hidden sm:block absolute bottom-1/4 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-[#FFB22C]/18 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+          <div className="hidden sm:block absolute top-1/2 left-1/2 w-48 h-48 sm:w-64 sm:h-64 bg-[#FB9224]/14 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto py-20 grid gap-12 lg:grid-cols-2 items-center">
