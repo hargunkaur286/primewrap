@@ -74,20 +74,20 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
 
           {/* Enhanced Features List */}
           <div className="flex flex-wrap gap-1 md:gap-2 pt-2">
-            <span className="text-xs bg-emerald-100/80 text-emerald-700 px-2 md:px-3 py-1 rounded-full font-medium">
+            <span className="text-xs bg-emerald-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">
               Biodegradable
             </span>
-            <span className="text-xs bg-cyan-100/80 text-cyan-700 px-2 md:px-3 py-1 rounded-full font-medium">
+            <span className="text-xs bg-cyan-100/80 text-teal-700 px-2 md:px-3 py-1 rounded-full font-medium">
               Ultra Strong
             </span>
-            <span className="text-xs bg-teal-100/80 text-teal-700 px-2 md:px-3 py-1 rounded-full font-medium">
+            <span className="text-xs bg-teal-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">
               Premium
             </span>
           </div>
           
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
             <div className="space-y-1">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text">
                 ${product.price}
               </div>
               <div className="text-xs text-gray-500 uppercase tracking-wide">

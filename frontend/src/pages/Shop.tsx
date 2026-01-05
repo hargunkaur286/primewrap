@@ -52,11 +52,11 @@ const Shop = () => {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold font-display tracking-tight leading-[0.9]">
-              <span className="bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text">
                 Our
               </span>
               <br />
-              <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-primary">
                 Products
               </span>
             </h1>
@@ -96,7 +96,7 @@ const Shop = () => {
 
           {/* Product Comparison */}
           <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 md:p-12 shadow-2xl border border-white/20 mb-12 md:mb-20">
-            <h2 className="text-2xl md:text-3xl font-bold font-display text-center mb-8 md:mb-12 bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-3xl font-bold font-display text-center mb-8 md:mb-12 bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text">
               Compare Our Products
             </h2>
             
@@ -136,7 +136,7 @@ const Shop = () => {
           {/* Product Benefits Section */}
           <div className="mb-12 md:mb-20">
             <div className="text-center mb-8 md:mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold font-display mb-4 bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text text-transparent">
+              <h2 className="text-2xl md:text-3xl font-bold font-display mb-4 bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text">
                 Why Choose Pinewrap?
               </h2>
               <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
@@ -150,8 +150,8 @@ const Shop = () => {
           <div className="text-center bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent animate-shimmer"></div>
             <div className="relative z-10">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">Ready to Make the Switch?</h3>
-              <p className="text-lg md:text-xl mb-6 md:mb-8 opacity-90">Join thousands of eco-conscious customers today</p>
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-primary">Ready to Make the Switch?</h3>
+              <p className="text-lg md:text-xl mb-6 md:mb-8 opacity-90 text-primary">Join thousands of eco-conscious customers today</p>
               <Button className="bg-white text-emerald-600 hover:bg-gray-100 px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu hover:scale-105">
                 <span className="flex items-center gap-2">
                   Start Shopping

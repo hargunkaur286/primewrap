@@ -84,12 +84,12 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFE569]/40 via-white to-[#FFB22C]/25">
+    <div className="min-h-screen bg-background">
       {/* Floating Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#FFE569]/20 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#FFB22C]/16 rounded-full blur-3xl animate-float" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-3/4 right-1/3 w-64 h-64 bg-[#FB9224]/12 rounded-full blur-3xl animate-float" style={{animationDelay: '3s'}}></div>
+        <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-[#FFE100]/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#134686]/14 rounded-full blur-3xl animate-float" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-3/4 right-1/3 w-64 h-64 bg-[#000000]/5 rounded-full blur-3xl animate-float" style={{animationDelay: '3s'}}></div>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -100,12 +100,12 @@ const Contact = () => {
             <span className="text-sm font-bold text-emerald-800 tracking-wide">LET'S CONNECT</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight leading-[0.9]">
-            <span className="bg-gradient-to-r from-emerald-700 via-cyan-600 to-teal-700 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-display tracking-tight leading-tight">
+            <span className="text-foreground">
               GET IN
             </span>
             <br />
-            <span className="bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+            <span className="text-primary">
               TOUCH
             </span>
           </h1>
@@ -118,13 +118,13 @@ const Contact = () => {
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Contact Form */}
           <div className="group perspective-1000 animate-slide-up">
-            <div className="relative bg-gradient-to-br from-white/90 to-emerald-50/90 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 transform-gpu group-hover:scale-[1.02] group-hover:rotate-1 transition-all duration-500">
+            <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 transform-gpu group-hover:scale-[1.02] group-hover:rotate-1 transition-all duration-500">
               {/* 3D Icon Header */}
               <div className="flex items-center mb-8">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center mr-6 shadow-lg transform-gpu group-hover:rotate-6 transition-transform duration-500">
+                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mr-6 shadow-lg transform-gpu group-hover:rotate-6 transition-transform duration-500">
                   <Mail className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text text-transparent">
+                <h2 className="text-3xl font-bold text-foreground">
                   Send us a message
                 </h2>
               </div>
@@ -176,7 +176,7 @@ const Contact = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white py-4 font-bold tracking-wide rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform-gpu hover:scale-105"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-4 font-bold tracking-wide rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform-gpu hover:scale-105"
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   SEND MESSAGE
@@ -184,7 +184,7 @@ const Contact = () => {
               </form>
 
               {/* Hover glow */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-teal-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10"></div>
+              <div className="absolute inset-0 rounded-3xl bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl -z-10"></div>
             </div>
           </div>
 
@@ -193,12 +193,12 @@ const Contact = () => {
             {/* Contact Info Cards */}
             <div className="grid gap-4 mb-8">
               {[
-                { icon: <Phone className="w-5 h-5" />, text: "1-800-PRIMEWRAP", color: "from-emerald-100 to-green-100" },
-                { icon: <Mail className="w-5 h-5" />, text: "help@primewrap.com", color: "from-cyan-100 to-blue-100" },
-                { icon: <Clock className="w-5 h-5" />, text: "Mon-Fri 9AM-6PM EST", color: "from-teal-100 to-emerald-100" }
+                { icon: <Phone className="w-5 h-5" />, text: "1-800-PRIMEWRAP" },
+                { icon: <Mail className="w-5 h-5" />, text: "help@primewrap.com" },
+                { icon: <Clock className="w-5 h-5" />, text: "Mon-Fri 9AM-6PM EST" }
               ].map((contact, index) => (
                 <div key={index} className="group perspective-1000">
-                  <div className={`bg-gradient-to-r ${contact.color} backdrop-blur-sm rounded-2xl p-4 flex items-center space-x-4 shadow-lg border border-white/30 transform-gpu group-hover:scale-105 group-hover:rotate-1 transition-all duration-300`}>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 flex items-center space-x-4 shadow-lg border border-white/30 transform-gpu group-hover:scale-105 group-hover:rotate-1 transition-all duration-300">
                     <div className="w-10 h-10 bg-white/80 rounded-xl flex items-center justify-center text-emerald-600 shadow-md">
                       {contact.icon}
                     </div>
@@ -209,10 +209,10 @@ const Contact = () => {
             </div>
 
             <div className="flex items-center mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-emerald-500 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+              <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mr-4 shadow-lg">
                 <Leaf className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold text-foreground">
                 Frequently Asked Questions
               </h2>
             </div>

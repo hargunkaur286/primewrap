@@ -130,7 +130,7 @@ const Login = () => {
         <Card className="shadow-xl border-0">
           <CardHeader className="text-center pb-8">
             <div className="mx-auto mb-6">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text">
                 Pinewrap
               </h1>
             </div>

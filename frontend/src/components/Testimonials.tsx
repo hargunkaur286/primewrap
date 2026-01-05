@@ -31,11 +31,11 @@ const Testimonials = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold font-display mb-6">
-            <span className="bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-gray-900 to-emerald-900 bg-clip-text">
               What Our Customers
             </span>
             <br />
-            <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text">
               Are Saying
             </span>
           </h2>

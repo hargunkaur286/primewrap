@@ -47,12 +47,12 @@ const About = () => {
             <span className="text-sm font-bold text-emerald-800 tracking-wide">ECO-FRIENDLY INNOVATION</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight leading-[0.9]">
-            <span className="bg-gradient-to-r from-emerald-700 via-cyan-600 to-teal-700 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-display tracking-tight leading-tight">
+            <span className="bg-gradient-to-r from-emerald-700 via-cyan-600 to-teal-700 bg-clip-text text-foreground">
               SMALL CHANGE,
             </span>
             <br />
-            <span className="bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 bg-clip-text text-primary">
               BIG IMPACT
             </span>
           </h1>
@@ -74,7 +74,7 @@ const About = () => {
                 <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center mr-6 shadow-lg transform-gpu group-hover:rotate-6 transition-transform duration-300">
                   <Recycle className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text text-transparent">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text">
                   Our Story
                 </h2>
               </div>
@@ -124,7 +124,7 @@ const About = () => {
         {/* Certifications */}
         <div className="group perspective-1000 animate-fade-in">
           <div className="relative bg-gradient-to-br from-white/90 to-cyan-50/90 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-white/30 text-center transform-gpu group-hover:scale-[1.02] transition-all duration-500">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text text-transparent mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text mb-12">
               Certified & Trusted
             </h2>
             

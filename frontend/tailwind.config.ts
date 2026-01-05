@@ -2,31 +2,43 @@
 import type { Config } from "tailwindcss";
 
 const PRIME = {
-  yellow: "#FFE569",
-  amber: "#FFB22C",
-  orange: "#FB9224",
+  yellow: "#FFE100",
+  blue: "#134686",
   black: "#000000",
 } as const;
 
-const PRIME_SCALE = {
+const PRIME_YELLOW_SCALE = {
   50: PRIME.yellow,
   100: PRIME.yellow,
-  200: PRIME.amber,
-  300: PRIME.amber,
-  400: PRIME.amber,
-  500: PRIME.orange,
-  600: PRIME.orange,
-  700: PRIME.orange,
-  800: PRIME.black,
-  900: PRIME.black,
+  200: PRIME.yellow,
+  300: PRIME.yellow,
+  400: PRIME.yellow,
+  500: PRIME.yellow,
+  600: PRIME.yellow,
+  700: PRIME.yellow,
+  800: PRIME.yellow,
+  900: PRIME.yellow,
+} as const;
+
+const PRIME_BLUE_SCALE = {
+  50: PRIME.blue,
+  100: PRIME.blue,
+  200: PRIME.blue,
+  300: PRIME.blue,
+  400: PRIME.blue,
+  500: PRIME.blue,
+  600: PRIME.blue,
+  700: PRIME.blue,
+  800: PRIME.blue,
+  900: PRIME.blue,
 } as const;
 
 const PRIME_TEXT_SCALE = {
-  50: PRIME.yellow,
-  100: PRIME.yellow,
-  200: PRIME.amber,
-  300: PRIME.orange,
-  400: PRIME.orange,
+  50: PRIME.blue,
+  100: PRIME.blue,
+  200: PRIME.blue,
+  300: PRIME.blue,
+  400: PRIME.black,
   500: PRIME.black,
   600: PRIME.black,
   700: PRIME.black,
@@ -100,30 +112,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Updated brand palette (only uses: #FFE569, #FFB22C, #FB9224, #000000)
-        sage: {
-          50: PRIME.yellow,
-          100: PRIME.yellow,
-          200: PRIME.yellow,
-          300: PRIME.yellow,
-          400: PRIME.amber,
-          500: PRIME.amber,
-          600: PRIME.orange,
-          700: PRIME.orange,
-          800: PRIME.black,
-          900: PRIME.black,
-        },
-        kraft: PRIME_SCALE,
+        // Updated brand palette (only uses: #FFE100, #134686, #000000)
+        sage: PRIME_YELLOW_SCALE,
+        kraft: PRIME_YELLOW_SCALE,
         charcoal: PRIME_TEXT_SCALE,
-        'prime-blue': PRIME_SCALE,
-        'forest-green': PRIME_SCALE,
+        'prime-blue': PRIME_BLUE_SCALE,
+        'forest-green': PRIME_BLUE_SCALE,
 
         // Override common Tailwind color names used across the app
-        emerald: PRIME_SCALE,
-        cyan: PRIME_SCALE,
-        teal: PRIME_SCALE,
-        green: PRIME_SCALE,
-        blue: PRIME_SCALE,
+        emerald: PRIME_BLUE_SCALE,
+        cyan: PRIME_YELLOW_SCALE,
+        teal: PRIME_BLUE_SCALE,
+        green: PRIME_YELLOW_SCALE,
+        blue: PRIME_BLUE_SCALE,
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -152,8 +153,8 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         "glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(251, 146, 36, 0.25)" },
-          "50%": { boxShadow: "0 0 40px rgba(255, 178, 44, 0.45)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(19, 70, 134, 0.22)" },
+          "50%": { boxShadow: "0 0 44px rgba(255, 225, 0, 0.35)" },
         },
       },
       animation: {

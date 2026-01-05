@@ -91,7 +91,7 @@ const ProductScented = () => {
             </div>
 
             {/* Price */}
-            <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text text-transparent">
+            <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text">
               ${product.price}
             </div>
 

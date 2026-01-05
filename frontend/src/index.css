@@ -4,70 +4,69 @@
 
 @layer base {
   :root {
-    /* Primewrap palette:
-       #FFE569 (49.6 100% 70.6%)
-       #FFB22C (38.1 100% 58.6%)
-       #FB9224 (30.7 96.4% 56.3%)
+     /* Primewrap palette:
+       #FFE100 (53 100% 50%)
+       #134686 (213 75% 30%)
        #000000 (0 0% 0%)
-    */
-    --background: 49.6 100% 70.6%;
+     */
+     --background: 53 100% 96%;
     --foreground: 0 0% 0%;
-    --card: 49.6 100% 70.6%;
+     --card: 53 100% 98%;
     --card-foreground: 0 0% 0%;
-    --popover: 49.6 100% 70.6%;
+     --popover: 53 100% 98%;
     --popover-foreground: 0 0% 0%;
-    --primary: 30.7 96.4% 56.3%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 38.1 100% 58.6%;
+     --primary: 213 75% 30%;
+     --primary-foreground: 53 100% 50%;
+     --secondary: 53 100% 50%;
     --secondary-foreground: 0 0% 0%;
-    --muted: 38.1 100% 58.6%;
-    --muted-foreground: 30.7 96.4% 56.3%;
-    --accent: 38.1 100% 58.6%;
-    --accent-foreground: 0 0% 0%;
-    --destructive: 30.7 96.4% 56.3%;
+     --muted: 53 100% 92%;
+     --muted-foreground: 213 45% 25%;
+     --accent: 53 100% 50%;
+     --accent-foreground: 213 75% 30%;
+     --destructive: 0 0% 0%;
     --destructive-foreground: 0 0% 0%;
-    --border: 38.1 100% 58.6%;
-    --input: 38.1 100% 58.6%;
-    --ring: 0 0% 0%;
+     --border: 213 35% 80%;
+     --input: 213 35% 80%;
+     --ring: 213 75% 30%;
     --radius: 0.5rem;
-    --sidebar-background: 49.6 100% 70.6%;
+     --sidebar-background: 53 100% 96%;
     --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 30.7 96.4% 56.3%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 38.1 100% 58.6%;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 38.1 100% 58.6%;
-    --sidebar-ring: 0 0% 0%;
+     --sidebar-primary: 213 75% 30%;
+     --sidebar-primary-foreground: 53 100% 50%;
+     --sidebar-accent: 53 100% 50%;
+     --sidebar-accent-foreground: 213 75% 30%;
+     --sidebar-border: 213 35% 80%;
+     --sidebar-ring: 213 75% 30%;
   }
 
   .dark {
     --background: 0 0% 0%;
-    --foreground: 49.6 100% 70.6%;
-    --card: 0 0% 0%;
-    --card-foreground: 49.6 100% 70.6%;
-    --popover: 0 0% 0%;
-    --popover-foreground: 49.6 100% 70.6%;
-    --primary: 38.1 100% 58.6%;
+    --foreground: 53 100% 75%;
+    --card: 213 75% 14%;
+    --card-foreground: 53 100% 75%;
+    --popover: 213 75% 14%;
+    --popover-foreground: 53 100% 75%;
+    --primary: 53 100% 50%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 30.7 96.4% 56.3%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 30.7 96.4% 56.3%;
-    --muted-foreground: 49.6 100% 70.6%;
-    --accent: 30.7 96.4% 56.3%;
-    --accent-foreground: 49.6 100% 70.6%;
-    --destructive: 30.7 96.4% 56.3%;
+    --secondary: 213 75% 30%;
+    --secondary-foreground: 53 100% 75%;
+    --muted: 213 75% 20%;
+    --muted-foreground: 53 35% 75%;
+    --accent: 213 75% 30%;
+    --accent-foreground: 53 100% 75%;
+    --destructive: 53 100% 50%;
     --destructive-foreground: 0 0% 0%;
-    --border: 30.7 96.4% 56.3%;
-    --input: 30.7 96.4% 56.3%;
-    --ring: 49.6 100% 70.6%;
+    --border: 213 45% 35%;
+    --input: 213 45% 35%;
+    --ring: 53 100% 50%;
     --sidebar-background: 0 0% 0%;
-    --sidebar-foreground: 49.6 100% 70.6%;
-    --sidebar-primary: 38.1 100% 58.6%;
+    --sidebar-foreground: 53 100% 75%;
+    --sidebar-primary: 53 100% 50%;
     --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 30.7 96.4% 56.3%;
-    --sidebar-accent-foreground: 49.6 100% 70.6%;
-    --sidebar-border: 30.7 96.4% 56.3%;
-    --sidebar-ring: 49.6 100% 70.6%;
+    --sidebar-accent: 213 75% 30%;
+    --sidebar-accent-foreground: 53 100% 75%;
+    --sidebar-border: 213 45% 35%;
+    --sidebar-ring: 53 100% 50%;
   }
 }
 
@@ -137,11 +136,11 @@
 @keyframes glow {
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(251, 146, 36, 0.25);
+    box-shadow: 0 0 20px rgba(19, 70, 134, 0.22);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 178, 44, 0.45),
-      0 0 60px rgba(255, 229, 105, 0.25);
+    box-shadow: 0 0 44px rgba(255, 225, 0, 0.35),
+      0 0 64px rgba(19, 70, 134, 0.18);
   }
 }
 
@@ -157,11 +156,11 @@
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(251, 146, 36, 0.6);
+    box-shadow: 0 0 0 0 rgba(19, 70, 134, 0.35);
     transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 0 20px rgba(251, 146, 36, 0);
+    box-shadow: 0 0 0 20px rgba(255, 225, 0, 0);
     transform: scale(1.05);
   }
 }
@@ -183,14 +182,7 @@
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 229, 105, 0.45),
-    transparent
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  background: none;
 }
 
 .animate-pulse-glow {
@@ -209,12 +201,11 @@
 
 /* Gradient text animations */
 .gradient-text {
-  background: linear-gradient(-45deg, #fb9224, #ffb22c, #ffe569, #fb9224);
-  background-size: 400% 400%;
-  animation: gradient-shift 3s ease infinite;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none;
+  animation: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background-clip: initial;
 }
 
 @keyframes gradient-shift {
@@ -260,14 +251,34 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #ffe569;
+  background: #ffe100;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #fb9224, #ffb22c);
+  background: #134686;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #ffb22c, #ffe569);
+  background: #134686;
+}
+
+/* Remove all gradients globally (Tailwind utilities + arbitrary gradients).
+   We keep the color palette; we just disable gradient rendering. */
+[class*="bg-gradient-to-"] {
+  background-image: none !important;
+}
+
+[class*="bg-[linear-gradient"] {
+  background-image: none !important;
+}
+
+[class*="before:bg-gradient-to-"]::before,
+[class*="before:bg-[linear-gradient"]::before {
+  background-image: none !important;
+}
+
+[class*="after:bg-gradient-to-"]::after,
+[class*="after:bg-[linear-gradient"]::after {
+  background-image: none !important;
 }

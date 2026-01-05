@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -39,8 +40,19 @@ import {
   DollarSign,
   Eye,
   Download,
-  Calendar
+  Calendar,
+  type LucideIcon
 } from "lucide-react";
+
+const CHART_COLORS = ["#134686", "#FFE100", "#000000"] as const;
+
+type StatCardProps = {
+  title: string;
+  value: ReactNode;
+  change: number;
+  subtitle: string;
+  icon: LucideIcon;
+};
 
 const Analytics = () => {
   // TODO: Replace with MongoDB aggregation queries
@@ -74,9 +86,9 @@ const Analytics = () => {
       { name: "Bubble Wrap Roll", sales: 18, revenue: 359.82, percentage: 18 }
     ],
     inventoryStatus: [
-      { name: "In Stock", value: 78, color: "#10B981" },
-      { name: "Low Stock", value: 15, color: "#F59E0B" },
-      { name: "Out of Stock", value: 7, color: "#EF4444" }
+      { name: "In Stock", value: 78, color: "#134686" },
+      { name: "Low Stock", value: 15, color: "#FFE100" },
+      { name: "Out of Stock", value: 7, color: "#000000" }
     ],
     customerMetrics: {
       newCustomers: 23,
@@ -95,7 +107,7 @@ const Analytics = () => {
     }
   };
 
-  const StatCard = ({ title, value, change, icon: Icon, subtitle }: any) => (
+  const StatCard = ({ title, value, change, icon: Icon, subtitle }: StatCardProps) => (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
@@ -105,11 +117,11 @@ const Analytics = () => {
         <div className="text-2xl font-bold">{value}</div>
         <div className="flex items-center text-xs text-muted-foreground">
           {change > 0 ? (
-            <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
+            <TrendingUp className="h-3 w-3 text-primary mr-1" />
           ) : (
-            <TrendingDown className="h-3 w-3 text-red-500 mr-1" />
+            <TrendingDown className="h-3 w-3 text-muted-foreground mr-1" />
           )}
-          <span className={change > 0 ? "text-green-500" : "text-red-500"}>
+          <span className={change > 0 ? "text-primary" : "text-muted-foreground"}>
             {Math.abs(change)}%
           </span>
           <span className="ml-1">{subtitle}</span>
@@ -200,7 +212,7 @@ const Analytics = () => {
                       <XAxis dataKey="date" />
                       <YAxis />
                       <Tooltip />
-                      <Area type="monotone" dataKey="revenue" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                      <Area type="monotone" dataKey="revenue" stroke={CHART_COLORS[0]} fill={CHART_COLORS[0]} fillOpacity={0.2} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -218,7 +230,7 @@ const Analytics = () => {
                       <XAxis dataKey="date" />
                       <YAxis />
                       <Tooltip />
-                      <Line type="monotone" dataKey="orders" stroke="#82ca9d" strokeWidth={2} />
+                      <Line type="monotone" dataKey="orders" stroke={CHART_COLORS[1]} strokeWidth={2} />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -232,7 +244,7 @@ const Analytics = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">${analyticsData.overview.averageOrderValue}</div>
-                  <div className="flex items-center text-sm text-green-600 mt-2">
+                  <div className="flex items-center text-sm text-primary mt-2">
                     <TrendingUp className="h-4 w-4 mr-1" />
                     +{analyticsData.overview.avgOrderGrowth}% from last month
                   </div>
@@ -245,7 +257,7 @@ const Analytics = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">{analyticsData.overview.totalCustomers}</div>
-                  <div className="flex items-center text-sm text-green-600 mt-2">
+                  <div className="flex items-center text-sm text-primary mt-2">
                     <TrendingUp className="h-4 w-4 mr-1" />
                     +{analyticsData.overview.customersGrowth}% from last month
                   </div>
@@ -257,8 +269,8 @@ const Analytics = () => {
                   <CardTitle className="text-lg">Monthly Growth</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600">+{analyticsData.overview.revenueGrowth}%</div>
-                  <div className="text-sm text-gray-600 mt-2">Revenue growth rate</div>
+                  <div className="text-3xl font-bold text-primary">+{analyticsData.overview.revenueGrowth}%</div>
+                  <div className="text-sm text-muted-foreground mt-2">Revenue growth rate</div>
                 </CardContent>
               </Card>
             </div>
@@ -278,7 +290,7 @@ const Analytics = () => {
                       <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
                       <YAxis />
                       <Tooltip />
-                      <Bar dataKey="revenue" fill="#8884d8" />
+                      <Bar dataKey="revenue" fill={CHART_COLORS[0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -297,12 +309,12 @@ const Analytics = () => {
                         cx="50%"
                         cy="50%"
                         outerRadius={80}
-                        fill="#8884d8"
+                        fill={CHART_COLORS[0]}
                         dataKey="sales"
                         label={({ name, percentage }) => `${name}: ${percentage}%`}
                       >
-                        {analyticsData.productPerformance.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={`hsl(${index * 90}, 70%, 50%)`} />
+                        {analyticsData.productPerformance.map((_, index) => (
+                          <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                         ))}
                       </Pie>
                       <Tooltip />
@@ -319,10 +331,10 @@ const Analytics = () => {
               <CardContent>
                 <div className="space-y-4">
                   {analyticsData.productPerformance.map((product, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-4 bg-muted rounded-lg">
                       <div>
                         <h3 className="font-medium">{product.name}</h3>
-                        <p className="text-sm text-gray-600">{product.sales} units sold</p>
+                        <p className="text-sm text-muted-foreground">{product.sales} units sold</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">${product.revenue}</p>
@@ -415,7 +427,7 @@ const Analytics = () => {
                         cx="50%"
                         cy="50%"
                         outerRadius={80}
-                        fill="#8884d8"
+                        fill={CHART_COLORS[0]}
                         dataKey="value"
                         label={({ name, value }) => `${name}: ${value}%`}
                       >
