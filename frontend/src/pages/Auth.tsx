@@ -39,7 +39,7 @@ const Auth = () => {
   const { isAuthenticated } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
-  // ⛔️ Already signed-in? Kick them home.
+  // Already signed-in? Kick them home.
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }

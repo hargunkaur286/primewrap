@@ -124,28 +124,29 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/20 z-40"
+        className="fixed inset-0 bg-black/20 z-50"
         onClick={onClose}
       />
 
       {/* Cart Dropdown */}
-      <div className="absolute right-2 sm:right-0 top-full mt-2 w-[calc(100vw-2rem)] max-w-sm bg-white rounded-lg shadow-xl border border-sage/20 z-50">
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-lg text-charcoal">Shopping Cart</h3>
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-sage/20 rounded-full transition-colors"
-            >
-              <X size={20} />
-            </button>
-          </div>
+      <div className="fixed left-4 right-4 top-20 z-[60] max-h-[calc(100dvh-6rem)] overflow-hidden rounded-2xl bg-white shadow-xl border border-sage/20 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96 sm:max-h-96">
+        <div className="flex items-center justify-between border-b border-sage/20 p-4">
+          <h3 className="font-semibold text-lg text-charcoal">Shopping Cart</h3>
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-sage/20 rounded-full transition-colors"
+            aria-label="Close cart"
+          >
+            <X size={20} />
+          </button>
+        </div>
 
+        <div className="p-4 overflow-y-auto">
           {items.length === 0 ? (
             <p className="text-gray-500 text-center py-8">Your cart is empty</p>
           ) : (
             <>
-              <div className="space-y-3 max-h-64 overflow-y-auto">
+              <div className="space-y-3">
                 {items.map(item => (
                   <div key={item.id} className="flex items-center space-x-3 py-2">
                     <img
@@ -165,6 +166,7 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         className="p-1 hover:bg-sage/20 rounded transition-colors"
+                        aria-label="Decrease quantity"
                       >
                         <Minus size={12} />
                       </button>
@@ -180,12 +182,14 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
                             ? 'opacity-50 cursor-not-allowed'
                             : 'hover:bg-sage/20'
                         }`}
+                        aria-label="Increase quantity"
                       >
                         <Plus size={12} />
                       </button>
                       <button
                         onClick={() => removeItem(item.id)}
                         className="p-1 hover:bg-red-100 text-red-500 rounded transition-colors ml-2"
+                        aria-label="Remove item"
                       >
                         <X size={12} />
                       </button>
@@ -202,7 +206,6 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
                   </span>
                 </div>
 
-                {/* Proceed to Cart button */}
                 <Button
                   variant="outline"
                   className="w-full py-2"
@@ -214,11 +217,10 @@ const CartDropdown = ({ isOpen, onClose }: CartDropdownProps) => {
                   Proceed to Cart
                 </Button>
 
-                {/* Checkout button */}
                 <Button
                   className="w-full bg-prime-blue hover:bg-prime-blue/90 text-white"
                   onClick={() => {
-                    navigate('/checkout'); // or your checkout route
+                    navigate('/checkout');
                     onClose();
                   }}
                 >

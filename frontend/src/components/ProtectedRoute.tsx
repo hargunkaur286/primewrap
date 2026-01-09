@@ -62,11 +62,11 @@ import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedEmails?: string[]; // 👈 optional whitelist
+  allowedEmails?: string[]; // optional whitelist
 }
 
 const ProtectedRoute = ({ children, allowedEmails }: ProtectedRouteProps) => {
-  const { isAuthenticated, isLoading, user } = useAuth(); // 👈 make sure 'user' is available in context
+  const { isAuthenticated, isLoading, user } = useAuth(); // ensure 'user' is available in context
   const location = useLocation();
 
   if (isLoading) {
@@ -84,7 +84,7 @@ const ProtectedRoute = ({ children, allowedEmails }: ProtectedRouteProps) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 👇 If `allowedEmails` is provided and user is not on the list
+  // If `allowedEmails` is provided and user is not on the list
   if (allowedEmails && (!user || !allowedEmails.includes(user.email))) {
     return <Navigate to="/" replace />;
   }

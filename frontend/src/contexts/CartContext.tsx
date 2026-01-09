@@ -30,19 +30,19 @@
 //   useEffect(() => {
 //     const fetchCart = async () => {
 //       if (!isAuthenticated) {
-//         console.log('🛒 [CartContext] User not authenticated — clearing cart');
+//         console.log('[CartContext] User not authenticated — clearing cart');
 //         setItems([]);
 //         return;
 //       }
 //       try {
-//         console.log('🛒 [CartContext] Fetching cart from backend...');
+//         console.log('[CartContext] Fetching cart from backend...');
 //         const res = await axios.get('http://localhost:4000/api/v1/user/cart', {
 //           withCredentials: true,
 //         });
-//         console.log('🛒 [CartContext] fetchCart response:', res.data.cart);
+//         console.log('[CartContext] fetchCart response:', res.data.cart);
 //         setItems(res.data.cart || []);
 //       } catch (err) {
-//         console.error('🛒 [CartContext] fetchCart error:', err);
+//         console.error('[CartContext] fetchCart error:', err);
 //         setItems([]);
 //       }
 //     };
@@ -51,7 +51,7 @@
 
 //   // Sync local cart to backend
 //   const syncCart = async (newCart: CartItem[]) => {
-//     console.log('🛒 [CartContext] syncCart sending:', newCart);
+//     console.log('[CartContext] syncCart sending:', newCart);
 //     setItems(newCart);
 //     try {
 //       const res = await axios.post(
@@ -59,14 +59,14 @@
 //         { cartItems: newCart },
 //         { withCredentials: true }
 //       );
-//       console.log('🛒 [CartContext] saveCart response:', res.data.cart);
+//       console.log('[CartContext] saveCart response:', res.data.cart);
 //     } catch (err) {
-//       console.error('🛒 [CartContext] syncCart error:', err);
+//       console.error('[CartContext] syncCart error:', err);
 //     }
 //   };
 
 //   // const addItem = async (item: CartItem) => {
-//   //   console.log('🛒 [CartContext] addItem called with:', item);
+//   //   console.log('[CartContext] addItem called with:', item);
 //   //   const existing = items.find(i => i.id === item.id);
 //   //   let updated: CartItem[];
 //   //   if (existing) {
@@ -80,7 +80,7 @@
 //   // };
 
 //   const addItem = async (item: CartItem) => {
-//     console.log('🛒 [CartContext] addItem called with:', item);
+//     console.log('[CartContext] addItem called with:', item);
 //     const existing = items.find(i => i.id === item.id);
 //     let updated: CartItem[];
 //     if (existing) {
@@ -95,13 +95,13 @@
 //   };
 
 //   const removeItem = async (itemId: string) => {
-//     console.log('🛒 [CartContext] removeItem called for ID:', itemId);
+//     console.log('[CartContext] removeItem called for ID:', itemId);
 //     const updated = items.filter(i => i.id !== itemId);
 //     await syncCart(updated);
 //   };
 
 //   const clearCart = async () => {
-//     console.log('🛒 [CartContext] clearCart called');
+//     console.log('[CartContext] clearCart called');
 //     await syncCart([]);
 //   };
 
@@ -169,19 +169,19 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchCart = async () => {
       if (!isAuthenticated) {
-        console.log('🛒 [CartContext] clearing cart (not authenticated)');
+        console.log('[CartContext] clearing cart (not authenticated)');
         setItems([]);
         return;
       }
       try {
-        console.log('🛒 [CartContext] fetching cart…');
+        console.log('[CartContext] fetching cart…');
         const res = await axios.get(`${API_BASE}/api/v1/user/cart`, {
           withCredentials: true,
         });
-        console.log('🛒 [CartContext] fetchCart response:', res.data.cart);
+        console.log('[CartContext] fetchCart response:', res.data.cart);
         setItems(res.data.cart || []);
       } catch (err) {
-        console.error('🛒 [CartContext] fetchCart error:', err);
+        console.error('[CartContext] fetchCart error:', err);
         setItems([]);
       }
     };
@@ -190,7 +190,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
 
   // Sync local cart to backend
   const syncCart = async (newCart: CartItem[]) => {
-    console.log('🛒 [CartContext] syncing cart:', newCart);
+    console.log('[CartContext] syncing cart:', newCart);
     setItems(newCart);
     try {
       const res = await axios.post(
@@ -198,14 +198,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         { cartItems: newCart },
         { withCredentials: true }
       );
-      console.log('🛒 [CartContext] saveCart response:', res.data.cart);
+      console.log('[CartContext] saveCart response:', res.data.cart);
     } catch (err) {
-      console.error('🛒 [CartContext] syncCart error:', err);
+      console.error('[CartContext] syncCart error:', err);
     }
   };
 
   const addItem = async (item: CartItem) => {
-    console.log('🛒 [CartContext] addItem:', item);
+    console.log('[CartContext] addItem:', item);
     const existing = items.find(i => i.id === item.id);
     const updated = existing
       ? items.map(i =>
@@ -218,13 +218,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const removeItem = async (itemId: string) => {
-    console.log('🛒 [CartContext] removeItem:', itemId);
+    console.log('[CartContext] removeItem:', itemId);
     const updated = items.filter(i => i.id !== itemId);
     await syncCart(updated);
   };
 
   const updateQuantity = async (itemId: string, quantity: number) => {
-    console.log('🛒 [CartContext] updateQuantity:', itemId, quantity);
+    console.log('[CartContext] updateQuantity:', itemId, quantity);
     if (quantity < 1) {
       // If you want removing when quantity goes to zero:
       return removeItem(itemId);
@@ -237,7 +237,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const clearCart = async () => {
-    console.log('🛒 [CartContext] clearCart');
+    console.log('[CartContext] clearCart');
     await syncCart([]);
   };
 

@@ -43,7 +43,9 @@ import {
   MessageSquare,
   Route,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Check,
+  Star
 } from "lucide-react";
 
 const DeliveryManagement = () => {
@@ -348,7 +350,10 @@ const DeliveryManagement = () => {
                               </div>
                               <div className="text-right text-sm">
                                 {stop.status === 'completed' ? (
-                                  <span className="text-green-600 font-medium">✓ {stop.completedTime}</span>
+                                  <span className="inline-flex items-center gap-1 text-green-600 font-medium">
+                                    <Check className="h-4 w-4" />
+                                    {stop.completedTime}
+                                  </span>
                                 ) : (
                                   <span className="text-gray-600">Est. {stop.estimatedTime}</span>
                                 )}
@@ -421,7 +426,10 @@ const DeliveryManagement = () => {
                         <TableCell>
                           <div className="text-sm">
                             <p>{driver.totalDeliveries} deliveries</p>
-                            <p className="text-yellow-600">★ {driver.rating}</p>
+                            <p className="inline-flex items-center gap-1 text-yellow-600">
+                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              {driver.rating}
+                            </p>
                           </div>
                         </TableCell>
                         <TableCell>

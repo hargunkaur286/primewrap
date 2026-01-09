@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { ArrowLeft, Shield, Lock, CheckCircle, CreditCard, Sparkles } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, CheckCircle, CreditCard, Sparkles, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -113,7 +113,12 @@ const PaymentForm = () => {
         setPaymentComplete(true);
         clearCart();
         toast({
-          title: "Payment Successful! 🎉",
+          title: (
+            <span className="inline-flex items-center gap-2">
+              <PartyPopper className="w-4 h-4" />
+              Payment Successful!
+            </span>
+          ),
           description: "Your order has been confirmed. You'll receive an email confirmation shortly.",
         });
       } else {
@@ -199,7 +204,7 @@ const PaymentForm = () => {
 //     setPaymentComplete(true);
 //     clearCart();
 //     toast({
-//       title:       "Payment Successful! 🎉",
+//       title:       "Payment Successful!",
 //       description: "Your order has been confirmed. You'll receive an email confirmation shortly.",
 //     });
 

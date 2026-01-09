@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, Star, Sparkles, CheckCircle } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Star, Sparkles, CheckCircle, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from '@/hooks/use-toast';
@@ -40,7 +40,12 @@ const ProductRecycling = () => {
       addItem(product);
     }
     toast({
-      title: "Added to cart! 🎉",
+      title: (
+        <span className="inline-flex items-center gap-2">
+          <PartyPopper className="w-4 h-4" />
+          Added to cart!
+        </span>
+      ),
       description: `${quantity} ${product.name}${quantity > 1 ? 's' : ''} added to your cart.`,
     });
   };

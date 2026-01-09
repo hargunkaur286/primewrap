@@ -1,8 +1,10 @@
 
+import type { ReactNode } from 'react';
+
 interface Feature {
   title: string;
   description: string;
-  icon: string;
+  icon: ReactNode;
 }
 
 interface FeatureCardProps {

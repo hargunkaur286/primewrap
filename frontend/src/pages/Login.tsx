@@ -70,7 +70,7 @@ const Login = () => {
 //     setIsAuthenticated(true);
 //     setUser(res.data.user);
 
-//     // 👇 Redirect based on email
+//     // Redirect based on email
 //     if (res.data.user.email === "hargunkaur2863@gmail.com") {
 //       navigate("/dashboard");
 //     } else {

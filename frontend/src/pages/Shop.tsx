@@ -1,7 +1,7 @@
 
 import { useCart } from '@/contexts/CartContext';
 import { toast } from '@/hooks/use-toast';
-import { Sparkles, Shield, Leaf, Star, ArrowRight, CheckCircle } from 'lucide-react';
+import { Sparkles, Shield, Leaf, Star, ArrowRight, CheckCircle, PartyPopper } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProductCard from '@/components/ProductCard';
 import ProductBenefits from '@/components/ProductBenefits';
@@ -85,7 +85,12 @@ const Shop = () => {
                   onAddToCart={() => {
                     addItem(product);
                     toast({
-                      title: "Added to cart! 🎉",
+                      title: (
+                        <span className="inline-flex items-center gap-2">
+                          <PartyPopper className="w-4 h-4" />
+                          Added to cart!
+                        </span>
+                      ),
                       description: `${product.name} has been added to your cart.`,
                     });
                   }}

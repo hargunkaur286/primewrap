@@ -1,6 +1,19 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowDown, Sparkles, Shield, Leaf, Star } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowDown,
+  BadgeCheck,
+  Brain,
+  Dumbbell,
+  Leaf,
+  PartyPopper,
+  Shield,
+  Sparkles,
+  Sprout,
+  Star,
+  XCircle,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/contexts/CartContext';
@@ -31,12 +44,22 @@ const Index = () => {
 
     if (response.ok) {
       toast({
-        title: "🎉 Subscription Successful!",
+        title: (
+          <span className="inline-flex items-center gap-2">
+            <PartyPopper className="w-4 h-4" />
+            Subscription Successful!
+          </span>
+        ),
         description: message,
       });
     } else {
       toast({
-        title: "⚠️ Subscription Failed",
+        title: (
+          <span className="inline-flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Subscription Failed
+          </span>
+        ),
         description: message,
         variant: "destructive",
       });
@@ -46,7 +69,12 @@ const Index = () => {
   } catch (error) {
     console.error("Newsletter subscription error:", error);
     toast({
-      title: "❌ Something went wrong",
+      title: (
+        <span className="inline-flex items-center gap-2">
+          <XCircle className="w-4 h-4" />
+          Something went wrong
+        </span>
+      ),
       description: "Please try again later.",
       variant: "destructive",
     });
@@ -75,22 +103,22 @@ const Index = () => {
     {
       title: '100% Biodegradable',
       description: 'Break down naturally without harming the environment',
-      icon: '🌱'
+      icon: <Sprout className="w-7 h-7 text-blue-600" />
     },
     {
       title: 'Ultra Strong',
       description: 'Advanced polymer technology for maximum durability',
-      icon: '💪'
+      icon: <Dumbbell className="w-7 h-7 text-blue-600" />
     },
     {
       title: 'Smart Design',
       description: 'Engineered for modern living with convenience in mind',
-      icon: '🧠'
+      icon: <Brain className="w-7 h-7 text-blue-600" />
     },
     {
       title: 'Certified Quality',
       description: 'Meets all environmental and safety standards worldwide',
-      icon: '✅'
+      icon: <BadgeCheck className="w-7 h-7 text-blue-600" />
     }
   ];
 
@@ -213,7 +241,12 @@ const Index = () => {
                   onAddToCart={() => {
                     addItem(product);
                     toast({
-                      title: "Added to cart! 🎉",
+                      title: (
+                        <span className="inline-flex items-center gap-2">
+                          <PartyPopper className="w-4 h-4" />
+                          Added to cart!
+                        </span>
+                      ),
                       description: `${product.name} has been added to your cart.`,
                     });
                   }}
@@ -297,7 +330,10 @@ const Index = () => {
           </form>
 
           <p className="text-white/70 text-sm mt-2">
-            ✨ No spam, just exclusive offers and eco-living tips
+            <span className="inline-flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              No spam, just exclusive offers and eco-living tips
+            </span>
           </p>
         </div>
       </section>

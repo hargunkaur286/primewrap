@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { toast } from '@/hooks/use-toast';
-import { Mail, MessageSquare, Phone, Clock, Leaf, Sparkles } from 'lucide-react';
+import { Mail, MessageSquare, Phone, Clock, Leaf, Sparkles, Sprout } from 'lucide-react';
 import axios from 'axios';
 import { API_BASE } from '@/lib/apiBase';
 
@@ -28,7 +28,12 @@ const Contact = () => {
 
       if (res.status === 201) {
         toast({
-          title: "Message sent! 🌱",
+          title: (
+            <span className="inline-flex items-center gap-2">
+              <Sprout className="w-4 h-4" />
+              Message sent!
+            </span>
+          ),
           description: "We'll get back to you within 24 hours.",
         });
         setFormData({ name: '', email: '', message: '' });

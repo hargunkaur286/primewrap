@@ -1,5 +1,5 @@
 
-import { Leaf, Shield, Heart, Award, Recycle, Globe } from 'lucide-react';
+import { Leaf, Shield, Heart, Award, Recycle, Globe, BadgeCheck, Sprout, Trophy } from 'lucide-react';
 
 const About = () => {
   const values = [
@@ -24,10 +24,10 @@ const About = () => {
   ];
 
   const certifications = [
-    { icon: "✅", title: "BPI Certified", color: "from-emerald-100 to-green-100" },
-    { icon: "🌱", title: "ASTM D6400", color: "from-cyan-100 to-blue-100" },
-    { icon: "♻️", title: "OK Compost", color: "from-teal-100 to-emerald-100" },
-    { icon: "🏆", title: "ISO 14855", color: "from-green-100 to-cyan-100" }
+    { icon: <BadgeCheck className="w-8 h-8" />, title: "BPI Certified", color: "from-emerald-100 to-green-100" },
+    { icon: <Sprout className="w-8 h-8" />, title: "ASTM D6400", color: "from-cyan-100 to-blue-100" },
+    { icon: <Recycle className="w-8 h-8" />, title: "OK Compost", color: "from-teal-100 to-emerald-100" },
+    { icon: <Trophy className="w-8 h-8" />, title: "ISO 14855", color: "from-green-100 to-cyan-100" }
   ];
 
   return (
@@ -132,7 +132,7 @@ const About = () => {
               {certifications.map((cert, index) => (
                 <div key={index} className="group/cert text-center transform-gpu hover:scale-110 transition-all duration-300">
                   <div className={`bg-gradient-to-br ${cert.color} rounded-2xl p-6 mb-4 shadow-lg transform-gpu group-hover/cert:rotate-6 transition-transform duration-300`}>
-                    <span className="text-3xl">{cert.icon}</span>
+                    <div className="flex items-center justify-center text-slate-700">{cert.icon}</div>
                     {/* 3D depth */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${cert.color} opacity-40 rounded-2xl -z-10 translate-x-1 translate-y-1`}></div>
                   </div>
