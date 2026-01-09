@@ -7,13 +7,21 @@ import userRouter from "./routes/userRouter.js";
 import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.js";
 export const app = express();
 
-const defaultFrontendUrl = "https://primewrap.vercel.app";
+// Production frontend (custom domain) + Vercel deployment URLs.
+const defaultFrontendUrl = "https://pinewrap.ca";
+const vercelProdFrontendUrl = "https://primewrap.vercel.app";
+const wwwFrontendUrl = "https://www.pinewrap.ca";
 
 // In Vercel, your frontend can be either the production URL or a preview URL like:
 // https://primewrap-git-main-hargunkaur286s-projects.vercel.app
 const vercelPreviewOriginRegex = /^https:\/\/primewrap(-.*)?\.vercel\.app$/;
 const allowedOrigins = new Set(
-  [process.env.FRONTEND_URL, defaultFrontendUrl].filter(Boolean)
+  [
+    process.env.FRONTEND_URL,
+    defaultFrontendUrl,
+    wwwFrontendUrl,
+    vercelProdFrontendUrl,
+  ].filter(Boolean)
 );
 
 const corsOptions = {
