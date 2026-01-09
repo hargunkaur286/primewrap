@@ -181,7 +181,7 @@ const Contact = () => {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-4 font-bold tracking-wide rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform-gpu hover:scale-105"
+                  className="w-full bg-primary hover:bg-primary/90 text-white py-4 font-bold tracking-wide rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform-gpu hover:scale-105"
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   SEND MESSAGE

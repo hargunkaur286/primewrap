@@ -77,7 +77,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
             <span className="text-xs bg-emerald-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">
               Biodegradable
             </span>
-            <span className="text-xs bg-cyan-100/80 text-teal-700 px-2 md:px-3 py-1 rounded-full font-medium">
+            <span className="text-xs bg-teal-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">
               Ultra Strong
             </span>
             <span className="text-xs bg-teal-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">

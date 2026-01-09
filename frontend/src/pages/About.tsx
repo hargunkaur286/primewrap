@@ -4,19 +4,19 @@ import { Leaf, Shield, Heart, Award, Recycle, Globe, BadgeCheck, Sprout, Trophy 
 const About = () => {
   const values = [
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <Globe className="w-8 h-8 text-primary" />,
       title: "Planet First",
       description: "Every decision we make considers the environmental impact first",
       color: "from-emerald-400 to-green-500"
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield className="w-8 h-8 text-primary" />,
       title: "Ultra Strong",
       description: "Eco-friendly shouldn't mean compromising on quality or reliability",
       color: "from-cyan-400 to-blue-500"
     },
     {
-      icon: <Heart className="w-8 h-8" />,
+      icon: <Heart className="w-8 h-8 text-primary" />,
       title: "Community Love",
       description: "Building a movement of conscious consumers making better choices",
       color: "from-teal-400 to-emerald-500"
@@ -72,7 +72,7 @@ const About = () => {
               
               <div className="flex items-center mb-8">
                 <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center mr-6 shadow-lg transform-gpu group-hover:rotate-6 transition-transform duration-300">
-                  <Recycle className="w-8 h-8 text-white" />
+                  <Recycle className="w-8 h-8 text-primary" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-cyan-700 bg-clip-text">
                   Our Story
