@@ -183,6 +183,7 @@ const Index = () => {
                 <img
                   src="/uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png"
                   alt="Pinewrap Hero Product"
+                  loading="lazy"
                   className="w-full h-auto drop-shadow-2xl group-hover:drop-shadow-3xl transition-all duration-500 rounded-lg"
                 />
 
