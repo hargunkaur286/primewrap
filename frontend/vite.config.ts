@@ -9,12 +9,6 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   build: {
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-      },
-    },
     rollupOptions: {
       output: {
         manualChunks: {
