@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { TreePine, Sparkles, Sprout, Truck, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Sprout, Truck, Mail, Phone, MapPin, Heart } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -18,20 +18,7 @@ const Footer = () => {
           <div className="md:col-span-2 space-y-6">
             {/* 3D Logo */}
             <div className="group flex items-center space-x-4 mb-6">
-              <div className="relative perspective-1000">
-                <div className="relative w-16 h-16 rounded-3xl flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-3xl bg-primary/30 blur-xl animate-glow" aria-hidden="true" />
-                  <div className="relative w-16 h-16 bg-primary rounded-3xl flex items-center justify-center shadow-2xl ring-2 ring-secondary/40 transform-gpu group-hover:rotate-y-12 group-hover:scale-110 transition-all duration-500 transform-style-preserve-3d">
-                    <TreePine className="w-8 h-8 text-white transform-gpu group-hover:scale-110 transition-transform duration-300" strokeWidth={2.25} />
-                    <Sparkles
-                      className="absolute -top-1 -right-1 w-4 h-4 text-secondary opacity-0 transition-opacity duration-300 group-hover:opacity-90 animate-float pointer-events-none"
-                      aria-hidden="true"
-                    />
-                    {/* 3D depth effect */}
-                    <div className="absolute inset-0 bg-primary/60 rounded-3xl -z-10 translate-x-2 translate-y-2 opacity-60"></div>
-                  </div>
-                </div>
-              </div>
+              <img src="/uploads/logo.png" alt="Pinewrap Logo" className="w-16 h-16 object-contain" />
               <div className="font-bold text-3xl tracking-tight">
                 <span className="text-background">
                   PINE

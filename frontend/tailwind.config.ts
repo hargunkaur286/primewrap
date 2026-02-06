@@ -2,8 +2,8 @@
 import type { Config } from "tailwindcss";
 
 const PRIME = {
-  yellow: "#FFE100",
-  blue: "#134686",
+  yellow: "#FFC400",
+  blue: "#0B2D5C",
   black: "#000000",
 } as const;
 
@@ -153,8 +153,8 @@ export default {
           "50%": { transform: "translateY(-10px)" },
         },
         "glow": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(19, 70, 134, 0.22)" },
-          "50%": { boxShadow: "0 0 44px rgba(255, 225, 0, 0.35)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(11, 45, 92, 0.22)" },
+          "50%": { boxShadow: "0 0 44px rgba(255, 196, 0, 0.35)" },
         },
       },
       animation: {

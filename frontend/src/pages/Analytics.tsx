@@ -44,7 +44,7 @@ import {
   type LucideIcon
 } from "lucide-react";
 
-const CHART_COLORS = ["#134686", "#FFE100", "#000000"] as const;
+const CHART_COLORS = ["#0B2D5C", "#FFC400", "#000000"] as const;
 
 type StatCardProps = {
   title: string;
@@ -86,8 +86,8 @@ const Analytics = () => {
       { name: "Bubble Wrap Roll", sales: 18, revenue: 359.82, percentage: 18 }
     ],
     inventoryStatus: [
-      { name: "In Stock", value: 78, color: "#134686" },
-      { name: "Low Stock", value: 15, color: "#FFE100" },
+      { name: "In Stock", value: 78, color: "#0B2D5C" },
+      { name: "Low Stock", value: 15, color: "#FFC400" },
       { name: "Out of Stock", value: 7, color: "#000000" }
     ],
     customerMetrics: {

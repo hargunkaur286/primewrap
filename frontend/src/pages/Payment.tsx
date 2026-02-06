@@ -413,7 +413,7 @@ const PaymentForm = () => {
                             color: '#000000',
                             fontFamily: 'Inter, system-ui, sans-serif',
                             '::placeholder': {
-                              color: '#134686',
+                              color: '#0B2D5C',
                             },
                           },
                         },

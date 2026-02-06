@@ -129,8 +129,8 @@ const Index = () => {
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {/* Hide blurred circles on small screens for clarity */}
-          <div className="hidden sm:block absolute top-1/4 left-1/4 w-56 h-56 sm:w-72 sm:h-72 bg-[#FFE100]/20 rounded-full blur-3xl animate-float"></div>
-          <div className="hidden sm:block absolute bottom-1/4 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-[#134686]/14 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+          <div className="hidden sm:block absolute top-1/4 left-1/4 w-56 h-56 sm:w-72 sm:h-72 bg-[#FFC400]/20 rounded-full blur-3xl animate-float"></div>
+          <div className="hidden sm:block absolute bottom-1/4 right-1/4 w-72 h-72 sm:w-96 sm:h-96 bg-[#0B2D5C]/14 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
           <div className="hidden sm:block absolute top-1/2 left-1/2 w-48 h-48 sm:w-64 sm:h-64 bg-[#000000]/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
         </div>
 

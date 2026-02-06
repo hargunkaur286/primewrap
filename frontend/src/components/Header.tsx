@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, TreePine, Sparkles, User as UserIcon, LogOut, Menu } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Menu } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import CartDropdown from './CartDropdown';
@@ -37,16 +37,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 sm:h-20 items-center justify-between gap-2">
         {/* Logo */}
         <Link to="/" className="group flex items-center space-x-3 hover:scale-105 transition">
-          <div className="relative w-9 h-9 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center">
-            <div className="absolute inset-0 rounded-2xl bg-primary/30 blur-lg animate-glow" aria-hidden="true" />
-            <div className="relative w-9 h-9 sm:w-12 sm:h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg ring-2 ring-secondary/40">
-              <TreePine className="w-5 h-5 sm:w-6 sm:h-6 text-white" strokeWidth={2.25} />
-              <Sparkles
-                className="absolute -top-1 -right-1 w-3.5 h-3.5 text-secondary opacity-0 transition-opacity duration-300 group-hover:opacity-90 animate-float pointer-events-none"
-                aria-hidden="true"
-              />
-            </div>
-          </div>
+          <img src="/uploads/logo.png" alt="Pinewrap Logo" className="w-9 h-9 sm:w-12 sm:h-12 object-contain" />
           <h1 className="text-lg sm:text-2xl font-bold tracking-tight">
             <span className="text-foreground">PINE</span>
             <span className="text-primary">WRAP</span>
@@ -153,7 +144,6 @@ export default function Header() {
               <div className="space-y-6">
                 <div className="space-y-1">
                   <div className="text-sm font-semibold text-foreground">Menu</div>
-                  <div className="text-sm text-muted-foreground">Navigate the site</div>
                 </div>
 
                 <nav className="flex flex-col gap-3">
