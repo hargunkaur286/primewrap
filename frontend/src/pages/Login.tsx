@@ -25,7 +25,7 @@ import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";  // ← use the typed auth hook
-const ADMIN_EMAIL="hargunkaur2863@gmail.com"
+const ADMIN_EMAILS = ["hargunkaur2863@gmail.com", "gursahib@pinewrap.com"]
 /* --------------------------- validation schema --------------------------- */
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -107,7 +107,7 @@ const Login = () => {
 
       // Redirect based on email (case/space tolerant)
       const normalized = (user.email || "").trim().toLowerCase();
-      if (normalized === ADMIN_EMAIL.toLowerCase()) {
+      if (ADMIN_EMAILS.includes(normalized)) {
         navigate("/dashboard", { replace: true });
       } else {
         navigate("/", { replace: true });

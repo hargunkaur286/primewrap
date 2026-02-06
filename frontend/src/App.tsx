@@ -159,14 +159,14 @@ import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
-const ADMIN_EMAIL = "hargunkaur2863@gmail.com";
+const ADMIN_EMAILS = ["hargunkaur2863@gmail.com", "gursahib@pinewrap.com"];
 
 const AppShell: React.FC = () => {
   const { user, isAuthenticated, isLoading } = useAuth();
 
   const isAdmin =
     isAuthenticated &&
-    (user?.email ?? '').trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    ADMIN_EMAILS.includes((user?.email ?? '').trim().toLowerCase());
 
   if (isLoading) {
     return <p className="p-8 text-center">Loading…</p>;
