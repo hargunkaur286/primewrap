@@ -25,7 +25,12 @@ import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";  // ← use the typed auth hook
-const ADMIN_EMAILS = ["hargunkaur2863@gmail.com", "gursahib@pinewrap.com"]
+
+// Get admin emails from environment variable or use defaults
+const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS
+  ? import.meta.env.VITE_ADMIN_EMAILS.split(',')
+  : ["hargunkaur2863@gmail.com", "gursahib@pinewrap.ca", "workmailsahib1997@gmail.com"];
+
 /* --------------------------- validation schema --------------------------- */
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),

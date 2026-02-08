@@ -159,7 +159,15 @@ import ScrollToTop from "./components/ScrollToTop";
 import PromoBar from "./components/PromoBar";
 
 const queryClient = new QueryClient();
-const ADMIN_EMAILS = ["hargunkaur2863@gmail.com", "gursahib@pinewrap.com"];
+
+// Get admin emails from environment variable or use defaults
+const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS
+  ? import.meta.env.VITE_ADMIN_EMAILS.split(',')
+  : [
+      "hargunkaur2863@gmail.com",
+      "gursahib@pinewrap.ca",
+      "workmailsahib1997@gmail.com"
+    ];
 
 const AppShell: React.FC = () => {
   const { user, isAuthenticated, isLoading } = useAuth();

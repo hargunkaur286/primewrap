@@ -115,7 +115,16 @@ const OTPVerification: React.FC = () => {
       setIsVerified(true);
       // Backend sets the auth cookie; pull fresh /me so Header updates immediately.
       await refreshMe();
-      setTimeout(() => navigate('/'), 2000); // Navigate to home, not login
+      
+      // Check if user is admin and redirect accordingly
+      const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS
+        ? import.meta.env.VITE_ADMIN_EMAILS.split(',')
+        : ["hargunkaur2863@gmail.com", "gursahib@pinewrap.ca", "workmailsahib1997@gmail.com"];
+      
+      const userEmail = res.data.user?.email?.trim().toLowerCase();
+      const redirectPath = userEmail && ADMIN_EMAILS.includes(userEmail) ? '/dashboard' : '/';
+      
+      setTimeout(() => navigate(redirectPath, { replace: true }), 2000);
     } catch (err: any) {
       console.error('OTP Verification Error:', err.response?.data); // Add logging
       toast({

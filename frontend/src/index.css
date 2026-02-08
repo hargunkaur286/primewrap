@@ -4,39 +4,39 @@
 
 @layer base {
   :root {
-     /* Primewrap palette:
+    /* Primewrap palette:
        #FFC400 (42 100% 50%)
        #0B2D5C (213 84% 20%)
        #000000 (0 0% 0%)
      */
-     --background: 0 0% 100%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 0%;
-     --card: 0 0% 100%;
+    --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
-     --popover: 0 0% 100%;
+    --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
-     --primary: 213 84% 20%;
-     --primary-foreground: 42 100% 50%;
-     --secondary: 42 100% 50%;
+    --primary: 213 84% 20%;
+    --primary-foreground: 42 100% 50%;
+    --secondary: 42 100% 50%;
     --secondary-foreground: 0 0% 0%;
-     --muted: 0 0% 95%;
-     --muted-foreground: 213 50% 35%;
-     --accent: 42 100% 50%;
-     --accent-foreground: 213 84% 20%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 213 50% 35%;
+    --accent: 42 100% 50%;
+    --accent-foreground: 213 84% 20%;
     --destructive: 0 84% 60%;
-      --destructive-foreground: 0 0% 100%;
-     --border: 213 30% 85%;
-     --input: 213 30% 85%;
-     --ring: 213 84% 20%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 213 30% 85%;
+    --input: 213 30% 85%;
+    --ring: 213 84% 20%;
     --radius: 0.5rem;
-     --sidebar-background: 0 0% 100%;
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 0%;
-     --sidebar-primary: 213 84% 20%;
-     --sidebar-primary-foreground: 42 100% 50%;
-     --sidebar-accent: 42 100% 50%;
-     --sidebar-accent-foreground: 213 84% 20%;
-     --sidebar-border: 213 30% 85%;
-     --sidebar-ring: 213 84% 20%;
+    --sidebar-primary: 213 84% 20%;
+    --sidebar-primary-foreground: 42 100% 50%;
+    --sidebar-accent: 42 100% 50%;
+    --sidebar-accent-foreground: 213 84% 20%;
+    --sidebar-border: 213 30% 85%;
+    --sidebar-ring: 213 84% 20%;
   }
 
   .dark {
@@ -139,7 +139,8 @@
     box-shadow: 0 0 20px rgba(11, 45, 92, 0.22);
   }
   50% {
-    box-shadow: 0 0 44px rgba(255, 196, 0, 0.35),
+    box-shadow:
+      0 0 44px rgba(255, 196, 0, 0.35),
       0 0 64px rgba(11, 45, 92, 0.18);
   }
 }
