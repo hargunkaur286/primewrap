@@ -33,7 +33,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg">
+    <header className="sticky top-5 z-40 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 sm:h-20 items-center justify-between gap-2">
         {/* Logo */}
         <Link to="/" className="group flex items-center space-x-3 hover:scale-105 transition">
@@ -46,7 +46,7 @@ export default function Header() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex space-x-8">
-          {['/', '/shop', '/about', '/contact'].map(href => {
+          {['/', '/shop', '/contact'].map(href => {
             const name = href === '/' ? 'Home' : href.replace('/', '').replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
             const active = location.pathname === href;
             return (
@@ -150,7 +150,6 @@ export default function Header() {
                   {[
                     { href: '/', label: 'Home' },
                     { href: '/shop', label: 'Shop' },
-                    { href: '/about', label: 'About' },
                     { href: '/contact', label: 'Contact' },
                   ].map(({ href, label }) => (
                     <SheetClose asChild key={href}>

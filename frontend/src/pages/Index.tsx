@@ -170,6 +170,12 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 className="border-2 border-primary text-primary hover:bg-primary/10 px-8 sm:px-10 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform-gpu hover:scale-105 bg-white/50 backdrop-blur-sm"
+                onClick={() => {
+                  const featuresSection = document.getElementById('features-section');
+                  if (featuresSection) {
+                    featuresSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
               >
                 LEARN MORE
               </Button>
@@ -259,7 +265,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 sm:py-24 bg-muted">
+      <section className="py-20 sm:py-24 bg-muted" id="features-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 sm:mb-20 space-y-6">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight">
@@ -291,7 +297,7 @@ const Index = () => {
       <section className="py-20 sm:py-24 bg-primary relative overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Background Effects */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="hidden lg:block absolute top-0 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+         <div className="hidden lg:block absolute top-0 left-1/4 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
           <div className="hidden lg:block absolute bottom-0 right-1/4 w-56 h-56 bg-white/10 rounded-full blur-3xl"></div>
         </div>
 

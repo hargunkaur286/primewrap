@@ -152,12 +152,12 @@ const Shop = () => {
           </div>
 
           {/* Call to Action */}
-          <div className="text-center bg-gradient-to-r from-emerald-600 to-cyan-600 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+          <div className="text-center bg-secondary rounded-3xl p-8 md:p-12 text-gray-900 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent animate-shimmer"></div>
             <div className="relative z-10">
               <h3 className="text-2xl md:text-3xl font-bold mb-4 text-primary">Ready to Make the Switch?</h3>
-              <p className="text-lg md:text-xl mb-6 md:mb-8 opacity-90 text-primary">Join thousands of eco-conscious customers today</p>
-              <Button className="bg-white text-emerald-600 hover:bg-gray-100 px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu hover:scale-105">
+              <p className="text-lg md:text-xl mb-6 md:mb-8 opacity-90 text-gray-800">Join thousands of eco-conscious customers today</p>
+              <Button className="bg-gray-900 text-secondary bg-primary px-6 md:px-8 py-3 md:py-4 text-base md:text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu hover:scale-105">
                 <span className="flex items-center gap-2">
                   Start Shopping
                   <ArrowRight className="w-4 md:w-5 h-4 md:h-5" />

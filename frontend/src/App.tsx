@@ -135,7 +135,6 @@ import DriverPanel from "./pages/DriverPanel";
 import Analytics from "./pages/Analytics";
 import Accounting from "./pages/Accounting";
 import Shop from "./pages/Shop";
-import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
 import ProductScented from "./pages/ProductScented";
@@ -157,6 +156,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
+import PromoBar from "./components/PromoBar";
 
 const queryClient = new QueryClient();
 const ADMIN_EMAILS = ["hargunkaur2863@gmail.com", "gursahib@pinewrap.com"];
@@ -181,6 +181,7 @@ const AppShell: React.FC = () => {
           <BrowserRouter>
             <ScrollToTop />
             <div className="min-h-screen bg-white font-satoshi">
+              <PromoBar />
               <Header />
               <Routes>
                 {/* Auth pages */}
@@ -201,7 +202,6 @@ const AppShell: React.FC = () => {
 
                 {/* Public shop pages */}
                 <Route path="/shop" element={<Shop />} />
-                <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/product/scented" element={<ProductScented />} />

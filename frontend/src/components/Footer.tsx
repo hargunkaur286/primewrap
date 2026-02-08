@@ -77,7 +77,7 @@ const Footer = () => {
             </h3>
             <div className="space-y-4">
               {[
-                { icon: <Mail className="w-5 h-5" />, text: "help@primewrap.com" },
+                { icon: <Mail className="w-5 h-5" />, text: "gursahib@pinewrap.ca" },
                 { icon: <Phone className="w-5 h-5" />, text: "1-800-PRIMEWRAP" },
                 { icon: <MapPin className="w-5 h-5" />, text: "Mon-Fri 9AM-6PM EST" }
               ].map((contact, index) => (

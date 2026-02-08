@@ -199,7 +199,7 @@ const Contact = () => {
             <div className="grid gap-4 mb-8">
               {[
                 { icon: <Phone className="w-5 h-5" />, text: "1-800-PRIMEWRAP" },
-                { icon: <Mail className="w-5 h-5" />, text: "help@primewrap.com" },
+                { icon: <Mail className="w-5 h-5" />, text: "gursahib@pinewrap.ca" },
                 { icon: <Clock className="w-5 h-5" />, text: "Mon-Fri 9AM-6PM EST" }
               ].map((contact, index) => (
                 <div key={index} className="group perspective-1000">
