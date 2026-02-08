@@ -394,9 +394,9 @@ const ContactQueries = () => {
 
   // filter by name/email/message
   const filtered = queries.filter(q =>
-    q.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    q.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    q.message.toLowerCase().includes(searchTerm.toLowerCase())
+    (q.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (q.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (q.message || "").toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -407,7 +407,7 @@ const ContactQueries = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-6 overflow-x-hidden">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -446,24 +446,24 @@ const ContactQueries = () => {
               <p className="text-center py-8 text-gray-500">No messages found.</p>
             ) : (
               <div className="overflow-x-auto">
-                <Table>
+                <Table className="min-w-[760px]">
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID</TableHead>
+                      <TableHead className="hidden md:table-cell">ID</TableHead>
                       <TableHead>Name</TableHead>
                       <TableHead>Email</TableHead>
-                      <TableHead>Message</TableHead>
-                      <TableHead>Submitted</TableHead>
+                      <TableHead className="hidden lg:table-cell">Message</TableHead>
+                      <TableHead className="whitespace-nowrap">Submitted</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filtered.map(msg => (
                       <TableRow key={msg._id}>
-                        <TableCell className="font-medium">{msg._id}</TableCell>
-                        <TableCell>{msg.name}</TableCell>
-                        <TableCell>{msg.email}</TableCell>
-                        <TableCell className="max-w-xs truncate">{msg.message}</TableCell>
+                        <TableCell className="hidden md:table-cell font-medium whitespace-nowrap">{msg._id}</TableCell>
+                        <TableCell className="break-words">{msg.name}</TableCell>
+                        <TableCell className="break-words">{msg.email}</TableCell>
+                        <TableCell className="hidden lg:table-cell max-w-xs truncate">{msg.message}</TableCell>
                         <TableCell>
                           {new Date(msg.createdAt).toLocaleString()}
                         </TableCell>

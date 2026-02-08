@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
         select: false,
     },
     phone: String,
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
     accountVerified: { type: Boolean, default: false },
     verificationCode: Number,
     verificationCodeExpire: Date,

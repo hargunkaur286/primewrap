@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,6 @@ import {
 import { 
   Search, 
   Download, 
-  Send, 
   Eye, 
   Plus,
   Filter,
@@ -28,65 +28,142 @@ import {
   MessageSquare
 } from "lucide-react";
 
+import { API_BASE } from "@/lib/apiBase";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+
+type ApiOrderItem = {
+  product?: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
+type ApiUser = {
+  _id: string;
+  name?: string;
+  email?: string;
+};
+
+type ApiOrder = {
+  _id: string;
+  user?: string | ApiUser | null;
+  guestName?: string;
+  guestEmail?: string;
+  items: ApiOrderItem[];
+  total: number;
+  status: OrderStatus;
+  createdAt?: string;
+  orderDate?: string;
+  deliveryAddress?: string;
+  paymentMethod?: string;
+  trackingNumber?: string | null;
+};
+
 const OrderManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [orders, setOrders] = useState<ApiOrder[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<ApiOrder | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
-  // TODO: Replace with MongoDB queries from orders collection
-  const orders = [
-    {
-      id: "ORD-001",
-      customer: "John Doe",
-      email: "john@example.com",
-      phone: "+1234567890",
-      products: [
-        { name: "Aluminum Foil 200m", quantity: 2, price: 24.99 }
-      ],
-      total: 49.98,
-      status: "pending",
-      orderDate: "2024-01-15",
-      deliveryDate: "2024-01-17",
-      address: "123 Main St, City, State 12345",
-      timeline: [
-        { stage: "order-placed", date: "2024-01-15 10:30 AM", completed: true },
-        { stage: "payment-received", date: "2024-01-15 10:35 AM", completed: true },
-        { stage: "out-for-delivery", date: "", completed: false },
-        { stage: "delivered", date: "", completed: false }
-      ]
-    },
-    {
-      id: "ORD-002", 
-      customer: "Jane Smith",
-      email: "jane@example.com",
-      phone: "+1234567891",
-      products: [
-        { name: "Aluminum Foil 100m", quantity: 1, price: 15.99 },
-        { name: "Plastic Wrap 50m", quantity: 3, price: 8.99 }
-      ],
-      total: 42.96,
-      status: "delivered",
-      orderDate: "2024-01-14",
-      deliveryDate: "2024-01-16",
-      address: "456 Oak Ave, City, State 12345",
-      timeline: [
-        { stage: "order-placed", date: "2024-01-14 02:15 PM", completed: true },
-        { stage: "payment-received", date: "2024-01-14 02:20 PM", completed: true },
-        { stage: "out-for-delivery", date: "2024-01-16 09:00 AM", completed: true },
-        { stage: "delivered", date: "2024-01-16 02:30 PM", completed: true }
-      ]
-    }
-  ];
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/api/v1/user/orders`, {
+          withCredentials: true,
+        });
+        setOrders(res.data?.orders || []);
+      } catch (err: any) {
+        setError(
+          err?.response?.data?.message || err?.message || "Failed to fetch orders",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const tabCounts = useMemo(() => {
+    const pending = orders.filter((o) => o.status === "pending").length;
+    const inProgress = orders.filter(
+      (o) => o.status === "processing" || o.status === "shipped",
+    ).length;
+    const delivered = orders.filter((o) => o.status === "delivered").length;
+    return { pending, inProgress, delivered };
+  }, [orders]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "pending": return "bg-yellow-500";
-      case "payment-received": return "bg-blue-500";
-      case "out-for-delivery": return "bg-purple-500";
+      case "processing": return "bg-blue-500";
+      case "shipped": return "bg-purple-500";
       case "delivered": return "bg-green-500";
       case "cancelled": return "bg-red-500";
       default: return "bg-gray-500";
     }
   };
+
+  const getDisplayId = (order: ApiOrder) => {
+    const suffix = order._id?.slice(-6)?.toUpperCase();
+    return suffix ? `ORD-${suffix}` : order._id;
+  };
+
+  const getCustomerName = (order: ApiOrder) => {
+    if (order.guestName) return order.guestName;
+    if (typeof order.user === "object" && order.user?.name) return order.user.name;
+    return "Guest";
+  };
+
+  const getCustomerEmail = (order: ApiOrder) => {
+    if (order.guestEmail) return order.guestEmail;
+    if (typeof order.user === "object" && order.user?.email) return order.user.email;
+    return "";
+  };
+
+  const humanizeProduct = (value?: string) => {
+    const base = String(value || "")
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!base) return "Item";
+    return base
+      .split(" ")
+      .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : ""))
+      .join(" ");
+  };
+
+  const getItemDisplayName = (item: ApiOrderItem) => {
+    if (item?.name && String(item.name).trim()) return item.name;
+    if (item?.product) return humanizeProduct(item.product);
+    return "Item";
+  };
+
+  const getOrderDate = (order: ApiOrder) => {
+    const raw = order.createdAt || order.orderDate;
+    if (!raw) return "";
+    const date = new Date(raw);
+    return Number.isNaN(date.getTime()) ? String(raw) : date.toLocaleDateString();
+  };
+
+  const openDetails = (order: ApiOrder) => {
+    setSelectedOrder(order);
+    setDetailsOpen(true);
+  };
+
+  const getDeliveryAddress = (order: ApiOrder) => order.deliveryAddress || "—";
+  const getPaymentMethod = (order: ApiOrder) => order.paymentMethod || "—";
+  const getTrackingNumber = (order: ApiOrder) => order.trackingNumber || "—";
 
   const handleGenerateInvoice = (orderId: string) => {
     // TODO: Generate PDF invoice and save to MongoDB/GridFS or file storage
@@ -106,15 +183,23 @@ const OrderManagement = () => {
     // MongoDB Query: db.orders.updateOne({ _id: orderId }, { $set: { status: newStatus, updatedAt: new Date() } })
   };
 
-  const filteredOrders = orders.filter(order => {
-    const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.customer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === "all" || order.status === selectedStatus;
-    return matchesSearch && matchesStatus;
+  const filteredOrders = orders.filter((order) => {
+    const displayId = getDisplayId(order).toLowerCase();
+    const customerName = getCustomerName(order).toLowerCase();
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return true;
+    return displayId.includes(q) || customerName.includes(q);
   });
 
+  if (loading) {
+    return <p className="p-8 text-center">Loading orders…</p>;
+  }
+  if (error) {
+    return <p className="p-8 text-center text-red-600">{error}</p>;
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-6 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
@@ -130,7 +215,7 @@ const OrderManagement = () => {
         <Tabs defaultValue="all-orders" className="space-y-6">
           <TabsList>
             <TabsTrigger value="all-orders">All Orders</TabsTrigger>
-            <TabsTrigger value="pending">Pending ({orders.filter(o => o.status === 'pending').length})</TabsTrigger>
+            <TabsTrigger value="pending">Pending ({tabCounts.pending})</TabsTrigger>
             <TabsTrigger value="in-progress">In Progress</TabsTrigger>
             <TabsTrigger value="delivered">Delivered</TabsTrigger>
           </TabsList>
@@ -167,76 +252,88 @@ const OrderManagement = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Order ID</TableHead>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Products</TableHead>
-                      <TableHead>Total</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Order Date</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredOrders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">{order.id}</TableCell>
+                <div className="w-full overflow-x-auto">
+                  <Table className="min-w-[900px]">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="whitespace-nowrap">Order ID</TableHead>
+                        <TableHead>Customer</TableHead>
+                        <TableHead className="hidden lg:table-cell">Products</TableHead>
+                        <TableHead className="whitespace-nowrap">Total</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="hidden md:table-cell whitespace-nowrap">Order Date</TableHead>
+                        <TableHead className="whitespace-nowrap">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredOrders.map((order) => (
+                        <TableRow key={order._id}>
+                          <TableCell className="font-medium whitespace-nowrap">{getDisplayId(order)}</TableCell>
                         <TableCell>
                           <div>
-                            <p className="font-medium">{order.customer}</p>
-                            <p className="text-sm text-gray-500">{order.email}</p>
+                            <p className="font-medium">{getCustomerName(order)}</p>
+                            {getCustomerEmail(order) ? (
+                              <p className="text-sm text-gray-500 break-words hidden sm:block">{getCustomerEmail(order)}</p>
+                            ) : null}
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden lg:table-cell">
                           <div className="text-sm">
-                            {order.products.map((product, idx) => (
-                              <div key={idx}>
-                                {product.name} × {product.quantity}
+                            {order.items?.map((item, idx) => (
+                              <div key={`${order._id}-${idx}`}>
+                                {getItemDisplayName(item)} × {item.quantity}
                               </div>
                             ))}
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">${order.total}</TableCell>
+                        <TableCell className="font-medium">${Number(order.total || 0).toFixed(2)}</TableCell>
                         <TableCell>
                           <Badge className={`${getStatusColor(order.status)} text-white`}>
                             {order.status.replace('-', ' ')}
                           </Badge>
                         </TableCell>
-                        <TableCell>{order.orderDate}</TableCell>
+                        <TableCell className="hidden md:table-cell whitespace-nowrap">{getOrderDate(order)}</TableCell>
                         <TableCell>
-                          <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
+                          <div className="flex flex-wrap gap-2 min-w-[180px]">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8 w-8 p-0"
+                              onClick={() => openDetails(order)}
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 
                               size="sm" 
                               variant="outline"
-                              onClick={() => handleGenerateInvoice(order.id)}
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleGenerateInvoice(order._id)}
                             >
                               <Download className="h-4 w-4" />
                             </Button>
                             <Button 
                               size="sm" 
                               variant="outline"
-                              onClick={() => handleSendInvoice(order.id, 'email')}
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleSendInvoice(order._id, 'email')}
                             >
                               <Mail className="h-4 w-4" />
                             </Button>
                             <Button 
                               size="sm" 
                               variant="outline"
-                              onClick={() => handleSendInvoice(order.id, 'whatsapp')}
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleSendInvoice(order._id, 'whatsapp')}
                             >
                               <MessageSquare className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -250,31 +347,29 @@ const OrderManagement = () => {
               <CardContent>
                 <div className="space-y-4">
                   {orders.filter(order => order.status === 'pending').map((order) => (
-                    <div key={order.id} className="border rounded-lg p-4">
+                    <div key={order._id} className="border rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="font-semibold">{order.id}</h3>
-                          <p className="text-sm text-gray-600">{order.customer} - ${order.total}</p>
+                          <h3 className="font-semibold">{getDisplayId(order)}</h3>
+                          <p className="text-sm text-gray-600">
+                            {getCustomerName(order)} - ${Number(order.total || 0).toFixed(2)}
+                          </p>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" onClick={() => handleStatusUpdate(order.id, 'payment-received')}>
-                            Mark as Paid
+                          <Button size="sm" onClick={() => handleStatusUpdate(order._id, 'processing')}>
+                            Mark Processing
                           </Button>
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" onClick={() => openDetails(order)}>
                             View Details
                           </Button>
                         </div>
                       </div>
-                      
-                      {/* Order Timeline */}
                       <div className="border-t pt-4">
-                        <h4 className="text-sm font-medium mb-2">Order Progress</h4>
-                        <div className="flex items-center space-x-4">
-                          {order.timeline.map((stage, idx) => (
-                            <div key={idx} className="flex items-center">
-                              <div className={`w-3 h-3 rounded-full ${stage.completed ? 'bg-green-500' : 'bg-gray-300'}`} />
-                              <span className="ml-2 text-xs">{stage.stage.replace('-', ' ')}</span>
-                              {idx < order.timeline.length - 1 && <div className="w-8 h-px bg-gray-300 ml-4" />}
+                        <h4 className="text-sm font-medium mb-2">Items</h4>
+                        <div className="text-sm text-gray-700 space-y-1">
+                          {order.items?.map((item, idx) => (
+                            <div key={`${order._id}-pending-${idx}`}>
+                              {getItemDisplayName(item)} × {item.quantity}
                             </div>
                           ))}
                         </div>
@@ -288,6 +383,88 @@ const OrderManagement = () => {
 
           {/* Add similar TabsContent for in-progress and delivered */}
         </Tabs>
+
+        <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Order Details</DialogTitle>
+              <DialogDescription>
+                {selectedOrder ? getDisplayId(selectedOrder) : ""}
+              </DialogDescription>
+            </DialogHeader>
+
+            {selectedOrder ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Customer</p>
+                    <p className="font-medium">{getCustomerName(selectedOrder)}</p>
+                    {getCustomerEmail(selectedOrder) ? (
+                      <p className="text-sm text-gray-600">{getCustomerEmail(selectedOrder)}</p>
+                    ) : null}
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Status</p>
+                    <Badge className={`${getStatusColor(selectedOrder.status)} text-white`}>
+                      {selectedOrder.status}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Order Date</p>
+                    <p className="font-medium">{getOrderDate(selectedOrder) || "—"}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Total</p>
+                    <p className="font-medium">${Number(selectedOrder.total || 0).toFixed(2)}</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Payment Method</p>
+                    <p className="font-medium">{getPaymentMethod(selectedOrder)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500">Tracking Number</p>
+                    <p className="font-medium">{getTrackingNumber(selectedOrder)}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-500">Delivery Address</p>
+                  <p className="font-medium">{getDeliveryAddress(selectedOrder)}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm text-gray-500 mb-2">Items</p>
+                  <div className="space-y-2">
+                    {selectedOrder.items?.map((item, idx) => (
+                      <div key={`${selectedOrder._id}-details-${idx}`} className="flex justify-between bg-gray-50 rounded p-2">
+                        <div>
+                          <p className="font-medium">{getItemDisplayName(item)}</p>
+                          <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-medium">
+                            ${Number((item.price || 0) * (item.quantity || 0)).toFixed(2)}
+                          </p>
+                          {item.quantity > 1 ? (
+                            <p className="text-xs text-gray-600">
+                              ${Number(item.price || 0).toFixed(2)} each
+                            </p>
+                          ) : null}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

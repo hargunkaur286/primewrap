@@ -20,6 +20,6 @@ router.get("/contact", isAuthenticated, getAllMessages);
 router.get("/all", isAuthenticated, getAllUsers);
 router.get("/subscribers", isAuthenticated, getAllSubscribers);
 router.get("/orders", isAuthenticated, getAllOrders);
-router.post("/orders", isAuthenticated, createOrder);
+router.post("/orders", createOrder);  // Remove authentication requirement for guest checkout
 
 export default router;

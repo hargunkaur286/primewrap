@@ -138,7 +138,8 @@ import { useAuth } from './AuthContext';
 import { API_BASE } from '@/lib/apiBase';
 
 export interface CartItem {
-  id: string;
+  id?: string;  // Made optional since backend uses 'product'
+  product?: string;  // Backend field name
   name: string;
   price: number;
   quantity: number;

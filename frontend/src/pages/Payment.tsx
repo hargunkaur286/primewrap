@@ -112,6 +112,37 @@ const PaymentForm = () => {
       const result = await response.json();
 
       if (result.success) {
+        // Create order in database after successful payment
+        console.log('🛒 Cart items:', items);
+        console.log('🛒 First item structure:', items[0]);
+        
+        const orderItems = items.map(item => {
+          console.log('Mapping item:', item, 'ID:', item.id, 'Product:', (item as any).product);
+          return {
+            id: (item as any).product || item.id,  // Use 'product' field from backend
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image
+          };
+        });
+        console.log('📦 Mapped order items:', orderItems);
+        
+        await axios.post(
+          `${API_BASE}/api/v1/user/orders`,
+          {
+            items: orderItems,
+            total: finalTotal,
+            deliveryAddress: `${formData.address}, ${formData.city}, ${formData.province} ${formData.postalCode}`,
+            paymentMethod: 'Credit Card',
+            trackingNumber: null,
+            // Guest information for non-authenticated orders
+            guestEmail: formData.email,
+            guestName: formData.fullName
+          },
+          { withCredentials: true }
+        );
+
         setPaymentComplete(true);
         clearCart();
         toast({
@@ -129,9 +160,19 @@ const PaymentForm = () => {
 
     } catch (error) {
       console.error('Payment error:', error);
+      // Log more details about the error
+      if (axios.isAxiosError(error)) {
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
+        console.error('Full error response:', JSON.stringify(error.response?.data, null, 2));
+      }
+      const errorMessage = axios.isAxiosError(error) && error.response?.data?.message 
+        ? error.response.data.message 
+        : error instanceof Error ? error.message : "Something went wrong. Please try again.";
+      
       toast({
         title: "Payment Failed",
-        description: error instanceof Error ? error.message : "Something went wrong. Please try again.",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {

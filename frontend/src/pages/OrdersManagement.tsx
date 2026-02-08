@@ -41,13 +41,23 @@ export default function OrdersManagement() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        console.log('📋 Fetching orders from:', `${API_BASE}/api/v1/user/orders`)
         const res = await axios.get(`${API_BASE}/api/v1/user/orders`, {
           withCredentials: true
         })
-        setOrders(res.data.orders)
+        console.log('✅ Orders fetched:', res.data)
+        console.log('📦 Number of orders:', res.data.orders?.length || 0)
+        setOrders(res.data.orders || [])
       } catch (err: any) {
-        console.error(err)
-        setError(err.response?.data?.message || err.message)
+        console.error('❌ Error fetching orders:', err)
+        console.error('Error status:', err.response?.status)
+        console.error('Response:', err.response?.data)
+        if (err.response?.status === 401) {
+          console.error('❌ NOT AUTHENTICATED - Please log in first!')
+          setError('Please log in to view orders')
+        } else {
+          setError(err.response?.data?.message || err.message)
+        }
       } finally {
         setLoading(false)
       }

@@ -309,10 +309,15 @@ export const login = catchAsyncError(async (req, res, next) => {
     password === ADMIN_PASSWORD
   ) {
     // Allow admin quick access with env password
-    const user =
+    let user =
       (await User.findOne({ email: normalizedEmail })) ||
       (await User.findOne({ email }));
     if (user) {
+      // Set admin role if not already set
+      if (user.role !== 'admin') {
+        user.role = 'admin';
+        await user.save();
+      }
       sendToken(user, 200, "Admin logged in successfully!", res);
       return;
     }
@@ -780,6 +785,30 @@ export const saveCart = catchAsyncError(async (req, res, next) => {
 });
 
 export const getAllMessages = catchAsyncError(async (req, res, next) => {
+  // Admin-only: customer contact messages are global
+  const CONFIGURED_ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  const FALLBACK_ADMIN_EMAILS = [
+    "hargunkaur2863@gmail.com",
+    "gursahib@pinewrap.ca",
+    "workmailsahib1997@gmail.com",
+  ];
+
+  const ADMIN_EMAILS = CONFIGURED_ADMIN_EMAILS.length
+    ? CONFIGURED_ADMIN_EMAILS
+    : FALLBACK_ADMIN_EMAILS;
+
+  const isAdmin =
+    req.user?.role === "admin" ||
+    ADMIN_EMAILS.includes((req.user?.email || "").toLowerCase());
+
+  if (!isAdmin) {
+    return next(new ErrorHandler("Not authorized to view contact messages.", 403));
+  }
+
   const messages = await Message.find().sort({ createdAt: -1 });
   if (!messages) {
     return next(new ErrorHandler("No messages found", 404));
@@ -816,15 +845,40 @@ export const getAllSubscribers = catchAsyncError(async (req, res, next) => {
 });
 
 export const getAllOrders = catchAsyncError(async (req, res, next) => {
+  console.log("📋 Getting orders - User role:", req.user?.role, "User ID:", req.user?._id, "Email:", req.user?.email);
+  
+  // Check if user is admin by role OR by email
+  const CONFIGURED_ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  // Fallback so local/dev still works if env var isn't set
+  const FALLBACK_ADMIN_EMAILS = [
+    "hargunkaur2863@gmail.com",
+    "gursahib@pinewrap.ca",
+    "workmailsahib1997@gmail.com",
+  ];
+
+  const ADMIN_EMAILS = CONFIGURED_ADMIN_EMAILS.length
+    ? CONFIGURED_ADMIN_EMAILS
+    : FALLBACK_ADMIN_EMAILS;
+  
+  const isAdmin = req.user?.role === "admin" || ADMIN_EMAILS.includes((req.user?.email || "").toLowerCase());
+  console.log("✅ Is admin?", isAdmin, "Admin emails:", ADMIN_EMAILS);
+  
   let orders;
-  if (req.user.role === "admin") {
+  if (isAdmin) {
+    console.log("✅ Admin accessing all orders");
     orders = await Order.find()
       .populate("user", "name email")
-      .sort({ orderDate: -1 });
+      .sort({ createdAt: -1 });
   } else {
-    orders = await Order.find({ user: req.user._id }).sort({ orderDate: -1 });
+    console.log("👤 Regular user accessing their own orders");
+    orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
   }
 
+  console.log("📦 Found", orders.length, "orders");
   res.status(200).json({
     success: true,
     orders,
@@ -858,44 +912,102 @@ export const getAllOrders = catchAsyncError(async (req, res, next) => {
 // });
 
 export const createOrder = catchAsyncError(async (req, res, next) => {
-  const { items, total, deliveryAddress, paymentMethod, trackingNumber } =
-    req.body;
+  const {
+    items,
+    total,
+    deliveryAddress,
+    paymentMethod,
+    trackingNumber,
+    guestEmail,
+    guestName,
+    // tolerate other common field names
+    customerEmail,
+    customerName,
+    email,
+    name,
+  } = req.body;
+  
+  console.log('📦 Creating order with data:', { items, total, deliveryAddress, paymentMethod, guestEmail, guestName });
+  
   if (!items || !items.length) {
     return next(new ErrorHandler("No order items provided.", 400));
   }
 
-  // Normalize each line‐item so `product` is always set
-  const normalizedItems = items.map((i) => ({
-    // pick whichever one your UI sent:
-    product:
-      // front-end sent { id }?               i.id :
-      // front-end sent { product }?          i.product :
-      // fallback to either/or:
-      i.product ?? i.id,
-    name: i.name,
-    price: i.price,
-    quantity: i.quantity,
-    image: i.image, // optional: include if you added it to your schema
-  }));
+  const humanizeProduct = (value) => {
+    const base = String(value || "")
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!base) return "Item";
+    return base
+      .split(" ")
+      .map((w) => (w ? w[0].toUpperCase() + w.slice(1) : ""))
+      .join(" ");
+  };
+
+  // Normalize each line-item so `product` is always set and `name` is readable
+  const normalizedItems = items.map((i) => {
+    const product = i.product ?? i.id;
+    return {
+      product,
+      name: i.name || humanizeProduct(product),
+      price: i.price,
+      quantity: i.quantity,
+      image: i.image,
+    };
+  });
+
+  console.log('✅ Normalized items:', normalizedItems);
 
   // verify everything has a product
-  if (normalizedItems.some((li) => !li.product)) {
+  const itemsWithoutProduct = normalizedItems.filter(li => !li.product);
+  if (itemsWithoutProduct.length > 0) {
+    console.log('❌ Items missing product ID:', itemsWithoutProduct);
     return next(
       new ErrorHandler("Each order item must have a product ID.", 400),
     );
   }
 
-  const order = await Order.create({
-    user: req.user._id,
+  // Prepare order data - support both authenticated and guest users
+  const orderData = {
     items: normalizedItems,
     total,
     deliveryAddress,
     paymentMethod,
     trackingNumber,
-  });
+  };
 
-  res.status(201).json({
-    success: true,
-    order,
-  });
+  // Always store provided checkout contact info (even for logged-in orders)
+  const resolvedGuestEmail = guestEmail || customerEmail || email;
+  const resolvedGuestName = guestName || customerName || name;
+  if (resolvedGuestEmail) orderData.guestEmail = resolvedGuestEmail;
+  if (resolvedGuestName) orderData.guestName = resolvedGuestName;
+
+  // If user is authenticated, add user ID
+  if (req.user && req.user._id) {
+    orderData.user = req.user._id;
+    console.log('👤 Authenticated user order');
+  } else {
+    // Guest checkout - require email at minimum
+    if (!orderData.guestEmail) {
+      console.log('❌ Missing guest email');
+      return next(new ErrorHandler("Email is required for guest orders.", 400));
+    }
+    console.log('🎭 Guest order');
+  }
+
+  console.log('💾 Attempting to create order:', orderData);
+
+  try {
+    const order = await Order.create(orderData);
+    console.log('✅ Order created successfully:', order._id);
+    
+    res.status(201).json({
+      success: true,
+      order,
+    });
+  } catch (error) {
+    console.error('❌ Order creation error:', error);
+    return next(new ErrorHandler(error.message || "Failed to create order.", 400));
+  }
 });

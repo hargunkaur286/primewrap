@@ -25,16 +25,14 @@
 //   }
 // };
 
-
-
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
 let stripeClient;
 const getStripeClient = () => {
   if (stripeClient) return stripeClient;
   const secretKey = process.env.STRIPE_SECRET_KEY;
   if (!secretKey) {
-    throw new Error('STRIPE_SECRET_KEY is not set');
+    throw new Error("STRIPE_SECRET_KEY is not set");
   }
   stripeClient = new Stripe(secretKey);
   return stripeClient;
@@ -43,23 +41,23 @@ const getStripeClient = () => {
 export const paymentHelper = async (paymentMethodId, amount) => {
   try {
     const stripe = getStripeClient();
-    
+
     // Ensure amount is a valid integer in cents
     const amountInCents = Math.round(amount * 100);
-    
+
     if (amountInCents < 50) {
-      throw new Error('Amount must be at least $0.50');
+      throw new Error("Amount must be at least $0.50");
     }
-    
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amountInCents, 
-      currency: 'cad',
+      amount: amountInCents,
+      currency: "cad",
       payment_method: paymentMethodId,
       confirm: true,
       automatic_payment_methods: {
         enabled: true,
-        allow_redirects: 'never'
-      }
+        allow_redirects: "never",
+      },
     });
 
     return paymentIntent;
