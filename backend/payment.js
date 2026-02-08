@@ -43,12 +43,23 @@ const getStripeClient = () => {
 export const paymentHelper = async (paymentMethodId, amount) => {
   try {
     const stripe = getStripeClient();
+    
+    // Ensure amount is a valid integer in cents
+    const amountInCents = Math.round(amount * 100);
+    
+    if (amountInCents < 50) {
+      throw new Error('Amount must be at least $0.50');
+    }
+    
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, 
+      amount: amountInCents, 
       currency: 'cad',
       payment_method: paymentMethodId,
       confirm: true,
-      return_url: "https://localhost:5176"
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never'
+      }
     });
 
     return paymentIntent;

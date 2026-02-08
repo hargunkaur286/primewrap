@@ -285,7 +285,26 @@ export const login = catchAsyncError(async(req, res, next) => {
     if(!email || !password) {
         return next(new ErrorHandler("Email and password are required.", 400));
     }
-    const user = await User.findOne({email, accountVerified: true}).select(
+
+    // Admin access check
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map(e => e.trim().toLowerCase())
+      .filter(Boolean);
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+    if (ADMIN_PASSWORD && ADMIN_EMAILS.includes(normalizedEmail) && password === ADMIN_PASSWORD) {
+      // Allow admin quick access with env password
+      const user = await User.findOne({ email: normalizedEmail }) || await User.findOne({ email });
+      if (user) {
+        sendToken(user, 200, "Admin logged in successfully!", res);
+        return;
+      }
+      return next(new ErrorHandler("Admin user not found.", 404));
+    }
+
+    const user = await User.findOne({email: normalizedEmail, accountVerified: true}).select(
         "+password"
     );
     if(!user){
@@ -395,7 +414,7 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
 });
 
 export const payment = catchAsyncError(async (req, res, next) => {
- const { paymentMethodId, amount } = req.body;
+ const { paymentMethodId, amount, orderDetails, customerEmail, customerName } = req.body;
   const { error: validationError } = validatePaymentInput(req.body);
 
   if (validationError) {
@@ -406,6 +425,29 @@ export const payment = catchAsyncError(async (req, res, next) => {
   try {
 
     const paymentResult = await paymentHelper(paymentMethodId, amount);
+    
+    // Send order confirmation email after successful payment
+    if (paymentResult && customerEmail) {
+      const emailMessage = generateOrderConfirmationEmail({
+        customerName: customerName || 'Valued Customer',
+        orderId: paymentResult.id,
+        amount: amount,
+        orderDetails: orderDetails || [],
+        paymentStatus: paymentResult.status
+      });
+      
+      try {
+        await sendEmail({
+          email: customerEmail,
+          subject: 'Order Confirmation - Pinewrap',
+          message: emailMessage
+        });
+      } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+        // Don't fail the payment if email fails
+      }
+    }
+    
     res.status(200).json({
       success: true,
       message: "Payment successful",
@@ -416,10 +458,99 @@ export const payment = catchAsyncError(async (req, res, next) => {
   }
 });
 
+function generateOrderConfirmationEmail({ customerName, orderId, amount, orderDetails, paymentStatus }) {
+  const itemsHtml = orderDetails.map(item => `
+    <tr>
+      <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">
+        <strong>${item.name || item.product}</strong><br/>
+        <span style="color: #666; font-size: 14px;">Quantity: ${item.quantity}</span>
+      </td>
+      <td style="padding: 12px; border-bottom: 1px solid #e0e0e0; text-align: right;">
+        $${(item.price * item.quantity).toFixed(2)}
+      </td>
+    </tr>
+  `).join('');
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+      <div style="background-color: #FFC400; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; color: #000; font-size: 28px;">PINEWRAP</h1>
+        <p style="margin: 10px 0 0; color: #000; font-size: 16px;">Order Confirmation</p>
+      </div>
+      
+      <div style="background-color: #fff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2 style="color: #0B2D5C; margin-top: 0;">Thank you for your order, ${customerName}!</h2>
+        <p style="color: #333; font-size: 16px; line-height: 1.6;">
+          We're excited to get your eco-friendly products to you. Your order has been confirmed and will be processed shortly.
+        </p>
+        
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin: 0 0 10px; color: #0B2D5C;">Order Details</h3>
+          <p style="margin: 5px 0; color: #666;">
+            <strong>Order ID:</strong> ${orderId}<br/>
+            <strong>Payment Status:</strong> <span style="color: #4CAF50; font-weight: bold;">${paymentStatus === 'succeeded' ? 'Paid' : paymentStatus}</span>
+          </p>
+        </div>
+        
+        ${orderDetails && orderDetails.length > 0 ? `
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background-color: #f5f5f5;">
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #ddd;">Item</th>
+              <th style="padding: 12px; text-align: right; border-bottom: 2px solid #ddd;">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td style="padding: 16px 12px; text-align: right; font-size: 18px; font-weight: bold; border-top: 2px solid #0B2D5C;">
+                Total:
+              </td>
+              <td style="padding: 16px 12px; text-align: right; font-size: 18px; font-weight: bold; color: #FFC400; border-top: 2px solid #0B2D5C;">
+                $${amount.toFixed(2)}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        ` : `
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 0; font-size: 18px; font-weight: bold; text-align: center;">
+            Total Amount: <span style="color: #FFC400;">$${amount.toFixed(2)}</span>
+          </p>
+        </div>
+        `}
+        
+        <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <p style="margin: 0; color: #2e7d32; font-size: 14px;">
+            ✓ Your order will be shipped within 2-3 business days<br/>
+            ✓ You'll receive a tracking number once your order ships<br/>
+            ✓ Free shipping on orders over $50
+          </p>
+        </div>
+        
+        <p style="color: #666; font-size: 14px; margin-top: 30px;">
+          If you have any questions about your order, please contact us at 
+          <a href="mailto:${process.env.SMTP_MAIL}" style="color: #FFC400;">${process.env.SMTP_MAIL}</a>
+        </p>
+      </div>
+      
+      <footer style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+        <p>Thank you for choosing Pinewrap - Making the world cleaner, one bag at a time.</p>
+        <p style="margin: 5px 0;">© ${new Date().getFullYear()} Pinewrap. All rights reserved.</p>
+      </footer>
+    </div>
+  `;
+}
+
 function validatePaymentInput(data) {
   const schema = Joi.object({
     paymentMethodId: Joi.string().required(),
-    amount: Joi.number().integer().min(1).required(),
+    amount: Joi.number().min(1).required(),
+    orderDetails: Joi.array().optional(),
+    customerEmail: Joi.string().email().optional(),
+    customerName: Joi.string().optional()
   });
 
   return schema.validate(data);
