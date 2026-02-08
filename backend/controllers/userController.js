@@ -1,15 +1,15 @@
 import ErrorHandler from "../middleware/error.js";
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { User } from "../models/userModel.js";
-import twilio from "twilio"
+import twilio from "twilio";
 import { sendEmail } from "../utils/sendEmail.js";
 import { sendToken } from "../utils/sendToken.js";
-import crypto from "crypto"
-import {paymentHelper} from "../payment.js"
+import crypto from "crypto";
+import { paymentHelper } from "../payment.js";
 import Joi from "joi";
 import { Message } from "../models/messageModel.js";
 import { Subscribers } from "../models/subscribers.js";
-import { sendNewsletter } from '../newsletter.js';
+import { sendNewsletter } from "../newsletter.js";
 import { Order } from "../models/orderModel.js";
 import { ensureDbConnection } from "../database/dbConnection.js";
 
@@ -25,70 +25,77 @@ const getTwilioClient = () => {
   return twilioClient;
 };
 
-export const register = catchAsyncError(async(req, res, next) => {
-    try {
-        const {name, email, phone, password, verificationMethod } = req.body;
-        if(!name || !email || !phone || !verificationMethod) {
-            return next (new ErrorHandler("All fields are required.", 400));
-        }
-        function validatePhoneNumber(phone) {
-            const phoneRegex = /^\+91\d{10}$/;
-            return phoneRegex.test(phone);
-        }
-        if(!validatePhoneNumber(phone)){
-            return next(new ErrorHandler("Invalid phone number.", 400))
-        }
-
-        const existingUser = await User.findOne({
-            $or: [
-                {
-                    email,
-                    accountVerified: true,
-                },
-                {
-                    phone,
-                    accountVerified: true,
-                },
-            ],
-        });
-
-        if(existingUser) {
-            return next(new ErrorHandler("Phone or Email is already used.", 400));
-        }
-
-        const registerationAttemptsByUser = await User.find({
-            $or: [
-                { phone, accountVerified: false },
-                { email, accountVerified: false }, 
-            ],
-        });
-
-        if(registerationAttemptsByUser.length > 3) {
-            return next(
-                new ErrorHandler(
-                    "You have exceeded the maximum number of attempts (3). Please try again after an hour.", 400
-                )
-            );
-        }
-
-        const userData = {
-            name,
-            email,
-            phone,
-            password,
-        };
-
-        const user = await User.create(userData);
-        const verificationCode = await user.generateVerificationCode();
-        await user.save();
-        await sendVerificationCode(verificationMethod, verificationCode, name, email, phone, res);
-        // res.status(200).json({
-        //     success: true,
-        // });
+export const register = catchAsyncError(async (req, res, next) => {
+  try {
+    const { name, email, phone, password, verificationMethod } = req.body;
+    if (!name || !email || !phone || !verificationMethod) {
+      return next(new ErrorHandler("All fields are required.", 400));
     }
-    catch(error){
-        next(error);
+    function validatePhoneNumber(phone) {
+      const phoneRegex = /^\+91\d{10}$/;
+      return phoneRegex.test(phone);
     }
+    if (!validatePhoneNumber(phone)) {
+      return next(new ErrorHandler("Invalid phone number.", 400));
+    }
+
+    const existingUser = await User.findOne({
+      $or: [
+        {
+          email,
+          accountVerified: true,
+        },
+        {
+          phone,
+          accountVerified: true,
+        },
+      ],
+    });
+
+    if (existingUser) {
+      return next(new ErrorHandler("Phone or Email is already used.", 400));
+    }
+
+    const registerationAttemptsByUser = await User.find({
+      $or: [
+        { phone, accountVerified: false },
+        { email, accountVerified: false },
+      ],
+    });
+
+    if (registerationAttemptsByUser.length > 3) {
+      return next(
+        new ErrorHandler(
+          "You have exceeded the maximum number of attempts (3). Please try again after an hour.",
+          400,
+        ),
+      );
+    }
+
+    const userData = {
+      name,
+      email,
+      phone,
+      password,
+    };
+
+    const user = await User.create(userData);
+    const verificationCode = await user.generateVerificationCode();
+    await user.save();
+    await sendVerificationCode(
+      verificationMethod,
+      verificationCode,
+      name,
+      email,
+      phone,
+      res,
+    );
+    // res.status(200).json({
+    //     success: true,
+    // });
+  } catch (error) {
+    next(error);
+  }
 });
 
 // async function sendVerificationCode(verificationMethod, verificationCode, name, email, phone, res){
@@ -103,7 +110,7 @@ export const register = catchAsyncError(async(req, res, next) => {
 //             });
 //         }
 //         else if(verificationMethod === "phone") {
-//             const verificationCodeWithSpace = verificationCode  
+//             const verificationCodeWithSpace = verificationCode
 //                 .toString()
 //                 .split("")
 //                 .join("");
@@ -136,7 +143,7 @@ async function sendVerificationCode(
   name,
   email,
   phone,
-  res
+  res,
 ) {
   try {
     if (verificationMethod === "email") {
@@ -175,7 +182,6 @@ async function sendVerificationCode(
   }
 }
 
-
 function generateEmailTemplate(verificationCode) {
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
@@ -198,186 +204,196 @@ function generateEmailTemplate(verificationCode) {
 }
 
 export const verifyOTP = catchAsyncError(async (req, res, next) => {
-    const {email, otp, phone} = req.body;
+  const { email, otp, phone } = req.body;
 
-    function validatePhoneNumber(phone) {
-        const phoneRegex = /^\+91\d{10}$/;
-        return phoneRegex.test(phone);
+  function validatePhoneNumber(phone) {
+    const phoneRegex = /^\+91\d{10}$/;
+    return phoneRegex.test(phone);
+  }
+
+  if (!validatePhoneNumber(phone)) {
+    return next(new ErrorHandler("Invalid phone number.", 400));
+  }
+  try {
+    const userAllEntries = await User.find({
+      $or: [
+        {
+          email,
+          accountVerified: false,
+        },
+        {
+          phone,
+          accountVerified: false,
+        },
+      ],
+    }).sort({ createdAt: -1 });
+
+    if (userAllEntries.length === 0) {
+      return next(new ErrorHandler("User not found!", 404));
     }
 
-    if(!validatePhoneNumber(phone)) {
-        return next(new ErrorHandler("Invalid phone number.", 400));
+    let user;
+    if (userAllEntries.length > 1) {
+      user = userAllEntries[0];
+
+      await User.deleteMany({
+        _id: { $ne: user._id },
+        $or: [
+          { phone, accountVerified: false },
+          { email, accountVerified: false },
+        ],
+      });
+    } else {
+      user = userAllEntries[0];
     }
-    try{
-        const userAllEntries = await User.find({
-            $or: [
-                {
-                    email,
-                    accountVerified: false,
-                },
-                {
-                    phone,
-                    accountVerified: false,
-                }
-            ]
-        }).sort({ createdAt: -1 });
-
-        if (userAllEntries.length === 0) {
-            return next(new ErrorHandler("User not found!", 404));
-        }
-
-        let user;
-        if(userAllEntries.length>1){
-            user = userAllEntries[0];
-
-            await User.deleteMany({
-                _id: {$ne: user._id},
-                $or: [
-                    {phone, accountVerified: false},
-                    {email, accountVerified: false},
-                ],
-            });
-        }
-        else{
-            user = userAllEntries[0];
-        }
-        console.log("Stored OTP:", user.verificationCode);
-        console.log("Entered OTP:", otp);
-        if(user.verificationCode !== Number(otp)){
-            return next(new ErrorHandler("Invalid Otp", 400));
-        }
-
-        const currentTime = Date.now();
-
-        const verificationCodeExpire = new Date(
-            user.verificationCodeExpire
-        ).getTime();
-        console.log(currentTime);
-        console.log(verificationCodeExpire);
-        if(currentTime > verificationCodeExpire){
-            return next(new ErrorHandler("OTP Expired", 400));
-        }
-
-        user.accountVerified = true,
-        user.verificationCode = null,
-        user.verificationCodeExpire = null;
-        await user.save({validateModifiedOnly: true});
-
-        try {
-            sendToken(user, 200, "Account Verified", res);
-        } catch (error) {
-            console.error("sendToken error:", error);
-            return next(new ErrorHandler("Token generation failed", 500));
-        }
+    console.log("Stored OTP:", user.verificationCode);
+    console.log("Entered OTP:", otp);
+    if (user.verificationCode !== Number(otp)) {
+      return next(new ErrorHandler("Invalid Otp", 400));
     }
-    catch(error){
-        return next(new ErrorHandler("Internal Server Error", 500));
+
+    const currentTime = Date.now();
+
+    const verificationCodeExpire = new Date(
+      user.verificationCodeExpire,
+    ).getTime();
+    console.log(currentTime);
+    console.log(verificationCodeExpire);
+    if (currentTime > verificationCodeExpire) {
+      return next(new ErrorHandler("OTP Expired", 400));
     }
+
+    ((user.accountVerified = true),
+      (user.verificationCode = null),
+      (user.verificationCodeExpire = null));
+    await user.save({ validateModifiedOnly: true });
+
+    try {
+      sendToken(user, 200, "Account Verified", res);
+    } catch (error) {
+      console.error("sendToken error:", error);
+      return next(new ErrorHandler("Token generation failed", 500));
+    }
+  } catch (error) {
+    return next(new ErrorHandler("Internal Server Error", 500));
+  }
 });
 
-export const login = catchAsyncError(async(req, res, next) => {
+export const login = catchAsyncError(async (req, res, next) => {
   try {
     await ensureDbConnection();
   } catch (err) {
-    return next(new ErrorHandler("Database is not connected. Please try again later.", 503));
-  }
-    const {email, password} = req.body;
-    if(!email || !password) {
-        return next(new ErrorHandler("Email and password are required.", 400));
-    }
-
-    // Admin access check
-    const normalizedEmail = String(email).trim().toLowerCase();
-    const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
-      .split(",")
-      .map(e => e.trim().toLowerCase())
-      .filter(Boolean);
-    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
-    if (ADMIN_PASSWORD && ADMIN_EMAILS.includes(normalizedEmail) && password === ADMIN_PASSWORD) {
-      // Allow admin quick access with env password
-      const user = await User.findOne({ email: normalizedEmail }) || await User.findOne({ email });
-      if (user) {
-        sendToken(user, 200, "Admin logged in successfully!", res);
-        return;
-      }
-      return next(new ErrorHandler("Admin user not found.", 404));
-    }
-
-    const user = await User.findOne({email: normalizedEmail, accountVerified: true}).select(
-        "+password"
+    return next(
+      new ErrorHandler(
+        "Database is not connected. Please try again later.",
+        503,
+      ),
     );
-    if(!user){
-        return next(new ErrorHandler("Invalid email or password", 400));
-    }
-    const isPasswordMatched = await user.comparePassword(password);
+  }
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return next(new ErrorHandler("Email and password are required.", 400));
+  }
 
-    if(!isPasswordMatched) {
-        return next(new ErrorHandler("Invalid email or password", 400));
+  // Admin access check
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+  if (
+    ADMIN_PASSWORD &&
+    ADMIN_EMAILS.includes(normalizedEmail) &&
+    password === ADMIN_PASSWORD
+  ) {
+    // Allow admin quick access with env password
+    const user =
+      (await User.findOne({ email: normalizedEmail })) ||
+      (await User.findOne({ email }));
+    if (user) {
+      sendToken(user, 200, "Admin logged in successfully!", res);
+      return;
     }
-    sendToken(user, 200, "User logged in successfully!", res);
+    return next(new ErrorHandler("Admin user not found.", 404));
+  }
+
+  const user = await User.findOne({
+    email: normalizedEmail,
+    accountVerified: true,
+  }).select("+password");
+  if (!user) {
+    return next(new ErrorHandler("Invalid email or password", 400));
+  }
+  const isPasswordMatched = await user.comparePassword(password);
+
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler("Invalid email or password", 400));
+  }
+  sendToken(user, 200, "User logged in successfully!", res);
 });
 
-export const logout = catchAsyncError(async(req, res, next) => {
+export const logout = catchAsyncError(async (req, res, next) => {
   const isProd = process.env.NODE_ENV === "production";
-    res
-        .status(200)
-        .cookie("token", "", {
+  res
+    .status(200)
+    .cookie("token", "", {
       expires: new Date(Date.now()),
-            httpOnly: true,
+      httpOnly: true,
       secure: isProd,
       sameSite: isProd ? "None" : "Lax",
       path: "/",
-        })
-        .json({
-            success: true,
-            message: "Logged out successfully",
-        });
+    })
+    .json({
+      success: true,
+      message: "Logged out successfully",
+    });
 });
 
-export const getUser = catchAsyncError(async(req, res, next) => {
-    const user = req.user;
+export const getUser = catchAsyncError(async (req, res, next) => {
+  const user = req.user;
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+export const forgotPassword = catchAsyncError(async (req, res, next) => {
+  const user = await User.findOne({
+    email: req.body.email,
+    accountVerified: true,
+  });
+  if (!user) {
+    return next(new ErrorHandler("User not found!", 404));
+  }
+  const resetToken = user.generateResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+  const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+
+  const message = `Your reset password token is: \n\n ${resetPasswordUrl} \n\n If you have not requested this email, please ignore it.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: "PINEWRAP PASSWORD RESET MAIL",
+      message,
+    });
     res.status(200).json({
-        success: true,
-        user,
+      success: true,
+      message: `Email sent to ${user.email} successfully.`,
     });
-});
-
-export const forgotPassword = catchAsyncError(async(req, res, next) => {
-    const user = await User.findOne({
-        email: req.body.email,
-        accountVerified: true,
-    });
-    if(!user){
-        return next(new ErrorHandler("User not found!", 404));
-    }
-    const resetToken = user.generateResetPasswordToken();
-    await user.save({validateBeforeSave: false});
-    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
-
-    const message = `Your reset password token is: \n\n ${resetPasswordUrl} \n\n If you have not requested this email, please ignore it.`;
-
-    try{
-        await sendEmail({
-            email: user.email,
-          subject: "PINEWRAP PASSWORD RESET MAIL",
-            message
-        });
-        res.status(200).json({
-            success: true,
-            message:  `Email sent to ${user.email} successfully.`
-        });
-    }
-    catch(error){
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
-        await user.save({ validateBeforeSave: false });
-        return next(
-            new ErrorHandler(
-                error.message ? error.message: "Cannot send rest password token.", 500
-            )
-        )
-    }
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(
+      new ErrorHandler(
+        error.message ? error.message : "Cannot send rest password token.",
+        500,
+      ),
+    );
+  }
 });
 
 export const resetPassword = catchAsyncError(async (req, res, next) => {
@@ -394,14 +410,14 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
     return next(
       new ErrorHandler(
         "Reset password token is invalid or has been expired.",
-        400
-      )
+        400,
+      ),
     );
   }
 
   if (req.body.password !== req.body.confirmPassword) {
     return next(
-      new ErrorHandler("Password & confirm password do not match.", 400)
+      new ErrorHandler("Password & confirm password do not match.", 400),
     );
   }
 
@@ -414,40 +430,39 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
 });
 
 export const payment = catchAsyncError(async (req, res, next) => {
- const { paymentMethodId, amount, orderDetails, customerEmail, customerName } = req.body;
+  const { paymentMethodId, amount, orderDetails, customerEmail, customerName } =
+    req.body;
   const { error: validationError } = validatePaymentInput(req.body);
 
   if (validationError) {
     return next(new ErrorHandler(validationError.details[0].message, 400));
   }
 
-
   try {
-
     const paymentResult = await paymentHelper(paymentMethodId, amount);
-    
+
     // Send order confirmation email after successful payment
     if (paymentResult && customerEmail) {
       const emailMessage = generateOrderConfirmationEmail({
-        customerName: customerName || 'Valued Customer',
+        customerName: customerName || "Valued Customer",
         orderId: paymentResult.id,
         amount: amount,
         orderDetails: orderDetails || [],
-        paymentStatus: paymentResult.status
+        paymentStatus: paymentResult.status,
       });
-      
+
       try {
         await sendEmail({
           email: customerEmail,
-          subject: 'Order Confirmation - Pinewrap',
-          message: emailMessage
+          subject: "Order Confirmation - Pinewrap",
+          message: emailMessage,
         });
       } catch (emailError) {
-        console.error('Failed to send confirmation email:', emailError);
+        console.error("Failed to send confirmation email:", emailError);
         // Don't fail the payment if email fails
       }
     }
-    
+
     res.status(200).json({
       success: true,
       message: "Payment successful",
@@ -458,8 +473,16 @@ export const payment = catchAsyncError(async (req, res, next) => {
   }
 });
 
-function generateOrderConfirmationEmail({ customerName, orderId, amount, orderDetails, paymentStatus }) {
-  const itemsHtml = orderDetails.map(item => `
+function generateOrderConfirmationEmail({
+  customerName,
+  orderId,
+  amount,
+  orderDetails,
+  paymentStatus,
+}) {
+  const itemsHtml = orderDetails
+    .map(
+      (item) => `
     <tr>
       <td style="padding: 12px; border-bottom: 1px solid #e0e0e0;">
         <strong>${item.name || item.product}</strong><br/>
@@ -469,7 +492,9 @@ function generateOrderConfirmationEmail({ customerName, orderId, amount, orderDe
         $${(item.price * item.quantity).toFixed(2)}
       </td>
     </tr>
-  `).join('');
+  `,
+    )
+    .join("");
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
@@ -488,11 +513,13 @@ function generateOrderConfirmationEmail({ customerName, orderId, amount, orderDe
           <h3 style="margin: 0 0 10px; color: #0B2D5C;">Order Details</h3>
           <p style="margin: 5px 0; color: #666;">
             <strong>Order ID:</strong> ${orderId}<br/>
-            <strong>Payment Status:</strong> <span style="color: #4CAF50; font-weight: bold;">${paymentStatus === 'succeeded' ? 'Paid' : paymentStatus}</span>
+            <strong>Payment Status:</strong> <span style="color: #4CAF50; font-weight: bold;">${paymentStatus === "succeeded" ? "Paid" : paymentStatus}</span>
           </p>
         </div>
         
-        ${orderDetails && orderDetails.length > 0 ? `
+        ${
+          orderDetails && orderDetails.length > 0
+            ? `
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
           <thead>
             <tr style="background-color: #f5f5f5;">
@@ -514,13 +541,15 @@ function generateOrderConfirmationEmail({ customerName, orderId, amount, orderDe
             </tr>
           </tfoot>
         </table>
-        ` : `
+        `
+            : `
         <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0; font-size: 18px; font-weight: bold; text-align: center;">
             Total Amount: <span style="color: #FFC400;">$${amount.toFixed(2)}</span>
           </p>
         </div>
-        `}
+        `
+        }
         
         <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0; color: #2e7d32; font-size: 14px;">
@@ -550,7 +579,7 @@ function validatePaymentInput(data) {
     amount: Joi.number().min(1).required(),
     orderDetails: Joi.array().optional(),
     customerEmail: Joi.string().email().optional(),
-    customerName: Joi.string().optional()
+    customerName: Joi.string().optional(),
   });
 
   return schema.validate(data);
@@ -700,7 +729,9 @@ export const createSubscribers = catchAsyncError(async (req, res, next) => {
   if (existing) {
     return res
       .status(200)
-      .send("Email already subscribed. Check your email for the welcome newsletter.");
+      .send(
+        "Email already subscribed. Check your email for the welcome newsletter.",
+      );
   }
 
   // 2) Save new subscriber
@@ -716,9 +747,10 @@ export const createSubscribers = catchAsyncError(async (req, res, next) => {
   // 4) Respond
   res
     .status(201)
-    .send("Subscription successful! Check your email for your welcome newsletter.");
+    .send(
+      "Subscription successful! Check your email for your welcome newsletter.",
+    );
 });
-
 
 export const getCart = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user._id);
@@ -732,12 +764,12 @@ export const saveCart = catchAsyncError(async (req, res, next) => {
   if (!user) return next(new ErrorHandler("User not found", 404));
 
   // Map the full client‐side array into your schema fields:
-  const items = (req.body.cartItems || []).map(c => ({
-    product: c.id ?? c.product,     // or c.product if your client uses that
-    name:    c.name,
-    price:   c.price,
-    quantity:c.quantity,
-    image:   c.image,
+  const items = (req.body.cartItems || []).map((c) => ({
+    product: c.id ?? c.product, // or c.product if your client uses that
+    name: c.name,
+    price: c.price,
+    quantity: c.quantity,
+    image: c.image,
   }));
 
   // ⚠️ Overwrite instead of merge:
@@ -746,8 +778,6 @@ export const saveCart = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({ success: true, cart: user.cart });
 });
-
-
 
 export const getAllMessages = catchAsyncError(async (req, res, next) => {
   const messages = await Message.find().sort({ createdAt: -1 });
@@ -760,12 +790,9 @@ export const getAllMessages = catchAsyncError(async (req, res, next) => {
   });
 });
 
-
 export const getAllUsers = catchAsyncError(async (req, res, next) => {
   // Fetch every user, omit the password field
-  const users = await User.find()
-    .select("-password")
-    .sort({ createdAt: -1 });
+  const users = await User.find().select("-password").sort({ createdAt: -1 });
 
   if (!users) {
     return next(new ErrorHandler("No users found", 404));
@@ -790,18 +817,17 @@ export const getAllSubscribers = catchAsyncError(async (req, res, next) => {
 
 export const getAllOrders = catchAsyncError(async (req, res, next) => {
   let orders;
-  if (req.user.role === 'admin') {
+  if (req.user.role === "admin") {
     orders = await Order.find()
-      .populate('user', 'name email')
+      .populate("user", "name email")
       .sort({ orderDate: -1 });
   } else {
-    orders = await Order.find({ user: req.user._id })
-      .sort({ orderDate: -1 });
+    orders = await Order.find({ user: req.user._id }).sort({ orderDate: -1 });
   }
 
   res.status(200).json({
     success: true,
-    orders
+    orders,
   });
 });
 
@@ -832,32 +858,36 @@ export const getAllOrders = catchAsyncError(async (req, res, next) => {
 // });
 
 export const createOrder = catchAsyncError(async (req, res, next) => {
-  const { items, total, deliveryAddress, paymentMethod, trackingNumber } = req.body;
+  const { items, total, deliveryAddress, paymentMethod, trackingNumber } =
+    req.body;
   if (!items || !items.length) {
-    return next(new ErrorHandler('No order items provided.', 400));
+    return next(new ErrorHandler("No order items provided.", 400));
   }
 
   // Normalize each line‐item so `product` is always set
-  const normalizedItems = items.map(i => ({
-    product:       // pick whichever one your UI sent:
-       // front-end sent { id }?               i.id :
-       // front-end sent { product }?          i.product :
-       // fallback to either/or:
-       i.product ?? i.id,
-    name:          i.name,
-    price:         i.price,
-    quantity:      i.quantity,
-    image:         i.image,   // optional: include if you added it to your schema
+  const normalizedItems = items.map((i) => ({
+    // pick whichever one your UI sent:
+    product:
+      // front-end sent { id }?               i.id :
+      // front-end sent { product }?          i.product :
+      // fallback to either/or:
+      i.product ?? i.id,
+    name: i.name,
+    price: i.price,
+    quantity: i.quantity,
+    image: i.image, // optional: include if you added it to your schema
   }));
 
   // verify everything has a product
-  if (normalizedItems.some(li => !li.product)) {
-    return next(new ErrorHandler('Each order item must have a product ID.', 400));
+  if (normalizedItems.some((li) => !li.product)) {
+    return next(
+      new ErrorHandler("Each order item must have a product ID.", 400),
+    );
   }
 
   const order = await Order.create({
-    user:            req.user._id,
-    items:           normalizedItems,
+    user: req.user._id,
+    items: normalizedItems,
     total,
     deliveryAddress,
     paymentMethod,
