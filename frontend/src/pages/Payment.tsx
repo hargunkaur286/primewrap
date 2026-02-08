@@ -96,14 +96,16 @@ const PaymentForm = () => {
         },
         body: JSON.stringify({
           paymentMethodId: paymentMethod.id,
-          amount: Math.round(finalTotal * 100), // Convert to proper format for your backend
-        //   currency: 'CAD',
-        //   metadata: {
-        //     customer_email: formData.email,
-        //     customer_name: formData.fullName,
-        //     items: JSON.stringify(items),
-        //     shipping_address: `${formData.address}, ${formData.city}, ${formData.province} ${formData.postalCode}`
-        //   }
+          amount: finalTotal, // Send the actual amount, not cents
+          customerEmail: formData.email,
+          customerName: formData.fullName,
+          orderDetails: items.map(item => ({
+            name: item.name,
+            product: item.id,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image
+          }))
         })
       });
 
