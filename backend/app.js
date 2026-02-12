@@ -5,6 +5,7 @@ import { connection } from "./database/dbConnection.js";
 import { errorMiddleware } from "./middleware/error.js";
 import userRouter from "./routes/userRouter.js";
 import { removeUnverifiedAccounts } from "./automation/removeUnverifiedAccounts.js";
+import compression from "compression";
 export const app = express();
 
 // Production frontend (custom domain) + Vercel deployment URLs.
@@ -46,6 +47,7 @@ app.use(cors(corsOptions));
 // Express 5 does not accept "*" as a path pattern here.
 app.options(/.*/, cors(corsOptions));
 
+app.use(compression({ threshold: 0 }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
