@@ -117,7 +117,7 @@
 
 // src/App.tsx
 // src/App.tsx
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -126,37 +126,43 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { useAuth, AuthProvider } from "./contexts/AuthContext";  // <-- add AuthProvider
 
-import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import OrderManagement from "./pages/OrderManagement";
-import ProductManagement from "./pages/ProductManagement";
-import DeliveryManagement from "./pages/DeliveryManagement";
-import DriverPanel from "./pages/DriverPanel";
-import Analytics from "./pages/Analytics";
-import Accounting from "./pages/Accounting";
-import Shop from "./pages/Shop";
-import Contact from "./pages/Contact";
-import ProductDetail from "./pages/ProductDetail";
-import ProductScented from "./pages/ProductScented";
-import ProductRecycling from "./pages/ProductRecycling";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import OTPVerification from "./pages/OTPVerification";
-import Profile from "./pages/Profile";
-import Payment from "./pages/Payment";
-import Cart from "./pages/Cart";
-import UsersManagement from "./pages/UsersManagement";
-import OrdersManagement from "./pages/OrdersManagement";
-import NewsletterSubscribers from "./pages/NewsletterSubscribers";
-import ContactQueries from "./pages/ContactQueries";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import PromoBar from "./components/PromoBar";
+
+const Index = lazy(() => import("./pages/Index"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const OrderManagement = lazy(() => import("./pages/OrderManagement"));
+const ProductManagement = lazy(() => import("./pages/ProductManagement"));
+const DeliveryManagement = lazy(() => import("./pages/DeliveryManagement"));
+const DriverPanel = lazy(() => import("./pages/DriverPanel"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+const Accounting = lazy(() => import("./pages/Accounting"));
+const Shop = lazy(() => import("./pages/Shop"));
+const Contact = lazy(() => import("./pages/Contact"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const ProductScented = lazy(() => import("./pages/ProductScented"));
+const ProductRecycling = lazy(() => import("./pages/ProductRecycling"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const OTPVerification = lazy(() => import("./pages/OTPVerification"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Payment = lazy(() => import("./pages/Payment"));
+const Cart = lazy(() => import("./pages/Cart"));
+const UsersManagement = lazy(() => import("./pages/UsersManagement"));
+const OrdersManagement = lazy(() => import("./pages/OrdersManagement"));
+const NewsletterSubscribers = lazy(() => import("./pages/NewsletterSubscribers"));
+const ContactQueries = lazy(() => import("./pages/ContactQueries"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const ROUTE_FALLBACK = (
+  <div className="p-8 text-center" role="status">
+    Loading…
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -191,155 +197,157 @@ const AppShell: React.FC = () => {
             <div className="min-h-screen bg-white font-satoshi">
               <PromoBar />
               <Header />
-              <Routes>
-                {/* Auth pages */}
-                <Route
-                  path="/login"
-                  element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
-                />
-                <Route
-                  path="/register"
-                  element={isAuthenticated ? <Navigate to="/" replace /> : <Register />}
-                />
-                <Route path="/password/forgot" element={<ForgotPassword />} />
-                <Route path="/password/reset/:token" element={<ResetPassword />} />
-                <Route path="/otp-verification/:email/:phone" element={<OTPVerification />} />
+              <Suspense fallback={ROUTE_FALLBACK}>
+                <Routes>
+                  {/* Auth pages */}
+                  <Route
+                    path="/login"
+                    element={isAuthenticated ? <Navigate to="/" replace /> : <Login />}
+                  />
+                  <Route
+                    path="/register"
+                    element={isAuthenticated ? <Navigate to="/" replace /> : <Register />}
+                  />
+                  <Route path="/password/forgot" element={<ForgotPassword />} />
+                  <Route path="/password/reset/:token" element={<ResetPassword />} />
+                  <Route path="/otp-verification/:email/:phone" element={<OTPVerification />} />
 
-                {/* Home (public) */}
-                <Route path="/" element={<Index />} />
+                  {/* Home (public) */}
+                  <Route path="/" element={<Index />} />
 
-                {/* Public shop pages */}
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/product/scented" element={<ProductScented />} />
-                <Route path="/product/recycling" element={<ProductRecycling />} />
+                  {/* Public shop pages */}
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/product/scented" element={<ProductScented />} />
+                  <Route path="/product/recycling" element={<ProductRecycling />} />
 
-                {/* Admin-only */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    isAdmin
-                      ? <Dashboard />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/orders"
-                  element={
-                    isAdmin
-                      ? <OrderManagement />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/products"
-                  element={
-                    isAdmin
-                      ? <ProductManagement />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/delivery"
-                  element={
-                    isAdmin
-                      ? <DeliveryManagement />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/drivers"
-                  element={
-                    isAdmin
-                      ? <DriverPanel />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/analytics"
-                  element={
-                    isAdmin
-                      ? <Analytics />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/accounting"
-                  element={
-                    isAdmin
-                      ? <Accounting />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/users"
-                  element={
-                    isAdmin
-                      ? <UsersManagement />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/orders-admin"
-                  element={
-                    isAdmin
-                      ? <OrdersManagement />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/newsletter"
-                  element={
-                    isAdmin
-                      ? <NewsletterSubscribers />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
-                <Route
-                  path="/dashboard/contact-queries"
-                  element={
-                    isAdmin
-                      ? <ContactQueries />
-                      : isAuthenticated
-                        ? <Navigate to="/" replace />
-                        : <Navigate to="/login" replace />
-                  }
-                />
+                  {/* Admin-only */}
+                  <Route
+                    path="/dashboard"
+                    element={
+                      isAdmin
+                        ? <Dashboard />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/orders"
+                    element={
+                      isAdmin
+                        ? <OrderManagement />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/products"
+                    element={
+                      isAdmin
+                        ? <ProductManagement />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/delivery"
+                    element={
+                      isAdmin
+                        ? <DeliveryManagement />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/drivers"
+                    element={
+                      isAdmin
+                        ? <DriverPanel />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/analytics"
+                    element={
+                      isAdmin
+                        ? <Analytics />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/accounting"
+                    element={
+                      isAdmin
+                        ? <Accounting />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/users"
+                    element={
+                      isAdmin
+                        ? <UsersManagement />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/orders-admin"
+                    element={
+                      isAdmin
+                        ? <OrdersManagement />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/newsletter"
+                    element={
+                      isAdmin
+                        ? <NewsletterSubscribers />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
+                  <Route
+                    path="/dashboard/contact-queries"
+                    element={
+                      isAdmin
+                        ? <ContactQueries />
+                        : isAuthenticated
+                          ? <Navigate to="/" replace />
+                          : <Navigate to="/login" replace />
+                    }
+                  />
 
-                {/* Authed user pages */}
-                <Route
-                  path="/profile"
-                  element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
-                />
+                  {/* Authed user pages */}
+                  <Route
+                    path="/profile"
+                    element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
+                  />
 
-                {/* Cart & payment */}
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/payment" element={<Payment />} />
+                  {/* Cart & payment */}
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/payment" element={<Payment />} />
 
-                {/* 404 */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
               <Footer />
             </div>
           </BrowserRouter>
