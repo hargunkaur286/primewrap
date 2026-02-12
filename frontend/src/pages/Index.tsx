@@ -21,13 +21,88 @@ import { toast } from '@/hooks/use-toast';
 import ProductCard from '@/components/ProductCard';
 import FeatureCard from '@/components/FeatureCard';
 import { API_BASE } from '@/lib/apiBase';
+import { Anchor, Droplet, Truck } from 'lucide-react';
+
+
+const heroProduct = {
+  id: 'pinewrap-premium',
+  name: 'Pinewrap Premium 4-Handle Garbage Bags',
+  tagline: '30 Bags Per Roll',
+  image: '/uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png',
+  subscriptionPrice: 29.74,
+  oneTimePrice: 34.99,
+};
+
+const featureHighlights = [
+  {
+    title: '4 Handle Tie System',
+    description: 'Easy secure knot, no tearing even when overfilled',
+    icon: <Anchor className="w-7 h-7 text-emerald-500" />,
+  },
+  {
+    title: 'Leak Resistant Material',
+    description: 'Heavy-duty gauge holds daily household waste without bulging',
+    icon: <Droplet className="w-7 h-7 text-amber-500" />,
+  },
+  {
+    title: 'Monthly Delivery',
+    description: 'Automatically delivered so you never run out mid-week',
+    icon: <Truck className="w-7 h-7 text-sky-500" />,
+  },
+];
+
+const subscriptionSteps = [
+  {
+    title: 'Choose Delivery Frequency',
+    detail: 'Monthly by default, change to bi-monthly or every 6 weeks in seconds.',
+  },
+  {
+    title: 'Receive Monthly',
+    detail: 'Fresh rolls arrive on your door before trash day even shows up.',
+  },
+  {
+    title: 'Cancel Anytime',
+    detail: 'Pause, skip, or adjust your wrap without penalties.',
+  },
+];
+
+
+const formatPrice = (value: number) => `$${value.toFixed(2)}`;
 
 const Index = () => {
   const [email, setEmail] = useState('');
   const { addItem } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [purchaseOption, setPurchaseOption] = useState<'subscription' | 'one-time'>('subscription');
+
+  const price = purchaseOption === 'subscription' ? heroProduct.subscriptionPrice : heroProduct.oneTimePrice;
+
+  const handleQuantityChange = (delta: number) => {
+    setQuantity((prev) => Math.max(1, prev + delta));
+  };
+
+  const handleAddToCart = async () => {
+      await addItem({
+        id: `${heroProduct.id}-${purchaseOption}`,
+        name: heroProduct.name,
+        price,
+        quantity,
+        image: heroProduct.image,
+      });
+  
+      toast({
+        title: `${heroProduct.name} added`,
+        description:
+          purchaseOption === 'subscription'
+            ? `Subscription locked in at ${formatPrice(heroProduct.subscriptionPrice)} / month.`
+            : `One-time purchase at ${formatPrice(heroProduct.oneTimePrice)} added.`,
+      });
+    };
+
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+
 
   if (!email) return;
 
@@ -215,8 +290,32 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="bg-[#fffdf8] px-6 py-16">
+        <div className="mx-auto max-w-6xl space-y-8">
+          <div className="space-y-2 text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-emerald-500">Features</p>
+            <h2 className="text-3xl font-bold">High-performance bags built for modern homes</h2>
+            <p className="mx-auto max-w-3xl text-base text-[#0b0a08]/70">
+              Designed with strength, grip, and convenience in mind so you can focus on the rest of the home.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {featureHighlights.map((feature) => (
+              <div key={feature.title} className="rounded-3xl border border-black/5 bg-white p-6 text-center shadow-[0_15px_50px_rgba(15,15,15,0.08)]">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-black/5">
+                  {feature.icon}
+                </div>
+                <h3 className="mt-6 text-lg font-semibold">{feature.title}</h3>
+                <p className="mt-2 text-sm text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Product Showcase */}
-      <section className="py-20 sm:py-24 bg-background">
+      {/* <section className="py-20 sm:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 sm:mb-20 space-y-6">
             <div className="inline-flex items-center bg-emerald-100/80 backdrop-blur-sm rounded-full px-6 py-2 shadow-lg justify-center mx-auto max-w-xs">
@@ -262,10 +361,84 @@ const Index = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <section className="px-6 py-16">
+              <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr,1.1fr]">
+                <div className="rounded-[2.5rem] border border-black/10 bg-white p-6 shadow-[0_35px_90px_rgba(15,15,15,0.15)]">
+                  <img src={heroProduct.image} alt={heroProduct.name} className="w-full rounded-2xl border border-black/5 object-cover" loading="lazy" />
+                </div>
+                <div className="space-y-6">
+                  <p className="text-sm uppercase tracking-[0.4em] text-emerald-500">Single SKU focus</p>
+                  <h2 className="text-3xl font-bold">{heroProduct.name}</h2>
+                  <p className="text-sm uppercase tracking-[0.4em] text-gray-500">{heroProduct.tagline}</p>
+      
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl font-bold text-[#111]">{formatPrice(price)}</span>
+                      {purchaseOption === 'subscription' && (
+                        <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-white">Save 15%</span>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      {purchaseOption === 'subscription'
+                        ? `Subscription: ${formatPrice(heroProduct.subscriptionPrice)} / month + FREE shipping`
+                        : `One-time: ${formatPrice(heroProduct.oneTimePrice)} — no recurring charge`}
+                    </p>
+                  </div>
+      
+                  <div className="flex flex-col gap-2">
+                    <div className="flex overflow-hidden rounded-full border border-[#d6d3cd] text-sm font-semibold">
+                      <button
+                        className={`flex-1 px-6 py-3 transition ${
+                          purchaseOption === 'subscription' ? 'bg-primary text-white' : 'bg-white text-[#0b0a08]'
+                        }`}
+                        onClick={() => setPurchaseOption('subscription')}
+                      >
+                        Subscribe & Save
+                      </button>
+                      <button
+                        className={`flex-1 px-6 py-3 transition ${
+                          purchaseOption === 'one-time' ? 'bg-primary text-white' : 'bg-white text-[#0b0a08]'
+                        }`}
+                        onClick={() => setPurchaseOption('one-time')}
+                      >
+                        Buy Once
+                      </button>
+                    </div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Subscription pre-selected</p>
+                  </div>
+      
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="text-sm font-semibold">Quantity</span>
+                    <div className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1 text-sm">
+                      <button className="rounded-full px-2 py-1 text-lg font-semibold text-gray-600" onClick={() => handleQuantityChange(-1)}>
+                        –
+                      </button>
+                      <span className="w-6 text-center text-base font-semibold">{quantity}</span>
+                      <button className="rounded-full px-2 py-1 text-lg font-semibold text-gray-600" onClick={() => handleQuantityChange(1)}>
+                        +
+                      </button>
+                    </div>
+                    <div className="ml-auto flex items-center gap-2 rounded-full bg-[#fff3e0] px-4 py-1 text-xs font-semibold text-[#ad5e00]">
+                      <Sparkles className="w-4 h-4" />
+                      Premium 4-handle grip
+                    </div>
+                  </div>
+      
+                  <Button className="bg-primary px-8 py-4 text-lg font-semibold text-white shadow-2xl shadow-[#0b3a23]/40" onClick={handleAddToCart}>
+                    Add To Cart
+                  </Button>
+      
+                  <p className="text-sm text-gray-500">
+                    Pure strength, four handle tie, and a monthly delivery rhythm that keeps you stocked.
+                  </p>
+                </div>
+              </div>
+            </section>
 
       {/* Features Section */}
-      <section className="py-20 sm:py-24 bg-muted" id="features-section">
+      {/* <section className="py-20 sm:py-24 bg-muted" id="features-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 sm:mb-20 space-y-6">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display tracking-tight">
@@ -291,8 +464,27 @@ const Index = () => {
             ))}
           </div>
         </div>
+      </section> */}
+      <section className="bg-[#faf8f4] px-6 py-16">
+        <div className="mx-auto max-w-5xl space-y-6">
+          <div className="space-y-2 text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.4em] text-emerald-500">How it works</p>
+            <h2 className="text-3xl font-bold">Three steps to keep you stocked</h2>
+            <p className="mx-auto max-w-3xl text-base text-[#0b0a08]/70">
+              A simple rhythm so trash day never catches you off guard again.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {subscriptionSteps.map((step, index) => (
+              <div key={step.title} className="space-y-2 rounded-3xl border border-[#f3ede2] bg-white p-6 text-sm">
+                <div className="text-3xl font-bold text-[#0b3a23]">0{index + 1}</div>
+                <p className="font-semibold">{step.title}</p>
+                <p className="text-gray-600">{step.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
-
       {/* Newsletter CTA */}
       <section className="py-20 sm:py-24 bg-primary relative overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Background Effects */}
