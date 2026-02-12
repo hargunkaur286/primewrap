@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AlertTriangle,
@@ -74,6 +74,7 @@ const Index = () => {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [purchaseOption, setPurchaseOption] = useState<'subscription' | 'one-time'>('subscription');
+  const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   const price = purchaseOption === 'subscription' ? heroProduct.subscriptionPrice : heroProduct.oneTimePrice;
 
@@ -156,6 +157,11 @@ const Index = () => {
   }
 };
 
+  useEffect(() => {
+    const timer = setTimeout(() => setShowPromoPopup(true), 10000);
+    return () => clearTimeout(timer);
+  }, []);
+
 
   const products = [
     {
@@ -199,6 +205,28 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {showPromoPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8 ">
+          <div className="relative w-full max-w-sm rounded-[2rem] border border-[#0b0a08]/20 bg-primary p-6 text-white shadow-[0_25px_80px_rgba(15,15,15,0.35)] sm:p-10">
+            <button
+              className="absolute right-4 top-4 rounded-full bg-white/80 p-2 text-sm font-bold text-[#0b0a08] shadow-lg"
+              onClick={() => setShowPromoPopup(false)}
+            >
+              ×
+            </button>
+            <div className="space-y-4 text-center">
+              <p className="text-xs uppercase tracking-[0.5em] text-white/70">Limited Time</p>
+              <h3 className="text-3xl font-bold text-white">Save 20% on your next Pinewrap order</h3>
+              <p className="text-base text-white/80">Use code <span className="font-semibold text-white">STOCKUP20</span> at checkout. Valid for the first three rolls.</p>
+              <p className="text-sm font-semibold text-white/80">Hurry—deal fades in 20 seconds!</p>
+              <div className="flex flex-col items-center gap-2 text-sm uppercase tracking-[0.2em] sm:flex-row">
+                <BadgeCheck className="h-5 w-5 text-white" />
+                <span className="text-white/70">Auto applies on subscribe</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Hero Section with 3D Elements */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Animated Background Elements */}
