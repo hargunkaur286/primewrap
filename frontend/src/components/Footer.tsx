@@ -18,7 +18,7 @@ const Footer = () => {
           <div className="md:col-span-2 space-y-6">
             {/* 3D Logo */}
             <div className="group flex items-center space-x-4 mb-6">
-              <img src="/uploads/logo.png" alt="Pinewrap Logo" className="w-16 h-16 object-contain" />
+              <img src="/uploads/logo.webp" alt="Pinewrap Logo" className="w-16 h-16 object-contain" />
               <div className="font-bold text-3xl tracking-tight">
                 <span className="text-background">
                   PINE

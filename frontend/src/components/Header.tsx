@@ -37,7 +37,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 sm:h-20 items-center justify-between gap-2">
         {/* Logo */}
         <Link to="/" className="group flex items-center space-x-3 hover:scale-105 transition">
-          <img src="/uploads/logo.png" alt="Pinewrap Logo" className="w-9 h-9 sm:w-12 sm:h-12 object-contain" />
+          <img src="/uploads/logo.webp" alt="Pinewrap Logo" className="w-9 h-9 sm:w-12 sm:h-12 object-contain" />
           <h1 className="text-lg sm:text-2xl font-bold tracking-tight">
             <span className="text-foreground">PINE</span>
             <span className="text-primary">WRAP</span>

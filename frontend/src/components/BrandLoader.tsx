@@ -10,7 +10,7 @@ const BrandLoader: React.FC<BrandLoaderProps> = ({ className }) => {
   return (
     <div className={cn("flex flex-col items-center justify-center text-center", className)}>
       <img
-        src="/uploads/logo.png"
+        src="/uploads/logo.webp"
         alt="Primewrap Logo"
         className="h-12 w-12 object-contain opacity-60 grayscale"
       />
