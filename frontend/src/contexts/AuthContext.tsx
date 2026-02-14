@@ -305,6 +305,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   ReactNode,
 } from 'react';
@@ -337,7 +338,7 @@ interface AuthContextType {
     verificationMethod: 'email' | 'phone';
   }) => Promise<void>;
   /** Re-fetch /me (handy after profile updates) */
-  refreshMe: () => Promise<void>;
+  refreshMe: (options?: { force?: boolean }) => Promise<void>;
 }
 
 /* ----------------------------- Axios ---------------------------- */
@@ -345,6 +346,8 @@ const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
 });
+
+const SESSION_HINT_KEY = 'pw_has_session';
 
 /* ---------------------------- Context --------------------------- */
 const AuthContext = createContext<AuthContextType>({
@@ -369,21 +372,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setAuthed]  = useState(false);
   const [isLoading, setLoading]       = useState(true);
 
-  const refreshMe = async () => {
+  const didInitRef = useRef(false);
+
+  const refreshMe = async (options?: { force?: boolean }) => {
+    // With httpOnly-cookie auth, JS cannot read the cookie. We keep a safe client-side
+    // hint to avoid calling /me for clearly-logged-out users on public pages.
+    const hasSessionHint = Boolean(localStorage.getItem(SESSION_HINT_KEY));
+    if (!options?.force && !hasSessionHint) {
+      setUser(null);
+      setAuthed(false);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     try {
       const { data } = await api.get('/api/v1/user/me');
       setUser(data.user as User);
       setAuthed(true);
+      localStorage.setItem(SESSION_HINT_KEY, '1');
     } catch {
       setUser(null);
       setAuthed(false);
+      localStorage.removeItem(SESSION_HINT_KEY);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    // Prevent dev StrictMode double-invocation from calling /me twice.
+    if (didInitRef.current) return;
+    didInitRef.current = true;
     void refreshMe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -395,6 +415,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const loggedInUser: User = data.user;
       setUser(loggedInUser);
       setAuthed(true);
+      localStorage.setItem(SESSION_HINT_KEY, '1');
       return loggedInUser;
     } finally {
       setLoading(false);
@@ -407,6 +428,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await api.get('/api/v1/user/logout');
       setUser(null);
       setAuthed(false);
+      localStorage.removeItem(SESSION_HINT_KEY);
     } finally {
       setLoading(false);
     }

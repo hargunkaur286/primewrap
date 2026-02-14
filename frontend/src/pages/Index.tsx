@@ -28,7 +28,7 @@ const heroProduct = {
   id: 'pinewrap-premium',
   name: 'Pinewrap Premium 4-Handle Garbage Bags',
   tagline: '30 Bags Per Roll',
-  image: '/uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png',
+  image: '/uploads/hero.png',
   subscriptionPrice: 29.74,
   oneTimePrice: 34.99,
 };
@@ -290,7 +290,7 @@ const Index = () => {
             <div className="perspective-1000">
               <div className="transform-gpu hover:rotate-y-12 transition-transform duration-700 group">
                 <img
-                  src="/uploads/ca930026-bdcf-41a6-974f-5d894632c11f.png"
+                  src="/uploads/hero.png"
                   alt="Pinewrap Hero Product"
                   loading="lazy"
                   className="w-full h-auto drop-shadow-2xl group-hover:drop-shadow-3xl transition-all duration-500 rounded-lg"

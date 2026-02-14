@@ -121,7 +121,7 @@ const ResetPassword = () => {
       );
       toast.success(res.data.message || 'Password reset successful!');
       // Reset endpoint may also set auth cookie; ensure app-wide auth state updates.
-      await refreshMe();
+      await refreshMe({ force: true });
       setIsSuccess(true);
     } catch (error: any) {
       toast.error(

@@ -114,7 +114,7 @@ const OTPVerification: React.FC = () => {
       });
       setIsVerified(true);
       // Backend sets the auth cookie; pull fresh /me so Header updates immediately.
-      await refreshMe();
+        await refreshMe({ force: true });
       
       // Check if user is admin and redirect accordingly
       const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS

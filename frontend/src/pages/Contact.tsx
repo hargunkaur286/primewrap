@@ -107,11 +107,11 @@ const Contact = () => {
           
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-display tracking-tight leading-tight">
             <span className="text-foreground">
-              GET IN
+              Get In
             </span>
             <br />
             <span className="text-primary">
-              TOUCH
+              Touch
             </span>
           </h1>
           
