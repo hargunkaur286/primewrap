@@ -290,9 +290,15 @@ const Index = () => {
             <div className="perspective-1000">
               <div className="transform-gpu hover:rotate-y-12 transition-transform duration-700 group">
                 <img
-                  src="/uploads/hero.webp"
+                  src="/uploads/hero-672.webp"
+                  srcSet="/uploads/hero-480.webp 480w, /uploads/hero-672.webp 672w"
+                  sizes="(max-width: 1024px) 100vw, 672px"
                   alt="Pinewrap Hero Product"
-                  loading="lazy"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  width={762}
+                  height={770}
                   className="w-full h-auto drop-shadow-2xl group-hover:drop-shadow-3xl transition-all duration-500 rounded-lg"
                 />
 

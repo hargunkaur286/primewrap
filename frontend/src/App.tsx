@@ -183,13 +183,7 @@ const AppShell: React.FC = () => {
     isAuthenticated &&
     ADMIN_EMAILS.includes((user?.email ?? '').trim().toLowerCase());
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" role="status">
-        <BrandLoader />
-      </div>
-    );
-  }
+  const authReady = !isLoading;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -231,7 +225,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <Dashboard />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -241,7 +237,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/orders"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <OrderManagement />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -251,7 +249,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/products"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <ProductManagement />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -261,7 +261,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/delivery"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <DeliveryManagement />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -271,7 +273,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/drivers"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <DriverPanel />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -281,7 +285,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/analytics"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <Analytics />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -291,7 +297,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/accounting"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <Accounting />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -301,7 +309,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/users"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <UsersManagement />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -311,7 +321,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/orders-admin"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <OrdersManagement />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -321,7 +333,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/newsletter"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <NewsletterSubscribers />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -331,7 +345,9 @@ const AppShell: React.FC = () => {
                   <Route
                     path="/dashboard/contact-queries"
                     element={
-                      isAdmin
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAdmin
                         ? <ContactQueries />
                         : isAuthenticated
                           ? <Navigate to="/" replace />
@@ -342,7 +358,13 @@ const AppShell: React.FC = () => {
                   {/* Authed user pages */}
                   <Route
                     path="/profile"
-                    element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />}
+                    element={
+                      !authReady
+                        ? ROUTE_FALLBACK
+                        : isAuthenticated
+                          ? <Profile />
+                          : <Navigate to="/login" replace />
+                    }
                   />
 
                   {/* Cart & payment */}
