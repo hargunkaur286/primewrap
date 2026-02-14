@@ -131,6 +131,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import PromoBar from "./components/PromoBar";
+import BrandLoader from "./components/BrandLoader";
 
 const Index = lazy(() => import("./pages/Index"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -159,8 +160,8 @@ const NewsletterSubscribers = lazy(() => import("./pages/NewsletterSubscribers")
 const ContactQueries = lazy(() => import("./pages/ContactQueries"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const ROUTE_FALLBACK = (
-  <div className="p-8 text-center" role="status">
-    Loading…
+  <div className="min-h-[60vh] p-8 flex items-center justify-center" role="status">
+    <BrandLoader />
   </div>
 );
 
@@ -183,7 +184,11 @@ const AppShell: React.FC = () => {
     ADMIN_EMAILS.includes((user?.email ?? '').trim().toLowerCase());
 
   if (isLoading) {
-    return <p className="p-8 text-center">Loading…</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center" role="status">
+        <BrandLoader />
+      </div>
+    );
   }
 
   return (
