@@ -130,7 +130,7 @@ import { useAuth, AuthProvider } from "./contexts/AuthContext";  // <-- add Auth
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
-import PromoBar from "./components/PromoBar";
+// import PromoBar from "./components/PromoBar"; // (disabled for now)
 import BrandLoader from "./components/BrandLoader";
 
 const Index = lazy(() => import("./pages/Index"));
@@ -194,7 +194,8 @@ const AppShell: React.FC = () => {
           <BrowserRouter>
             <ScrollToTop />
             <div className="min-h-screen bg-white font-satoshi">
-              <PromoBar />
+              {/** PromoBar disabled for now; we'll re-enable later */}
+              {/* <PromoBar /> */}
               <Header />
               <Suspense fallback={ROUTE_FALLBACK}>
                 <Routes>

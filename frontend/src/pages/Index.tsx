@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AlertTriangle,
@@ -74,7 +74,7 @@ const Index = () => {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [purchaseOption, setPurchaseOption] = useState<'subscription' | 'one-time'>('subscription');
-  const [showPromoPopup, setShowPromoPopup] = useState(false);
+  // const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   const price = purchaseOption === 'subscription' ? heroProduct.subscriptionPrice : heroProduct.oneTimePrice;
 
@@ -157,10 +157,11 @@ const Index = () => {
   }
 };
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShowPromoPopup(true), 10000);
-    return () => clearTimeout(timer);
-  }, []);
+  // Promo popup disabled for now; we'll re-enable later.
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setShowPromoPopup(true), 10000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
 
   const products = [
@@ -205,7 +206,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {showPromoPopup && (
+      {/** Timed promo popup disabled for now; we'll re-enable later */}
+      {/* {showPromoPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-8 ">
           <div className="relative w-full max-w-sm rounded-[2rem] border border-[#0b0a08]/20 bg-primary p-6 text-white shadow-[0_25px_80px_rgba(15,15,15,0.35)] sm:p-10">
             <button
@@ -226,7 +228,7 @@ const Index = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       {/* Hero Section with 3D Elements */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden px-4 sm:px-6 lg:px-8">
         {/* Animated Background Elements */}

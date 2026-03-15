@@ -33,7 +33,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-5 z-40 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg">
+    <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 sm:h-20 items-center justify-between gap-2">
         {/* Logo */}
         <Link to="/" className="group flex items-center space-x-3 hover:scale-105 transition">
