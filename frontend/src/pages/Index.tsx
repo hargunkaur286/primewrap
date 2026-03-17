@@ -26,16 +26,16 @@ import { Anchor, Droplet, Truck } from 'lucide-react';
 
 const heroProduct = {
   id: 'pinewrap-premium',
-  name: 'Pinewrap Premium 4-Handle Garbage Bags',
-  tagline: '30 Bags Per Roll',
+  name: 'Pinewrap Premium 2-Handle Garbage Bags',
+  tagline: '10 Bags Per Pack',
   image: '/uploads/hero.webp',
-  subscriptionPrice: 29.74,
-  oneTimePrice: 34.99,
+  subscriptionPrice: 5.99,
+  oneTimePrice: 6.49,
 };
 
 const featureHighlights = [
   {
-    title: '4 Handle Tie System',
+    title: '2 Handle Tie System',
     description: 'Easy secure knot, no tearing even when overfilled',
     icon: <Anchor className="w-7 h-7 text-emerald-500" />,
   },
@@ -54,15 +54,15 @@ const featureHighlights = [
 const subscriptionSteps = [
   {
     title: 'Choose Delivery Frequency',
-    detail: 'Monthly by default, change to bi-monthly or every 6 weeks in seconds.',
+    detail: 'Monthly by default',
   },
   {
     title: 'Receive Monthly',
-    detail: 'Fresh rolls arrive on your door before trash day even shows up.',
+    detail: 'Fresh packs arrive on your door before run out of the bags.',
   },
   {
     title: 'Cancel Anytime',
-    detail: 'Pause, skip, or adjust your wrap without penalties.',
+    detail: 'Pause, skip, or adjust your subscription without penalties.',
   },
 ];
 
@@ -263,7 +263,7 @@ const Index = () => {
 
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
               Experience the future of waste management with our revolutionary 
-              eco-friendly garbage bags. Thoughtfully engineered for the modern lifestyle.
+              garbage bags. Thoughtfully engineered for the modern lifestyle.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -330,9 +330,9 @@ const Index = () => {
         <div className="mx-auto max-w-6xl space-y-8">
           <div className="space-y-2 text-center">
             <p className="text-sm font-semibold uppercase tracking-[0.4em] text-emerald-500">Features</p>
-            <h2 className="text-3xl font-bold">High-performance bags built for modern homes</h2>
+            <h2 className="text-3xl font-bold">High-performance bags built for homes</h2>
             <p className="mx-auto max-w-3xl text-base text-[#0b0a08]/70">
-              Designed with strength, grip, and convenience in mind so you can focus on the rest of the home.
+              Designed with strength, grip, and convenience in mind so you can focus on the rest of the chores.
             </p>
           </div>
 
@@ -418,7 +418,7 @@ const Index = () => {
                     </div>
                     <p className="text-sm text-gray-500">
                       {purchaseOption === 'subscription'
-                        ? `Subscription: ${formatPrice(heroProduct.subscriptionPrice)} / month + FREE shipping`
+                        ? `Subscription: ${formatPrice(heroProduct.subscriptionPrice)} / month `
                         : `One-time: ${formatPrice(heroProduct.oneTimePrice)} — no recurring charge`}
                     </p>
                   </div>
@@ -446,7 +446,7 @@ const Index = () => {
                   </div>
       
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="text-sm font-semibold">Quantity</span>
+                    {/* <span className="text-sm font-semibold">Quantity</span>
                     <div className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1 text-sm">
                       <button className="rounded-full px-2 py-1 text-lg font-semibold text-gray-600" onClick={() => handleQuantityChange(-1)}>
                         –
@@ -455,10 +455,10 @@ const Index = () => {
                       <button className="rounded-full px-2 py-1 text-lg font-semibold text-gray-600" onClick={() => handleQuantityChange(1)}>
                         +
                       </button>
-                    </div>
+                    </div> */}
                     <div className="ml-auto flex items-center gap-2 rounded-full bg-[#fff3e0] px-4 py-1 text-xs font-semibold text-[#ad5e00]">
                       <Sparkles className="w-4 h-4" />
-                      Premium 4-handle grip
+                      Premium 2-handle grip
                     </div>
                   </div>
       

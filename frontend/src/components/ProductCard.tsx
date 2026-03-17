@@ -19,9 +19,11 @@ interface ProductCardProps {
 const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   const getProductPath = (id: string) => {
     switch (id) {
-      case 'scented-bags':
+      case 'one-time':
         return '/product/scented';
-      case 'recycling-bags':
+      case '6-month-sub-10-bags':
+        return '/product/recycling';
+      case '6-month-sub-15-bags':
         return '/product/recycling';
       default:
         return `/product/${id}`;
@@ -45,17 +47,17 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
             />
             
             {/* Enhanced Floating Badge */}
-            <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-white/90 backdrop-blur-sm rounded-full px-2 md:px-3 py-1 text-xs font-semibold text-emerald-700 shadow-lg transform-gpu group-hover:scale-110 transition-transform duration-300 flex items-center gap-1">
+            {/* <div className="absolute top-2 md:top-4 right-2 md:right-4 bg-white/90 backdrop-blur-sm rounded-full px-2 md:px-3 py-1 text-xs font-semibold text-emerald-700 shadow-lg transform-gpu group-hover:scale-110 transition-transform duration-300 flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
               <span className="hidden sm:inline">ECO-FRIENDLY</span>
               <span className="sm:hidden">ECO</span>
-            </div>
+            </div> */}
 
             {/* Quality Rating */}
-            <div className="absolute top-2 md:top-4 left-2 md:left-4 bg-white/90 backdrop-blur-sm rounded-full px-2 md:px-3 py-1 text-xs font-semibold text-gray-700 shadow-lg transform-gpu group-hover:scale-110 transition-transform duration-300 flex items-center gap-1">
+            {/* <div className="absolute top-2 md:top-4 left-2 md:left-4 bg-white/90 backdrop-blur-sm rounded-full px-2 md:px-3 py-1 text-xs font-semibold text-gray-700 shadow-lg transform-gpu group-hover:scale-110 transition-transform duration-300 flex items-center gap-1">
               <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
               5.0
-            </div>
+            </div> */}
           </div>
         </Link>
         
@@ -73,7 +75,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           </div>
 
           {/* Enhanced Features List */}
-          <div className="flex flex-wrap gap-1 md:gap-2 pt-2">
+          {/* <div className="flex flex-wrap gap-1 md:gap-2 pt-2">
             <span className="text-xs bg-emerald-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">
               Biodegradable
             </span>
@@ -83,16 +85,16 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
             <span className="text-xs bg-teal-100/80 text-white px-2 md:px-3 py-1 rounded-full font-medium">
               Premium
             </span>
-          </div>
+          </div> */}
           
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4">
             <div className="space-y-1">
-              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text">
+              <div className="text-2xl md:text-2xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 bg-clip-text">
                 ${product.price}
               </div>
-              <div className="text-xs text-gray-500 uppercase tracking-wide">
+              {/* <div className="text-xs text-gray-500 uppercase tracking-wide">
                 Premium Quality
-              </div>
+              </div> */}
             </div>
             
             <Button
@@ -101,7 +103,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 <ShoppingCart className="w-4 h-4 group-hover/button:animate-bounce" />
-                <span className="hidden sm:inline">ADD TO CART</span>
+                <span className="hidden sm:inline">CHECKOUT</span>
                 <span className="sm:hidden">ADD</span>
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-2xl opacity-0 group-hover/button:opacity-100 transition-opacity duration-300"></div>

@@ -62,25 +62,25 @@ const Contact = () => {
   };
 
   const faqs = [
-    {
-      question: "What makes Pinewrap bags eco-friendly?",
-      answer: "Our bags are made from plant-based materials that biodegrade naturally without leaving harmful residues. They're certified compostable and meet all international environmental standards."
-    },
+    // {
+    //   question: "What makes Pinewrap bags eco-friendly?",
+    //   answer: "Our bags are made from plant-based materials that biodegrade naturally without leaving harmful residues. They're certified compostable and meet all international environmental standards."
+    // },
     {
       question: "How strong are Pinewrap bags compared to regular plastic bags?",
       answer: "Pinewrap bags are designed to be just as strong as traditional plastic bags, with enhanced puncture resistance and stretch capacity. They won't tear or leak during normal use."
     },
     {
       question: "What's your shipping policy?",
-      answer: "We offer free shipping on orders over $25. Standard delivery takes 3-5 business days, and expedited shipping is available for faster delivery."
+      answer: "We charge a small fee of $1.99. Standard delivery takes 3-5 business days."
     },
-    {
-      question: "Can I return products if I'm not satisfied?",
-      answer: "Absolutely! We offer a 30-day satisfaction guarantee. If you're not completely happy with your purchase, we'll provide a full refund or exchange."
-    },
+    // {
+    //   question: "Can I return products if I'm not satisfied?",
+    //   answer: "Absolutely! We offer a 30-day satisfaction guarantee. If you're not completely happy with your purchase, we'll provide a full refund or exchange."
+    // },
     {
       question: "How should I store the bags?",
-      answer: "Store Pinewrap bags in a cool, dry place away from direct sunlight. They have a shelf life of 18 months when stored properly."
+      answer: "Store Pinewrap bags in a cool, dry place away from direct sunlight."
     },
     {
       question: "Are the bags suitable for all types of waste?",
@@ -198,7 +198,7 @@ const Contact = () => {
             {/* Contact Info Cards */}
             <div className="grid gap-4 mb-8">
               {[
-                { icon: <Phone className="w-5 h-5" />, text: "1-800-PRIMEWRAP" },
+                // { icon: <Phone className="w-5 h-5" />, text: "1-800-PRIMEWRAP" },
                 { icon: <Mail className="w-5 h-5" />, text: "gursahib@pinewrap.ca" },
                 { icon: <Clock className="w-5 h-5" />, text: "Mon-Fri 9AM-6PM EST" }
               ].map((contact, index) => (

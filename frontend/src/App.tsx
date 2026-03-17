@@ -132,6 +132,8 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 // import PromoBar from "./components/PromoBar"; // (disabled for now)
 import BrandLoader from "./components/BrandLoader";
+import Checkout from "./pages/Checkout";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 const Index = lazy(() => import("./pages/Index"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -218,6 +220,8 @@ const AppShell: React.FC = () => {
                   {/* Public shop pages */}
                   <Route path="/shop" element={<Shop />} />
                   <Route path="/contact" element={<Contact />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/checkout/success" element={<CheckoutSuccess />} />
                   <Route path="/product/:id" element={<ProductDetail />} />
                   <Route path="/product/scented" element={<ProductScented />} />
                   <Route path="/product/recycling" element={<ProductRecycling />} />

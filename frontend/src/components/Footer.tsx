@@ -39,18 +39,18 @@ const Footer = () => {
             </div>
             
             <p className="text-background/80 text-lg leading-relaxed max-w-md">
-              Leading the way in eco-friendly garbage bags. 
+              Leading the way in garbage bags. 
               Making sustainable choices simple for modern living.
             </p>
             
-            <div className="group flex items-center space-x-4 p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 transform-gpu hover:scale-105 transition-all duration-300">
+            {/* <div className="group flex items-center space-x-4 p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 transform-gpu hover:scale-105 transition-all duration-300">
               <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg transform-gpu group-hover:rotate-6 transition-transform duration-300">
                 <Sprout className="w-6 h-6 text-white" />
               </div>
               <span className="text-background/90 font-medium">
                 Certified biodegradable & compostable
               </span>
-            </div>
+            </div> */}
           </div>
 
           {/* Quick Links */}
@@ -62,7 +62,7 @@ const Footer = () => {
               {[
                 { name: 'Home', href: '/' },
                 { name: 'Shop', href: '/shop' },
-                { name: 'About', href: '/about' },
+                // { name: 'About', href: '/about' },
                 { name: 'Contact', href: '/contact' }
               ].map((link, index) => (
                 <Link
@@ -99,12 +99,12 @@ const Footer = () => {
               ))}
             </div>
             
-            <div className="mt-6 p-4 bg-primary/20 backdrop-blur-sm rounded-2xl border border-white/20">
+            {/* <div className="mt-6 p-4 bg-primary/20 backdrop-blur-sm rounded-2xl border border-white/20">
               <p className="text-secondary text-sm font-medium">
                 <Truck className="inline-block w-4 h-4 mr-2 align-text-bottom" />
                 Free shipping over $25
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -114,7 +114,7 @@ const Footer = () => {
             <div className="flex items-center space-x-2">
               <Heart className="w-5 h-5 text-secondary animate-pulse" />
               <p className="text-background/60 text-sm">
-                © 2024 PrimeWrap. Made with love for our planet.
+                © 2026 Pinewrap. Made with love for our cleaner vicinity.
               </p>
             </div>
             

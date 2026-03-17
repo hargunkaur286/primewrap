@@ -3,12 +3,12 @@ import { Shield, Leaf, Star, Sparkles, Heart, Zap } from 'lucide-react';
 
 const ProductBenefits = () => {
   const benefits = [
-    {
-      icon: <Leaf className="w-6 h-6" />,
-      title: "100% Biodegradable",
-      description: "Breaks down naturally in 90 days",
-      color: "text-emerald-600"
-    },
+    // {
+    //   icon: <Leaf className="w-6 h-6" />,
+    //   title: "100% Biodegradable",
+    //   description: "Breaks down naturally in 90 days",
+    //   color: "text-emerald-600"
+    // },
     {
       icon: <Shield className="w-6 h-6" />,
       title: "Ultra Durable",
@@ -32,17 +32,18 @@ const ProductBenefits = () => {
       title: "Premium Quality",
       description: "Certified by eco-standards",
       color: "text-cyan-500"
-    },
-    {
-      icon: <Zap className="w-6 h-6" />,
-      title: "Quick Dissolve",
-      description: "Dissolves in compost conditions",
-      color: "text-teal-500"
     }
+    // },
+    // {
+    //   icon: <Zap className="w-6 h-6" />,
+    //   title: "Quick Dissolve",
+    //   description: "Dissolves in compost conditions",
+    //   color: "text-teal-500"
+    // }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-">
       {benefits.map((benefit, index) => (
         <div
           key={index}
