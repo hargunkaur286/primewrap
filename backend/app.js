@@ -13,6 +13,9 @@ const defaultFrontendUrl = "https://pinewrap.ca";
 const vercelProdFrontendUrl = "https://primewrap.vercel.app";
 const wwwFrontendUrl = "https://www.pinewrap.ca";
 
+const paymentRoutes = require('./routes/paymentRoutes');
+const stripeWebhookRoutes = require('./routes/stripeWebhookRoutes');
+
 // In Vercel, your frontend can be either the production URL or a preview URL like:
 // https://primewrap-git-main-hargunkaur286s-projects.vercel.app
 const vercelPreviewOriginRegex = /^https:\/\/primewrap(-.*)?\.vercel\.app$/;
@@ -47,10 +50,14 @@ app.use(cors(corsOptions));
 // Express 5 does not accept "*" as a path pattern here.
 app.options(/.*/, cors(corsOptions));
 
+app.use('/api/payments', stripeWebhookRoutes);
+
 app.use(compression({ threshold: 0 }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/payments', paymentRoutes);
 
 app.use("/api/v1/user", userRouter);
 
