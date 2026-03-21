@@ -12,9 +12,10 @@ export const app = express();
 const defaultFrontendUrl = "https://pinewrap.ca";
 const vercelProdFrontendUrl = "https://primewrap.vercel.app";
 const wwwFrontendUrl = "https://www.pinewrap.ca";
-
-const paymentRoutes = require('./routes/paymentRoutes');
-const stripeWebhookRoutes = require('./routes/stripeWebhookRoutes');
+import paymentRoutes from "./routes/paymentRoutes.js"
+// const paymentRoutes = require('./routes/paymentRoutes');
+import stripeWebhookRoutes from "./routes/stripeWebhookRoutes.js"
+// const stripeWebhookRoutes = require('./routes/stripeWebhookRoutes');
 
 // In Vercel, your frontend can be either the production URL or a preview URL like:
 // https://primewrap-git-main-hargunkaur286s-projects.vercel.app

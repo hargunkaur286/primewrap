@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Loader2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
+import { API_BASE } from '@/lib/apiBase';
 
 type PlanType = 'one_time' | 'sub_6m_10' | 'sub_6m_15';
 
@@ -98,7 +99,7 @@ const Checkout = () => {
     try {
       setLoading(true);
 
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/create-checkout-session`, {
+      const res = await fetch(`${API_BASE}/api/payments/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

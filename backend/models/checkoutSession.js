@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const checkoutSessionSchema = new mongoose.Schema(
   {
@@ -13,7 +13,8 @@ const checkoutSessionSchema = new mongoose.Schema(
     quantity: { type: Number, default: 1 },
     stripeCheckoutSessionId: { type: String, index: true },
     stripeCustomerId: { type: String, default: null },
-    stripePriceId: { type: String, required: true },
+    // Optional because some flows use Stripe inline `price_data` (no reusable Price ID).
+    stripePriceId: { type: String, default: null },
     status: {
       type: String,
       enum: ['created', 'completed', 'expired', 'failed'],
@@ -35,4 +36,5 @@ const checkoutSessionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('CheckoutSession', checkoutSessionSchema);
+const CheckoutSession = mongoose.model('CheckoutSession', checkoutSessionSchema);
+export default CheckoutSession;

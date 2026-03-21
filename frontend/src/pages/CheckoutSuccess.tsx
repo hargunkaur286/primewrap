@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { API_BASE } from '@/lib/apiBase';
 
 const CheckoutSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -11,7 +12,7 @@ const CheckoutSuccess = () => {
       if (!sessionId) return;
 
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/payments/session/${sessionId}`,
+        `${API_BASE}/api/payments/session/${sessionId}`,
         {
           credentials: 'include',
         }
