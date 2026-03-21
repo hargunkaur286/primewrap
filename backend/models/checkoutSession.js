@@ -32,6 +32,11 @@ const checkoutSessionSchema = new mongoose.Schema(
       postalCode: String,
       country: String,
     },
+
+    thankYouEmailSent: { type: Boolean, default: false },
+    thankYouEmailSentAt: { type: Date, default: null },
+    thankYouEmailTo: { type: String, default: null },
+    thankYouEmailLastError: { type: String, default: null },
   },
   { timestamps: true }
 );
