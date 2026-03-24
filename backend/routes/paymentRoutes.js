@@ -43,7 +43,7 @@ const PLAN_CATALOG = {
     recurring: { interval: "month", interval_count: 6 },
   },
   sub_6m_15: {
-    label: "6-Month 15-Bags",
+    label: "6-Months, 15-Bags",
     unitAmountCents: 739,
     currency: "cad",
     mode: "subscription",
