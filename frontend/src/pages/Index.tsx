@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AlertTriangle,
   ArrowDown,
@@ -74,12 +74,23 @@ const Index = () => {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [purchaseOption, setPurchaseOption] = useState<'subscription' | 'one-time'>('subscription');
+  const navigate = useNavigate();
   // const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   const price = purchaseOption === 'subscription' ? heroProduct.subscriptionPrice : heroProduct.oneTimePrice;
 
   const handleQuantityChange = (delta: number) => {
     setQuantity((prev) => Math.max(1, prev + delta));
+  };
+
+  const handleCheckoutRedirect = () => {
+    let url = '/checkout?product=pinewrap';
+    if (purchaseOption === 'subscription') {
+      url += '&plan=sub_6m_15&qty=1';
+    } else {
+      url += '&plan=one_time&qty=' + quantity;
+    }
+    navigate(url);
   };
 
   const handleAddToCart = async () => {
@@ -400,78 +411,68 @@ const Index = () => {
       </section> */}
 
       <section className="px-6 py-16">
-              <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr,1.1fr]">
-                <div className="rounded-[2.5rem] border border-black/10 bg-white p-6 shadow-[0_35px_90px_rgba(15,15,15,0.15)]">
-                  <img src={heroProduct.image} alt={heroProduct.name} className="w-full rounded-2xl border border-black/5 object-cover" loading="lazy" />
-                </div>
-                <div className="space-y-6">
-                  <p className="text-sm uppercase tracking-[0.4em] text-emerald-500">Single SKU focus</p>
-                  <h2 className="text-3xl font-bold">{heroProduct.name}</h2>
-                  <p className="text-sm uppercase tracking-[0.4em] text-gray-500">{heroProduct.tagline}</p>
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1fr,1.1fr]">
+          <div className="rounded-[2.5rem] border border-black/10 bg-white p-6 shadow-[0_35px_90px_rgba(15,15,15,0.15)]">
+            <img src={heroProduct.image} alt={heroProduct.name} className="w-full rounded-2xl border border-black/5 object-cover" loading="lazy" />
+          </div>
+          <div className="space-y-6">
+            <p className="text-sm uppercase tracking-[0.4em] text-emerald-500">Single SKU focus</p>
+            <h2 className="text-3xl font-bold">{heroProduct.name}</h2>
+            <p className="text-sm uppercase tracking-[0.4em] text-gray-500">{heroProduct.tagline}</p>
       
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <span className="text-3xl font-bold text-[#111]">{formatPrice(price)}</span>
-                      {purchaseOption === 'subscription' && (
-                        <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-white">Save 15%</span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      {purchaseOption === 'subscription'
-                        ? `Subscription: ${formatPrice(heroProduct.subscriptionPrice)} / month `
-                        : `One-time: ${formatPrice(heroProduct.oneTimePrice)} — no recurring charge`}
-                    </p>
-                  </div>
-      
-                  <div className="flex flex-col gap-2">
-                    <div className="flex overflow-hidden rounded-full border border-[#d6d3cd] text-sm font-semibold">
-                      <button
-                        className={`flex-1 px-6 py-3 transition ${
-                          purchaseOption === 'subscription' ? 'bg-primary text-white' : 'bg-white text-[#0b0a08]'
-                        }`}
-                        onClick={() => setPurchaseOption('subscription')}
-                      >
-                        Subscribe & Save
-                      </button>
-                      <button
-                        className={`flex-1 px-6 py-3 transition ${
-                          purchaseOption === 'one-time' ? 'bg-primary text-white' : 'bg-white text-[#0b0a08]'
-                        }`}
-                        onClick={() => setPurchaseOption('one-time')}
-                      >
-                        Buy Once
-                      </button>
-                    </div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Subscription pre-selected</p>
-                  </div>
-      
-                  <div className="flex flex-wrap items-center gap-3">
-                    {/* <span className="text-sm font-semibold">Quantity</span>
-                    <div className="flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1 text-sm">
-                      <button className="rounded-full px-2 py-1 text-lg font-semibold text-gray-600" onClick={() => handleQuantityChange(-1)}>
-                        –
-                      </button>
-                      <span className="w-6 text-center text-base font-semibold">{quantity}</span>
-                      <button className="rounded-full px-2 py-1 text-lg font-semibold text-gray-600" onClick={() => handleQuantityChange(1)}>
-                        +
-                      </button>
-                    </div> */}
-                    <div className="ml-auto flex items-center gap-2 rounded-full bg-[#fff3e0] px-4 py-1 text-xs font-semibold text-[#ad5e00]">
-                      <Sparkles className="w-4 h-4" />
-                      Premium 2-handle grip
-                    </div>
-                  </div>
-      
-                  <Button className="bg-primary px-8 py-4 text-lg font-semibold text-white shadow-2xl shadow-[#0b3a23]/40" onClick={handleAddToCart}>
-                    Add To Cart
-                  </Button>
-      
-                  <p className="text-sm text-gray-500">
-                    Pure strength, four handle tie, and a monthly delivery rhythm that keeps you stocked.
-                  </p>
-                </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl font-bold text-[#111]">{formatPrice(price)}</span>
+                {purchaseOption === 'subscription' && (
+                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-white">Save 15%</span>
+                )}
               </div>
-            </section>
+              <p className="text-sm text-gray-500">
+                {purchaseOption === 'subscription'
+                  ? `Subscription: ${formatPrice(heroProduct.subscriptionPrice)} / month `
+                  : `One-time: ${formatPrice(heroProduct.oneTimePrice)} — no recurring charge`}
+              </p>
+            </div>
+      
+            <div className="flex flex-col gap-2">
+              <div className="flex overflow-hidden rounded-full border border-[#d6d3cd] text-sm font-semibold">
+                <button
+                  className={`flex-1 px-6 py-3 transition ${
+                    purchaseOption === 'subscription' ? 'bg-primary text-white' : 'bg-white text-[#0b0a08]'
+                  }`}
+                  onClick={() => setPurchaseOption('subscription')}
+                >
+                  Subscribe & Save
+                </button>
+                <button
+                  className={`flex-1 px-6 py-3 transition ${
+                    purchaseOption === 'one-time' ? 'bg-primary text-white' : 'bg-white text-[#0b0a08]'
+                  }`}
+                  onClick={() => setPurchaseOption('one-time')}
+                >
+                  Buy Once
+                </button>
+              </div>
+              <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Subscription pre-selected</p>
+            </div>
+      
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="ml-auto flex items-center gap-2 rounded-full bg-[#fff3e0] px-4 py-1 text-xs font-semibold text-[#ad5e00]">
+                <Sparkles className="w-4 h-4" />
+                Premium 2-handle grip
+              </div>
+            </div>
+      
+            <Button className="bg-primary px-8 py-4 text-lg font-semibold text-white shadow-2xl shadow-[#0b3a23]/40" onClick={handleCheckoutRedirect}>
+              {purchaseOption === 'subscription' ? 'Subscribe & Checkout' : 'Buy Now & Checkout'}
+            </Button>
+      
+            <p className="text-sm text-gray-500">
+              Pure strength, four handle tie, and a monthly delivery rhythm that keeps you stocked.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Features Section */}
       {/* <section className="py-20 sm:py-24 bg-muted" id="features-section">

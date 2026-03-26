@@ -75,23 +75,60 @@ const Checkout = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  if (!selected) {
-    return <div className="p-8 text-center text-red-600">Invalid checkout selection.</div>;
-  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\d{10}$/; // Canadian 10-digit phone
+  const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/; // Canadian postal code
+  const provinceRegex = /^[A-Za-z]{2}$/; // 2-letter province code
 
-  const { product, planData } = selected;
-  const finalQty = planData.isSubscription ? 1 : Math.max(1, Math.min(quantity, 10));
-  const subtotal = Number((planData.price * finalQty).toFixed(2));
+  type CheckoutForm = {
+    email: string;
+    name: string;
+    phone: string;
+    addressLine1: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
+
+  const validateForm = (form: CheckoutForm) => {
+    if (!form.email || !emailRegex.test(form.email)) {
+      return 'Please enter a valid email address.';
+    }
+    if (!form.name.trim()) {
+      return 'Full name is required.';
+    }
+    if (!form.phone || !phoneRegex.test(form.phone.replace(/\D/g, ''))) {
+      return 'Please enter a valid 10-digit phone number.';
+    }
+    if (!form.addressLine1.trim()) {
+      return 'Address is required.';
+    }
+    if (!form.city.trim()) {
+      return 'City is required.';
+    }
+    if (!form.state || !provinceRegex.test(form.state.trim())) {
+      return 'Please enter a valid 2-letter province code (e.g., ON).';
+    }
+    if (!form.postalCode || !postalCodeRegex.test(form.postalCode.trim())) {
+      return 'Please enter a valid Canadian postal code.';
+    }
+    if (!form.country.trim()) {
+      return 'Country is required.';
+    }
+    return null;
+  };
 
   const onChange = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleCheckout = async () => {
-    if (!form.email || !form.name || !form.addressLine1 || !form.city || !form.state || !form.postalCode) {
+    const errorMsg = validateForm(form);
+    if (errorMsg) {
       toast({
-        title: 'Missing details',
-        description: 'Please fill in all required checkout fields.',
+        title: 'Invalid details',
+        description: errorMsg,
       });
       return;
     }
@@ -141,6 +178,14 @@ const Checkout = () => {
     }
   };
 
+  if (!selected) {
+    return <div className="p-8 text-center text-red-600">Invalid checkout selection.</div>;
+  }
+
+  const { product, planData } = selected;
+  const finalQty = planData.isSubscription ? 1 : Math.max(1, Math.min(quantity, 10));
+  const subtotal = Number((planData.price * finalQty).toFixed(2));
+
   return (
     <div className="min-h-screen bg-slate-50 py-10">
       <div className="max-w-6xl mx-auto px-4 grid lg:grid-cols-2 gap-8">
@@ -155,6 +200,8 @@ const Checkout = () => {
                 value={form.email}
                 onChange={(e) => onChange('email', e.target.value)}
                 placeholder="you@example.com"
+                type="email"
+                required
               />
             </div>
 
@@ -165,6 +212,7 @@ const Checkout = () => {
                 value={form.name}
                 onChange={(e) => onChange('name', e.target.value)}
                 placeholder="Charles.."
+                required
               />
             </div>
 
@@ -173,8 +221,10 @@ const Checkout = () => {
               <input
                 className="w-full mt-1 border rounded-xl px-4 py-3"
                 value={form.phone}
-                onChange={(e) => onChange('phone', e.target.value)}
-                placeholder="647.."
+                onChange={(e) => onChange('phone', e.target.value.replace(/[^\d]/g, ''))}
+                placeholder="6471234567"
+                maxLength={10}
+                required
               />
             </div>
 
@@ -185,6 +235,7 @@ const Checkout = () => {
                 value={form.addressLine1}
                 onChange={(e) => onChange('addressLine1', e.target.value)}
                 placeholder="123 Main Street"
+                required
               />
             </div>
 
@@ -196,6 +247,7 @@ const Checkout = () => {
                   value={form.city}
                   onChange={(e) => onChange('city', e.target.value)}
                   placeholder="Toronto"
+                  required
                 />
               </div>
 
@@ -204,8 +256,10 @@ const Checkout = () => {
                 <input
                   className="w-full mt-1 border rounded-xl px-4 py-3"
                   value={form.state}
-                  onChange={(e) => onChange('state', e.target.value)}
+                  onChange={(e) => onChange('state', e.target.value.toUpperCase())}
                   placeholder="ON"
+                  maxLength={2}
+                  required
                 />
               </div>
 
@@ -214,8 +268,10 @@ const Checkout = () => {
                 <input
                   className="w-full mt-1 border rounded-xl px-4 py-3"
                   value={form.postalCode}
-                  onChange={(e) => onChange('postalCode', e.target.value)}
-                  placeholder="M3X..."
+                  onChange={(e) => onChange('postalCode', e.target.value.toUpperCase())}
+                  placeholder="M3X 1A1"
+                  maxLength={7}
+                  required
                 />
               </div>
             </div>
