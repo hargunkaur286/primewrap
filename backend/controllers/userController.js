@@ -523,6 +523,7 @@ function generateOrderConfirmationEmail({
   });
 }
 
+const BRAND_YELLOW="#FFE569";
 const BRAND_BLUE = "#0B2D5C";
 const BRAND_BLUE_LIGHT = "#e3ecf7";
 const CONTACT_EMAIL = "gursahib@pinewrap.ca";
@@ -542,8 +543,8 @@ function buildPinewrapEmail({
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-      <div style="background-color: ${BRAND_BLUE}; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-        <h1 style="margin: 0; color: #fff; font-size: 28px;">PINEWRAP</h1>
+      <div style="background-color: ${BRAND_YELLOW}; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; color: ${BRAND_BLUE}; font-size: 28px;">PINEWRAP</h1>
         <p style="margin: 10px 0 0; color: #fff; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">${headerSubtitle}</p>
       </div>
 
@@ -625,7 +626,7 @@ function generateNewsletterWelcomeEmail(email) {
     sectionsHtml: expectations,
     cta: {
       text: "Start Shopping Now →",
-      url: `${process.env.FRONTEND_URL || "https://primewrap.ca"}/shop`,
+      url: `${"https://primewrap.ca"}/shop`,
     },
     closingNote: `Questions or story ideas? Reply to this email or chat with us at <a href=\"mailto:${CONTACT_EMAIL}\" style=\"color: ${BRAND_BLUE};\">${CONTACT_EMAIL}</a>.`,
   });
