@@ -523,7 +523,7 @@ function generateOrderConfirmationEmail({
   });
 }
 
-const BRAND_YELLOW="#FFE569";
+const BRAND_YELLOW="#FFE102";
 const BRAND_BLUE = "#0B2D5C";
 const BRAND_BLUE_LIGHT = "#e3ecf7";
 const CONTACT_EMAIL = "gursahib@pinewrap.ca";
