@@ -545,7 +545,7 @@ function buildPinewrapEmail({
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
       <div style="background-color: ${BRAND_YELLOW}; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
         <h1 style="margin: 0; color: ${BRAND_BLUE}; font-size: 28px;">PINEWRAP</h1>
-        <p style="margin: 10px 0 0; color: #fff; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">${headerSubtitle}</p>
+        <p style="margin: 10px 0 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; color: ${BRAND_BLUE}">${headerSubtitle}</p>
       </div>
 
       <div style="background-color: #fff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -626,7 +626,7 @@ function generateNewsletterWelcomeEmail(email) {
     sectionsHtml: expectations,
     cta: {
       text: "Start Shopping Now →",
-      url: `${"https://primewrap.ca"}/shop`,
+      url: `${"https://pinewrap.ca"}/shop`,
     },
     closingNote: `Questions or story ideas? Reply to this email or chat with us at <a href=\"mailto:${CONTACT_EMAIL}\" style=\"color: ${BRAND_BLUE};\">${CONTACT_EMAIL}</a>.`,
   });
