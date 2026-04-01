@@ -147,7 +147,7 @@ async function sendVerificationCode(
 ) {
   try {
     if (verificationMethod === "email") {
-      const message = generateEmailTemplate(verificationCode);
+      const message = generateVerificationEmail(verificationCode);
       await sendEmail({ email, subject: "Your verification code", message });
       res.status(200).json({
         success: true,
@@ -180,27 +180,6 @@ async function sendVerificationCode(
   } catch (error) {
     return next(new ErrorHandler("Verification code failed to send", 500));
   }
-}
-
-function generateEmailTemplate(verificationCode) {
-  return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
-      <h2 style="color: #4CAF50; text-align: center;">Verification Code</h2>
-      <p style="font-size: 16px; color: #333;">Dear User,</p>
-      <p style="font-size: 16px; color: #333;">Your verification code is:</p>
-      <div style="text-align: center; margin: 20px 0;">
-        <span style="display: inline-block; font-size: 24px; font-weight: bold; color: #4CAF50; padding: 10px 20px; border: 1px solid #4CAF50; border-radius: 5px; background-color: #e8f5e9;">
-          ${verificationCode}
-        </span>
-      </div>
-      <p style="font-size: 16px; color: #333;">Please use this code to verify your email address. The code will expire in 10 minutes.</p>
-      <p style="font-size: 16px; color: #333;">If you did not request this, please ignore this email.</p>
-      <footer style="margin-top: 20px; text-align: center; font-size: 14px; color: #999;">
-        <p>Thank you,<br>Your Company Team</p>
-        <p style="font-size: 12px; color: #aaa;">This is an automated message. Please do not reply to this email.</p>
-      </footer>
-    </div>
-  `;
 }
 
 export const verifyOTP = catchAsyncError(async (req, res, next) => {
@@ -501,30 +480,8 @@ function generateOrderConfirmationEmail({
     )
     .join("");
 
-  return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-      <div style="background-color: #FFC400; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-        <h1 style="margin: 0; color: #000; font-size: 28px;">PINEWRAP</h1>
-        <p style="margin: 10px 0 0; color: #000; font-size: 16px;">Order Confirmation</p>
-      </div>
-      
-      <div style="background-color: #fff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h2 style="color: #0B2D5C; margin-top: 0;">Thank you for your order, ${customerName}!</h2>
-        <p style="color: #333; font-size: 16px; line-height: 1.6;">
-          We're excited to get your eco-friendly products to you. Your order has been confirmed and will be processed shortly.
-        </p>
-        
-        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="margin: 0 0 10px; color: #0B2D5C;">Order Details</h3>
-          <p style="margin: 5px 0; color: #666;">
-            <strong>Order ID:</strong> ${orderId}<br/>
-            <strong>Payment Status:</strong> <span style="color: #4CAF50; font-weight: bold;">${paymentStatus === "succeeded" ? "Paid" : paymentStatus}</span>
-          </p>
-        </div>
-        
-        ${
-          orderDetails && orderDetails.length > 0
-            ? `
+  const orderLayout = orderDetails && orderDetails.length > 0
+    ? `
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
           <thead>
             <tr style="background-color: #f5f5f5;">
@@ -547,35 +504,125 @@ function generateOrderConfirmationEmail({
           </tfoot>
         </table>
         `
-            : `
+    : `
         <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0; font-size: 18px; font-weight: bold; text-align: center;">
             Total Amount: <span style="color: #FFC400;">$${amount.toFixed(2)}</span>
           </p>
         </div>
-        `
-        }
-        
-        <div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0; color: #2e7d32; font-size: 14px;">
-            ✓ Your order will be shipped within 2-3 business days<br/>
-            ✓ You'll receive a tracking number once your order ships<br/>
-            ✓ Free shipping on orders over $50
-          </p>
-        </div>
-        
-        <p style="color: #666; font-size: 14px; margin-top: 30px;">
-          If you have any questions about your order, please contact us at 
-          <a href="mailto:${process.env.SMTP_MAIL}" style="color: #FFC400;">${process.env.SMTP_MAIL}</a>
-        </p>
+        `;
+
+  return buildPinewrapEmail({
+    headerSubtitle: "Order Confirmation",
+    heroTitle: `Thank you for your order, ${customerName}!`,
+    introHtml: `<p style="color: #333; font-size: 16px; line-height: 1.6; margin-top: 10px;">We're excited to get your eco-friendly products to you. Your order has been confirmed and will be processed shortly.</p>`,
+    highlightHtml: `<div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;"><p style="margin: 0; color: #2e7d32; font-size: 14px;"><strong>Order ID:</strong> ${orderId}<br/><strong>Payment Status:</strong> <span style="color: #4CAF50; font-weight: bold;">${paymentStatus === "succeeded" ? "Paid" : paymentStatus}</span></p></div>`,
+    sectionsHtml: orderLayout,
+    closingNote: `If you have any questions about your order, contact us at <a href=\"mailto:${process.env.SMTP_MAIL}\" style=\"color: #FFC400;\">${process.env.SMTP_MAIL}</a>.`,
+  });
+}
+
+function buildPinewrapEmail({
+  headerSubtitle = "A Pinewrap update",
+  heroTitle = "",
+  introHtml = "",
+  highlightHtml = "",
+  sectionsHtml = "",
+  closingNote,
+  cta,
+}) {
+  const contactEmail = process.env.SMTP_MAIL || "support@pinewrap.ca";
+  const footerNote =
+    closingNote ||
+    `Need help? Contact us at <a href=\"mailto:${contactEmail}\" style=\"color: #FFC400;\">${contactEmail}</a>.`;
+
+  return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+      <div style="background-color: #FFC400; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; color: #000; font-size: 28px;">PINEWRAP</h1>
+        <p style="margin: 10px 0 0; color: #000; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">${headerSubtitle}</p>
       </div>
-      
+
+      <div style="background-color: #fff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2 style="color: #0B2D5C; margin-top: 0;">${heroTitle || "Hello from Pinewrap"}</h2>
+        ${introHtml}
+        ${highlightHtml}
+        ${sectionsHtml}
+        ${cta && cta.text && cta.url
+      ? `<div style="text-align: center; margin: 25px 0;"><a href="${cta.url}" style="background-color: #10b981; color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);">${cta.text}</a></div>`
+      : ""}
+        <p style="color: #666; font-size: 14px; margin-top: 30px;">${footerNote}</p>
+      </div>
+
       <footer style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
         <p>Thank you for choosing Pinewrap - Making the world cleaner, one bag at a time.</p>
         <p style="margin: 5px 0;">© ${new Date().getFullYear()} Pinewrap. All rights reserved.</p>
       </footer>
     </div>
   `;
+}
+
+function generateVerificationEmail(verificationCode) {
+  const highlightBlock = `
+    <div style="text-align: center; margin: 20px 0;">
+      <span style="display: inline-block; font-size: 28px; font-weight: bold; color: #0B2D5C; padding: 15px 30px; border-radius: 8px; border: 2px dashed #0B2D5C; background-color: #e8f5e9; letter-spacing: 4px;">
+        ${verificationCode}
+      </span>
+    </div>
+  `;
+
+  const instructions = `
+    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0; line-height: 1.5; color: #444; font-size: 15px;">
+      <p style="margin: 0 0 10px 0;"><strong>How to use it:</strong></p>
+      <ul style="margin: 0; padding-left: 20px;">
+        <li>Enter this code into the verification screen.</li>
+        <li>The code expires in 10 minutes for your safety.</li>
+        <li>If you did not request this, you can safely ignore this email.</li>
+      </ul>
+    </div>
+  `;
+
+  return buildPinewrapEmail({
+    headerSubtitle: "Verification Code",
+    heroTitle: "Verify your Pinewrap account",
+    introHtml: `<p style="color: #333; font-size: 16px; line-height: 1.6; margin-top: 10px;">We received a request to verify your Pinewrap account. Use the code below to complete your sign-up or login process.</p>`,
+    highlightHtml: highlightBlock,
+    sectionsHtml: instructions,
+    closingNote: `Need additional help? Reach out to us at <a href=\"mailto:${process.env.SMTP_MAIL}\" style=\"color: #FFC400;\">${process.env.SMTP_MAIL}</a>.`,
+  });
+}
+
+function generateNewsletterWelcomeEmail(email) {
+  const expectations = `
+    <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 25px 0; color: #166534;">
+      <h3 style="margin: 0 0 10px 0; font-size: 18px;">What to expect</h3>
+      <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6;">
+        <li>Monthly drops on sustainable packaging launches</li>
+        <li>Early access to limited releases & exclusive offers</li>
+        <li>Eco-friendly tips and behind-the-scenes stories</li>
+        <li>Invites to community drives and workshops</li>
+      </ul>
+    </div>
+  `;
+
+  const highlightBlock = `
+    <div style="background-color: #10b981; color: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; font-size: 18px; font-weight: 600;">
+      Here's your welcome gift: <strong style="letter-spacing: 2px;">WELCOME10</strong> for 10% off your first order.
+    </div>
+  `;
+
+  return buildPinewrapEmail({
+    headerSubtitle: "Newsletter Subscription",
+    heroTitle: "You’re officially on the list!",
+    introHtml: `<p style="color: #333; font-size: 16px; line-height: 1.6; margin-top: 10px;">Thanks for subscribing to the Pinewrap newsletter! Watch your inbox for eco-inspired content, product launches, and member-only perks.</p>`,
+    highlightHtml: highlightBlock,
+    sectionsHtml: expectations,
+    cta: {
+      text: "Start Shopping Now →",
+      url: `${process.env.FRONTEND_URL || "https://primewrap.ca"}/shop`,
+    },
+    closingNote: `Questions or story ideas? Reply to this email or chat with us at <a href=\"mailto:${process.env.SMTP_MAIL}\" style=\"color: #FFC400;\">${process.env.SMTP_MAIL}</a>.`,
+  });
 }
 
 function validatePaymentInput(data) {
@@ -643,85 +690,6 @@ export const createMessage = async (req, res, next) => {
 //     }
 // };
 
-function generateWelcomeEmailHTML(email) {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to Pinewrap Newsletter</title>
-</head>
-<body style="margin:0;padding:0;background-color:#f8f9fa;">
-  <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background-color:#f8f9fa;padding:20px;">
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#10b981,#059669);padding:40px 30px;text-align:center;border-radius:12px 12px 0 0;">
-      <h1 style="color:#fff;font-size:28px;font-weight:bold;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.1);">
-        Welcome to Pinewrap!
-      </h1>
-      <div style="width:80px;height:3px;background-color:#fff;margin:15px auto;border-radius:2px;"></div>
-    </div>
-
-    <!-- Main Content -->
-    <div style="background-color:#fff;padding:40px 30px;border-radius:0 0 12px 12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-      <h2 style="color:#1f2937;font-size:24px;font-weight:600;margin:0 0 20px 0;text-align:center;">
-        Thank you for joining our newsletter! 🌿
-      </h2>
-      <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
-        Hi there!
-      </p>
-      <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
-        We're thrilled to welcome you to the Pinewrap family! You've taken the first step towards 
-        staying updated with our latest eco-friendly packaging solutions, exclusive offers, and 
-        sustainability tips.
-      </p>
-      <div style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:20px;margin:25px 0;">
-        <h3 style="color:#15803d;font-size:18px;font-weight:600;margin:0 0 15px 0;">
-          What to expect:
-        </h3>
-        <ul style="color:#166534;font-size:14px;line-height:1.6;margin:0;padding-left:20px;">
-          <li style="margin-bottom:8px;">Monthly updates on new sustainable packaging products</li>
-          <li style="margin-bottom:8px;">Exclusive discounts and early access to sales</li>
-          <li style="margin-bottom:8px;">Eco-friendly tips and industry insights</li>
-          <li style="margin-bottom:0;">Behind-the-scenes content from our sustainability journey</li>
-        </ul>
-      </div>
-      <p style="color:#4b5563;font-size:16px;line-height:1.6;margin:0 0 25px 0;">
-        As a welcome gift, here's a <strong style="color:#10b981;">10% discount code</strong> for your first order:
-      </p>
-      <div style="background-color:#10b981;color:#fff;padding:15px 20px;border-radius:8px;text-align:center;margin:25px 0;border:2px dashed #fff;">
-        <span style="font-size:24px;font-weight:bold;letter-spacing:2px;">WELCOME10</span>
-      </div>
-      <div style="text-align:center;margin:30px 0;">
-        <a href="https://primewrap.ca/shop" style="background-color:#10b981;color:#fff;padding:15px 30px;border-radius:8px;text-decoration:none;font-size:16px;font-weight:600;display:inline-block;box-shadow:0 4px 6px rgba(16,185,129,0.3);">
-          Start Shopping Now →
-        </a>
-      </div>
-      <p style="color:#6b7280;font-size:14px;line-height:1.5;margin:30px 0 0 0;text-align:center;">
-        Questions? Simply reply to this email – we'd love to hear from you!
-      </p>
-    </div>
-
-    <!-- Footer -->
-    <div style="background-color:#f9fafb;padding:30px;text-align:center;border-top:1px solid #e5e7eb;margin-top:20px;border-radius:8px;">
-      <div style="color:#10b981;font-size:20px;font-weight:bold;margin:0 0 15px 0;">Pinewrap</div>
-      <p style="color:#6b7280;font-size:14px;margin:0 0 15px 0;">
-        Sustainable Packaging Solutions for a Better Tomorrow
-      </p>
-      <div style="color:#9ca3af;font-size:12px;line-height:1.4;">
-        <p style="margin:0 0 5px 0;">📧 ${email} | 📞 1-800-PRIMEWRAP</p>
-        <p style="margin:0 0 15px 0;">🏢 123 Eco Street, Green City, GC 12345</p>
-        <a href="https://primewrap.ca/unsubscribe" style="color:#6b7280;font-size:12px;text-decoration:underline;">
-          Unsubscribe from this newsletter
-        </a>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-`;
-}
-
 /**
  * POST /api/v1/user/subscribe
  * Saves a new subscriber and sends the styled welcome email.
@@ -746,7 +714,7 @@ export const createSubscribers = catchAsyncError(async (req, res, next) => {
 
   // 3) Send styled welcome email
   const subject = "Welcome to Our Newsletter!";
-  const htmlContent = generateWelcomeEmailHTML(email);
+  const htmlContent = generateNewsletterWelcomeEmail(email);
   await sendNewsletter(email, subject, htmlContent);
 
   // 4) Respond
