@@ -293,8 +293,8 @@ export const login = catchAsyncError(async (req, res, next) => {
       (await User.findOne({ email }));
     if (user) {
       // Set admin role if not already set
-      if (user.role !== 'admin') {
-        user.role = 'admin';
+      if (user.role !== "admin") {
+        user.role = "admin";
         await user.save();
       }
       sendToken(user, 200, "Admin logged in successfully!", res);
@@ -480,8 +480,9 @@ function generateOrderConfirmationEmail({
     )
     .join("");
 
-  const orderLayout = orderDetails && orderDetails.length > 0
-    ? `
+  const orderLayout =
+    orderDetails && orderDetails.length > 0
+      ? `
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
           <thead>
             <tr style="background-color: #f5f5f5;">
@@ -497,17 +498,17 @@ function generateOrderConfirmationEmail({
               <td style="padding: 16px 12px; text-align: right; font-size: 18px; font-weight: bold; border-top: 2px solid #0B2D5C;">
                 Total:
               </td>
-              <td style="padding: 16px 12px; text-align: right; font-size: 18px; font-weight: bold; color: #FFC400; border-top: 2px solid #0B2D5C;">
+              <td style="padding: 16px 12px; text-align: right; font-size: 18px; font-weight: bold; color: #0B2D5C; border-top: 2px solid #0B2D5C;">
                 $${amount.toFixed(2)}
               </td>
             </tr>
           </tfoot>
         </table>
         `
-    : `
+      : `
         <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0; font-size: 18px; font-weight: bold; text-align: center;">
-            Total Amount: <span style="color: #FFC400;">$${amount.toFixed(2)}</span>
+            Total Amount: <span style="color: #0B2D5C;">$${amount.toFixed(2)}</span>
           </p>
         </div>
         `;
@@ -516,11 +517,15 @@ function generateOrderConfirmationEmail({
     headerSubtitle: "Order Confirmation",
     heroTitle: `Thank you for your order, ${customerName}!`,
     introHtml: `<p style="color: #333; font-size: 16px; line-height: 1.6; margin-top: 10px;">We're excited to get your eco-friendly products to you. Your order has been confirmed and will be processed shortly.</p>`,
-    highlightHtml: `<div style="background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin: 20px 0;"><p style="margin: 0; color: #2e7d32; font-size: 14px;"><strong>Order ID:</strong> ${orderId}<br/><strong>Payment Status:</strong> <span style="color: #4CAF50; font-weight: bold;">${paymentStatus === "succeeded" ? "Paid" : paymentStatus}</span></p></div>`,
+    highlightHtml: `<div style="background-color: #e3ecf7; padding: 15px; border-radius: 8px; margin: 20px 0;"><p style="margin: 0; color: #0B2D5C; font-size: 14px;"><strong>Order ID:</strong> ${orderId}<br/><strong>Payment Status:</strong> <span style="color: #0B2D5C; font-weight: bold;">${paymentStatus === "succeeded" ? "Paid" : paymentStatus}</span></p></div>`,
     sectionsHtml: orderLayout,
-    closingNote: `If you have any questions about your order, contact us at <a href=\"mailto:${process.env.SMTP_MAIL}\" style=\"color: #FFC400;\">${process.env.SMTP_MAIL}</a>.`,
+    closingNote: `If you have any questions about your order, contact us at <a href="mailto:gursahib@pinewrap.ca" style="color: #0B2D5C;">gursahib@pinewrap.ca</a>.`,
   });
 }
+
+const BRAND_BLUE = "#0B2D5C";
+const BRAND_BLUE_LIGHT = "#e3ecf7";
+const CONTACT_EMAIL = "gursahib@pinewrap.ca";
 
 function buildPinewrapEmail({
   headerSubtitle = "A Pinewrap update",
@@ -531,26 +536,27 @@ function buildPinewrapEmail({
   closingNote,
   cta,
 }) {
-  const contactEmail = process.env.SMTP_MAIL || "support@pinewrap.ca";
   const footerNote =
     closingNote ||
-    `Need help? Contact us at <a href=\"mailto:${contactEmail}\" style=\"color: #FFC400;\">${contactEmail}</a>.`;
+    `Need help? Contact us at <a href="mailto:${CONTACT_EMAIL}" style="color: ${BRAND_BLUE};">${CONTACT_EMAIL}</a>.`;
 
   return `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-      <div style="background-color: #FFC400; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-        <h1 style="margin: 0; color: #000; font-size: 28px;">PINEWRAP</h1>
-        <p style="margin: 10px 0 0; color: #000; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">${headerSubtitle}</p>
+      <div style="background-color: ${BRAND_BLUE}; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+        <h1 style="margin: 0; color: #fff; font-size: 28px;">PINEWRAP</h1>
+        <p style="margin: 10px 0 0; color: #fff; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">${headerSubtitle}</p>
       </div>
 
       <div style="background-color: #fff; padding: 30px; border-radius: 0 0 8px 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-        <h2 style="color: #0B2D5C; margin-top: 0;">${heroTitle || "Hello from Pinewrap"}</h2>
+        <h2 style="color: ${BRAND_BLUE}; margin-top: 0;">${heroTitle || "Hello from Pinewrap"}</h2>
         ${introHtml}
         ${highlightHtml}
         ${sectionsHtml}
-        ${cta && cta.text && cta.url
-      ? `<div style="text-align: center; margin: 25px 0;"><a href="${cta.url}" style="background-color: #10b981; color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);">${cta.text}</a></div>`
-      : ""}
+        ${
+          cta && cta.text && cta.url
+            ? `<div style="text-align: center; margin: 25px 0;"><a href="${cta.url}" style="background-color: ${BRAND_BLUE}; color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; box-shadow: 0 4px 6px rgba(11, 45, 92, 0.3);">${cta.text}</a></div>`
+            : ""
+        }
         <p style="color: #666; font-size: 14px; margin-top: 30px;">${footerNote}</p>
       </div>
 
@@ -565,14 +571,14 @@ function buildPinewrapEmail({
 function generateVerificationEmail(verificationCode) {
   const highlightBlock = `
     <div style="text-align: center; margin: 20px 0;">
-      <span style="display: inline-block; font-size: 28px; font-weight: bold; color: #0B2D5C; padding: 15px 30px; border-radius: 8px; border: 2px dashed #0B2D5C; background-color: #e8f5e9; letter-spacing: 4px;">
+      <span style="display: inline-block; font-size: 28px; font-weight: bold; color: ${BRAND_BLUE}; padding: 15px 30px; border-radius: 8px; border: 2px dashed ${BRAND_BLUE}; background-color: ${BRAND_BLUE_LIGHT}; letter-spacing: 4px;">
         ${verificationCode}
       </span>
     </div>
   `;
 
   const instructions = `
-    <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0; line-height: 1.5; color: #444; font-size: 15px;">
+    <div style="background-color: ${BRAND_BLUE_LIGHT}; padding: 20px; border-radius: 8px; margin: 20px 0; line-height: 1.5; color: ${BRAND_BLUE}; font-size: 15px; border: 1px solid rgba(11, 45, 92, 0.3);">
       <p style="margin: 0 0 10px 0;"><strong>How to use it:</strong></p>
       <ul style="margin: 0; padding-left: 20px;">
         <li>Enter this code into the verification screen.</li>
@@ -588,13 +594,13 @@ function generateVerificationEmail(verificationCode) {
     introHtml: `<p style="color: #333; font-size: 16px; line-height: 1.6; margin-top: 10px;">We received a request to verify your Pinewrap account. Use the code below to complete your sign-up or login process.</p>`,
     highlightHtml: highlightBlock,
     sectionsHtml: instructions,
-    closingNote: `Need additional help? Reach out to us at <a href=\"mailto:${process.env.SMTP_MAIL}\" style=\"color: #FFC400;\">${process.env.SMTP_MAIL}</a>.`,
+    closingNote: `Need additional help? Reach out to us at <a href=\"mailto:${CONTACT_EMAIL}\" style=\"color: ${BRAND_BLUE};\">${CONTACT_EMAIL}</a>.`,
   });
 }
 
 function generateNewsletterWelcomeEmail(email) {
   const expectations = `
-    <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 25px 0; color: #166534;">
+    <div style="background-color: ${BRAND_BLUE_LIGHT}; border: 1px solid rgba(11, 45, 92, 0.3); border-radius: 8px; padding: 20px; margin: 25px 0; color: ${BRAND_BLUE};">
       <h3 style="margin: 0 0 10px 0; font-size: 18px;">What to expect</h3>
       <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6;">
         <li>Monthly drops on sustainable packaging launches</li>
@@ -606,7 +612,7 @@ function generateNewsletterWelcomeEmail(email) {
   `;
 
   const highlightBlock = `
-    <div style="background-color: #10b981; color: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; font-size: 18px; font-weight: 600;">
+    <div style="background-color: ${BRAND_BLUE}; color: #fff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center; font-size: 18px; font-weight: 600;">
       Here's your welcome gift: <strong style="letter-spacing: 2px;">WELCOME10</strong> for 10% off your first order.
     </div>
   `;
@@ -621,7 +627,7 @@ function generateNewsletterWelcomeEmail(email) {
       text: "Start Shopping Now →",
       url: `${process.env.FRONTEND_URL || "https://primewrap.ca"}/shop`,
     },
-    closingNote: `Questions or story ideas? Reply to this email or chat with us at <a href=\"mailto:${process.env.SMTP_MAIL}\" style=\"color: #FFC400;\">${process.env.SMTP_MAIL}</a>.`,
+    closingNote: `Questions or story ideas? Reply to this email or chat with us at <a href=\"mailto:${CONTACT_EMAIL}\" style=\"color: ${BRAND_BLUE};\">${CONTACT_EMAIL}</a>.`,
   });
 }
 
@@ -774,7 +780,9 @@ export const getAllMessages = catchAsyncError(async (req, res, next) => {
     ADMIN_EMAILS.includes((req.user?.email || "").toLowerCase());
 
   if (!isAdmin) {
-    return next(new ErrorHandler("Not authorized to view contact messages.", 403));
+    return next(
+      new ErrorHandler("Not authorized to view contact messages.", 403),
+    );
   }
 
   const messages = await Message.find().sort({ createdAt: -1 });
@@ -813,8 +821,15 @@ export const getAllSubscribers = catchAsyncError(async (req, res, next) => {
 });
 
 export const getAllOrders = catchAsyncError(async (req, res, next) => {
-  console.log("📋 Getting orders - User role:", req.user?.role, "User ID:", req.user?._id, "Email:", req.user?.email);
-  
+  console.log(
+    "📋 Getting orders - User role:",
+    req.user?.role,
+    "User ID:",
+    req.user?._id,
+    "Email:",
+    req.user?.email,
+  );
+
   // Check if user is admin by role OR by email
   const CONFIGURED_ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
     .split(",")
@@ -831,10 +846,12 @@ export const getAllOrders = catchAsyncError(async (req, res, next) => {
   const ADMIN_EMAILS = CONFIGURED_ADMIN_EMAILS.length
     ? CONFIGURED_ADMIN_EMAILS
     : FALLBACK_ADMIN_EMAILS;
-  
-  const isAdmin = req.user?.role === "admin" || ADMIN_EMAILS.includes((req.user?.email || "").toLowerCase());
+
+  const isAdmin =
+    req.user?.role === "admin" ||
+    ADMIN_EMAILS.includes((req.user?.email || "").toLowerCase());
   console.log("✅ Is admin?", isAdmin, "Admin emails:", ADMIN_EMAILS);
-  
+
   let orders;
   if (isAdmin) {
     console.log("✅ Admin accessing all orders");
@@ -894,9 +911,16 @@ export const createOrder = catchAsyncError(async (req, res, next) => {
     email,
     name,
   } = req.body;
-  
-  console.log('📦 Creating order with data:', { items, total, deliveryAddress, paymentMethod, guestEmail, guestName });
-  
+
+  console.log("📦 Creating order with data:", {
+    items,
+    total,
+    deliveryAddress,
+    paymentMethod,
+    guestEmail,
+    guestName,
+  });
+
   if (!items || !items.length) {
     return next(new ErrorHandler("No order items provided.", 400));
   }
@@ -925,12 +949,12 @@ export const createOrder = catchAsyncError(async (req, res, next) => {
     };
   });
 
-  console.log('✅ Normalized items:', normalizedItems);
+  console.log("✅ Normalized items:", normalizedItems);
 
   // verify everything has a product
-  const itemsWithoutProduct = normalizedItems.filter(li => !li.product);
+  const itemsWithoutProduct = normalizedItems.filter((li) => !li.product);
   if (itemsWithoutProduct.length > 0) {
-    console.log('❌ Items missing product ID:', itemsWithoutProduct);
+    console.log("❌ Items missing product ID:", itemsWithoutProduct);
     return next(
       new ErrorHandler("Each order item must have a product ID.", 400),
     );
@@ -954,28 +978,30 @@ export const createOrder = catchAsyncError(async (req, res, next) => {
   // If user is authenticated, add user ID
   if (req.user && req.user._id) {
     orderData.user = req.user._id;
-    console.log('👤 Authenticated user order');
+    console.log("👤 Authenticated user order");
   } else {
     // Guest checkout - require email at minimum
     if (!orderData.guestEmail) {
-      console.log('❌ Missing guest email');
+      console.log("❌ Missing guest email");
       return next(new ErrorHandler("Email is required for guest orders.", 400));
     }
-    console.log('🎭 Guest order');
+    console.log("🎭 Guest order");
   }
 
-  console.log('💾 Attempting to create order:', orderData);
+  console.log("💾 Attempting to create order:", orderData);
 
   try {
     const order = await Order.create(orderData);
-    console.log('✅ Order created successfully:', order._id);
-    
+    console.log("✅ Order created successfully:", order._id);
+
     res.status(201).json({
       success: true,
       order,
     });
   } catch (error) {
-    console.error('❌ Order creation error:', error);
-    return next(new ErrorHandler(error.message || "Failed to create order.", 400));
+    console.error("❌ Order creation error:", error);
+    return next(
+      new ErrorHandler(error.message || "Failed to create order.", 400),
+    );
   }
 });
